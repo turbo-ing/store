@@ -12,7 +12,7 @@
       "@/public/*": ["./public/*"],
       "@/games/*": ["./games/*"],
       "@/constants/*": ["./constants/*"],
-
+      "@/server/*": ["./server/*"],
     }
 
   },
