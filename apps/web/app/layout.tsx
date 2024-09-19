@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import 'reflect-metadata';
-// import { TRPCReactProvider } from '@zknoid/sdk/trpc/react';
+import { TRPCReactProvider } from '../trpc/react';
 import { plexMono, museoSlab, plexSans } from './fonts';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -8,6 +8,8 @@ import NotificationsContainer from '@zknoid/sdk/components/shared/Notification/N
 import './globals.css'; 
 import "@zknoid/games/styles.css";
 import "@zknoid/sdk/styles.css";
+import './globals.css';
+import { UseSetupStore } from "@/app/lib/UseSetupStore";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://app.zknoid.io'),
@@ -37,17 +39,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // useSetupStore()
   return (
     <html lang="en">
-      <body
-        className={`${museoSlab.variable} ${plexMono.variable} ${plexSans.variable}`}
-      >
-        {children}
-        <Analytics />
-        <SpeedInsights />
+      <TRPCReactProvider>
+        <body
+          className={`${museoSlab.variable} ${plexMono.variable} ${plexSans.variable}`}
+        >
+            {children}
+          <Analytics/>
+          <SpeedInsights/>
 
-        <NotificationsContainer />
-      </body>
+          <NotificationsContainer/>
+        </body>
+        <UseSetupStore/>
+      </TRPCReactProvider>
     </html>
   );
 }

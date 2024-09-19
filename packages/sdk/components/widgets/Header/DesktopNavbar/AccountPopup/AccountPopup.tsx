@@ -6,7 +6,6 @@ import { useBridgeStore } from "../../../../../lib/stores/bridgeStore";
 import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
 import dynamic from "next/dynamic";
-// import { api } from  '../../../../../trpc/react';
 import { useNotificationStore } from "../../../../../components/shared/Notification/lib/notificationStore";
 import handEmojiImg from "../../../../../public/image/misc/handEmoji.svg";
 import avatarUnset from "../../../../../public/image/avatars/avatar-unset.svg";
@@ -32,7 +31,7 @@ import avatar19 from "../../../../../public/image/avatars/avatar-19.svg";
 import avatar20 from "../../../../../public/image/avatars/avatar-20.svg";
 import avatar21 from "../../../../../public/image/avatars/avatar-21.svg";
 import Image from "next/image";
-// import { api } from "../../../../../trpc/react";
+import { useAccountStore } from "../../../../../lib/stores/accountStore";
 
 const avatars = [
   avatarUnset,
@@ -74,11 +73,13 @@ export default function AccountPopup({
   const networkStore = useNetworkStore();
   const bridgeStore = useBridgeStore();
   const notificationStore = useNotificationStore();
+  const accountStore = useAccountStore();
+
   const [linkCopied, setLinkCopied] = useState<boolean>(false);
-  const [name, setName] = useState<string | undefined>(undefined);
+  // const [name, setName] = useState<string | undefined>(undefined);
   const [testName, setTestName] = useState<string>("");
   const [changeNameMode, setChangeNameMode] = useState<boolean>(false);
-  const [avatarId, setAvatarId] = useState<number | undefined>(undefined);
+  // const [avatarId, setAvatarId] = useState<number | undefined>(undefined);
   const [avatarMode, setAvatarMode] = useState<boolean>(false);
 
   // const getAccountQuery = api.accounts.getAccount.useQuery({
@@ -137,19 +138,19 @@ export default function AccountPopup({
 
   const submitForm = (userName: string) => {
     if (!networkStore.address) return;
-    if (name !== undefined && userName == name) {
+    if (accountStore.name !== undefined && userName == accountStore.name) {
       setChangeNameMode(false);
       return;
     }
+    accountStore.nameMutator(userName);
     // setNameMutation.mutate({
     //   userAddress: networkStore.address,
     //   name: userName,
     // });
-    setName(userName);
     setChangeNameMode(false);
     notificationStore.create({
       type: "message",
-      message: `Hi ${name ? "again" : ""} ${userName}!`,
+      message: `Hi ${accountStore.name ? "again" : ""} ${userName}!`,
       customIcon: handEmojiImg,
     });
   };
@@ -258,16 +259,16 @@ export default function AccountPopup({
                   <div
                     key={index}
                     className={cn("relative cursor-pointer", {
-                      "cursor-not-allowed": index == avatarId,
-                      "hover:opacity-80": index != avatarId,
+                      "cursor-not-allowed": index == accountStore.avatarId,
+                      "hover:opacity-80": index != accountStore.avatarId,
                     })}
                     onClick={() => {
                       if (!networkStore.address) return;
-                      if (index == avatarId) {
+                      if (index == accountStore.avatarId) {
                         setAvatarMode(false);
                         return;
                       }
-                      setAvatarId(index);
+                      accountStore.avatarIdMutator(index)
                       // setAvatarMutation.mutate({
                       //   userAddress: networkStore.address,
                       //   avatarId: index,
@@ -283,10 +284,10 @@ export default function AccountPopup({
                       src={item}
                       alt={"Avatar"}
                       className={cn("h-[3.125vw] w-[3.125vw]", {
-                        "opacity-20": index == avatarId,
+                        "opacity-20": index == accountStore.avatarId,
                       })}
                     />
-                    {index == avatarId && (
+                    {index == accountStore.avatarId && (
                       <div
                         className={
                           "absolute bottom-[10%] w-full text-center font-plexsans text-[0.781vw] font-extrabold text-bg-dark"
@@ -304,14 +305,14 @@ export default function AccountPopup({
         <div className={"mt-8 flex w-full flex-col gap-4"}>
           <div className={"flex flex-row gap-[0.521vw]"}>
             <Image
-              src={avatarId !== undefined ? avatars[avatarId] : avatars[0]}
+              src={accountStore.avatarId !== undefined ? avatars[accountStore.avatarId] : avatars[0]}
               alt={"User Avatar"}
               className={"h-[5vw] w-[5vw] cursor-pointer hover:opacity-80"}
               onClick={() => (avatarMode ? undefined : setAvatarMode(true))}
             />
             <div className={"flex w-full flex-col gap-4"}>
               <Formik
-                initialValues={{ name: name || "" }}
+                initialValues={{ name: accountStore.name || "" }}
                 validationSchema={validateSchema}
                 onSubmit={(values) => submitForm(values.name)}
               >
@@ -322,14 +323,14 @@ export default function AccountPopup({
                       setTestName(e.target.value);
                     }}
                   >
-                    {name && !changeNameMode ? (
+                    {accountStore.name && !changeNameMode ? (
                       <div
                         className={
                           "w-full cursor-pointer font-museo text-headline-1 font-medium text-bg-dark hover:opacity-80"
                         }
                         onClick={() => setChangeNameMode(true)}
                       >
-                        {name}
+                        {accountStore.name}
                       </div>
                     ) : (
                       <div className={"flex flex-col gap-2"}>
@@ -342,7 +343,7 @@ export default function AccountPopup({
                               "w-full rounded-[5px] border border-bg-dark bg-right-accent px-2 py-1 text-center font-plexsans text-main font-normal text-bg-dark placeholder:text-[#252525] placeholder:opacity-60"
                             }
                           />
-                          {values.name.length == 0 && name ? (
+                          {values.name.length == 0 && accountStore.name ? (
                             <button
                               className={
                                 "group flex cursor-pointer flex-col items-center justify-center rounded-[5px] border border-bg-dark bg-bg-dark p-1 hover:bg-right-accent hover:opacity-80"
