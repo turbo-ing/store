@@ -1,5 +1,4 @@
-import clientPromise from "../../../lib/mongodb";
-
+import clientPromise from '../../../app/lib/mongodb'
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";

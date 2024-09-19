@@ -1,10 +1,9 @@
-import clientPromise from '../../../lib/mongodb';
-
+import clientPromise from '../../../app/lib/mongodb'
 import { z } from 'zod';
 
 import { createTRPCRouter, publicProcedure } from '../../../server/api/trpc';
-import telegramBot from '../../../lib/telegram_bot';
-import { formatUnits } from '../../../lib/unit';
+import telegramBot from '../../../app/lib/telegram_bot';
+import { formatUnits } from '@zknoid/sdk/lib/unit';
 
 const client = await clientPromise;
 const db = client.db(process.env.MONGODB_DB);
