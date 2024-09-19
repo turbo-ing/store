@@ -50,9 +50,9 @@ Define game config and implement front-end and contracts part in [packages/chain
 
 ### Interesting places
 - Arkanoid game verification – [arkanoid/GameContexts.ts](https://github.com/ZkNoid/store/blob/main/packages/chain/src/games/arkanoid/GameContext.ts)
-- Competitions and leaderboard system SDK module [engine/GameHub.ts](https://github.com/ZkNoid/zknoid/blob/develop/packages/chain/src/engine/GameHub.ts)
-- Matchmaking system – [engine/MatchMaker.ts](https://github.com/ZkNoid/zknoid/blob/develop/packages/chain/src/engine/MatchMaker.ts)
-- Randzu logic implementation – [randzu/RandzuLogic.ts](https://github.com/ZkNoid/zknoid/blob/develop/packages/chain/src/randzu/RandzuLogic.ts)
-- Games frontend implementation [apps/store/games](https://github.com/ZkNoid/zknoid/tree/develop/apps/store/games)
-- Games contracts implementation [packages/chain/src/](https://github.com/ZkNoid/zknoid/blob/develop/packages/chain/src/)
+- Competitions and leaderboard system SDK module [engine/GameHub.ts](https://github.com/ZkNoid/store/blob/main/packages/chain/src/engine/GameHub.ts)
+- Matchmaking system – [engine/MatchMaker.ts](https://github.com/ZkNoid/store/blob/main/packages/chain/src/engine/MatchMaker.ts)
+- Randzu logic implementation – [packages/chain/src/games/randzu/RandzuLogic.ts](https://github.com/ZkNoid/store/blob/main/packages/chain/src/games/randzu/RandzuLogic.ts)
+- Games frontend implementation [apps/web/games](https://github.com/ZkNoid/store/tree/main/apps/web/games)
+- Games contracts implementation [packages/chain/src/](https://github.com/ZkNoid/store/blob/main/packages/chain/src/)
 
