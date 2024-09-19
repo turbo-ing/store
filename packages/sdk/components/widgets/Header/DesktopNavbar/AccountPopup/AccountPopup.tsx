@@ -119,9 +119,9 @@ export default function AccountPopup({
     name: Yup.string()
       .matches(/^(?![\d+_@.-]+$)[a-zA-Z0-9+_@.-]*$/, "Invalid name")
       .required("This field required")
-      .test("Check name unique", "This name already exists", (userName) =>
-        true
-      ),
+      // .test("Check name unique", "This name already exists", (userName) =>
+      //   true
+      // ),
   });
 
   const disconnectWallet = () => {
