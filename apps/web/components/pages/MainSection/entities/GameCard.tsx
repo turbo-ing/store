@@ -1,8 +1,7 @@
-import { IGame, LogoMode } from '@/app/constants/games';
+import { IGame } from '@/app/constants/games';
 import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
 import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
-import { useEffect, useState } from 'react';
-// import { api } from '@zknoid/sdk/trpc/react';
+import { useState } from 'react';
 import heart_2 from '@/public/image/misc/heart-2.svg';
 import heart_1 from '@/public/image/misc/heart-1.svg';
 import heart_3 from '@/public/image/misc/heart-3.svg';
@@ -12,7 +11,8 @@ import heart_3_filled from '@/public/image/misc/heart-3-filled.svg';
 import { cn } from '@zknoid/sdk/lib/helpers';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getEnvContext } from '@zknoid/sdk/lib/envContext';
+// import { api } from '@zknoid/sdk/trpc/react';
+// import { getEnvContext } from '@zknoid/sdk/lib/envContext';
 
 export function GameCard({
   game,
@@ -105,18 +105,11 @@ export function GameCard({
         )}
       >
         <Image
-          src={game.logo}
-          width={300}
-          height={300}
-          alt={game.name}
-          className={cn(
-            'h-full w-full object-center',
-            game.logoMode == LogoMode.FULL_WIDTH
-              ? 'object-cover'
-              : game.logoMode == LogoMode.CONTAIN
-                ? 'object-contain'
-                : 'object-none'
-          )}
+            src={game.logo}
+            width={300}
+            height={300}
+            alt={game.name}
+            className={'h-full w-full object-contain'}
         />
       </div>
       {game.isReleased && (

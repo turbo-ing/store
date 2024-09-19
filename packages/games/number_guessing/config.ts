@@ -5,7 +5,6 @@ import {
   ZkNoidGameFeature,
   ZkNoidGameGenre,
 } from "@zknoid/sdk/lib/platform/game_tags";
-import { LogoMode } from "@zknoid/sdk/constants/games";
 import NumberGuessing from "./NumberGuessing";
 
 export const numberGuessingConfig = createZkNoidGameConfig({
@@ -14,7 +13,6 @@ export const numberGuessingConfig = createZkNoidGameConfig({
   name: "Number guessing",
   description: "Player hides a number. Other player tries to guess it",
   image: "/image/games/soon.svg",
-  logoMode: LogoMode.CENTER,
   genre: ZkNoidGameGenre.BoardGames,
   features: [ZkNoidGameFeature.Multiplayer],
   isReleased: true,

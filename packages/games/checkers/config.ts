@@ -7,7 +7,6 @@ import {
   ZkNoidGameGenre,
 } from "@zknoid/sdk/lib/platform/game_tags";
 import CheckersLobby from "./components/CheckersLobby";
-import { LogoMode } from "@zknoid/sdk/constants/games";
 
 export const checkersConfig = createZkNoidGameConfig({
   id: "checkers",
@@ -16,7 +15,6 @@ export const checkersConfig = createZkNoidGameConfig({
   description:
     "Checkers is a two-player game played on an 8x8 board. The objective is to capture all of your opponent's pieces jumping diagonally over them",
   image: "/image/games/checkers.svg",
-  logoMode: LogoMode.FULL_WIDTH,
   genre: ZkNoidGameGenre.BoardGames,
   features: [ZkNoidGameFeature.Multiplayer],
   isReleased: true,
@@ -41,7 +39,6 @@ export const checkersRedirectConfig = createZkNoidGameConfig({
   description:
     "Checkers is a two-player game played on an 8x8 board. The objective is to capture all of your opponent's pieces jumping diagonally over them",
   image: "/image/games/checkers.svg",
-  logoMode: LogoMode.BOTTOM_RIGHT,
   genre: ZkNoidGameGenre.BoardGames,
   features: [ZkNoidGameFeature.Multiplayer],
   isReleased: true,
