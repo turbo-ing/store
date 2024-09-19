@@ -1,6 +1,5 @@
 import { createZkNoidGameConfig } from "@zknoid/sdk/lib/createConfig";
 import { ZkNoidGameType } from "@zknoid/sdk/lib/platform/game_types";
-import { LogoMode } from "@zknoid/sdk/constants/games";
 import {
   ZkNoidGameFeature,
   ZkNoidGameGenre,
@@ -16,7 +15,6 @@ export const gameTemplateConfig = createZkNoidGameConfig({
   name: "Game Template",
   description: description,
   image: "/image/games/soon.svg",
-  logoMode: LogoMode.CENTER,
   genre: ZkNoidGameGenre.BoardGames,
   features: [ZkNoidGameFeature.SinglePlayer],
   isReleased: true,
