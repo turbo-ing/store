@@ -100,7 +100,6 @@
     "./lib/stores/minaChain": "./lib/stores/minaChain.tsx",
     "./lib/stores/minaBalances": "./lib/stores/minaBalances.tsx",
     "./lib/stores/commitmentStorage": "./lib/stores/commitmentStorage.tsx",
-    "./lib/stores/accountStore": "./lib/stores/accountStore.ts",
 
     "./components/shared/Notification/NotificationsContainer": "./components/shared/Notification/NotificationsContainer.tsx",
     "./components/shared/Notification/lib/notificationStore": "./components/shared/Notification/lib/notificationStore.ts",
