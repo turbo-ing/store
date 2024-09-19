@@ -7,7 +7,6 @@ import {
   ZkNoidGameGenre,
 } from "@zknoid/sdk/lib/platform/game_tags";
 import RandzuLobby from "./components/RandzuLobby";
-import { LogoMode } from "@zknoid/sdk/constants/games";
 
 export const randzuConfig = createZkNoidGameConfig({
   id: "randzu",
@@ -16,7 +15,6 @@ export const randzuConfig = createZkNoidGameConfig({
   description:
     "Two players take turns placing pieces on the board attempting to create lines of 5 of their own color",
   image: "/image/games/randzu.svg",
-  logoMode: LogoMode.CENTER,
   genre: ZkNoidGameGenre.BoardGames,
   features: [ZkNoidGameFeature.Multiplayer],
   isReleased: true,
@@ -39,7 +37,6 @@ export const randzuRedirectConfig = createZkNoidGameConfig({
   description:
     "Two players take turns placing pieces on the board attempting to create lines of 5 of their own color",
   image: "/image/games/randzu.svg",
-  logoMode: LogoMode.CENTER,
   genre: ZkNoidGameGenre.BoardGames,
   features: [ZkNoidGameFeature.Multiplayer],
   isReleased: true,
