@@ -1,11 +1,11 @@
-import clientPromise from '../../../app/lib/mongodb'
-import { z } from 'zod';
-
-import { createTRPCRouter, publicProcedure } from '../../../server/api/trpc';
-import { PushOperator } from 'mongodb';
+import clientPromise from "../../../app/lib/mongodb";
+import { z } from "zod";
+import { Document } from "bson";
+import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";
+import { PushOperator } from "mongodb";
 
 const client = await clientPromise;
-const db = client.db(process.env.MONGODB_DB);
+const db = client?.db(process.env.MONGODB_DB);
 
 export interface Progress {
   ARKANOID: boolean[];
@@ -21,9 +21,11 @@ export const progressRouter = createTRPCRouter({
   getSolvedQuests: publicProcedure
     .input(z.object({ userAddress: z.string() }))
     .query(async ({ ctx, input }) => {
+      if (!db) return;
+
       return {
         quests: (
-          await db.collection('statuses').findOne({
+          await db.collection("statuses").findOne({
             address: input.userAddress,
           })
         )?.statuses as Progress | null,
@@ -41,7 +43,9 @@ export const progressRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      await db.collection('statuses').updateOne(
+      if (!db) return;
+
+      await db.collection("statuses").updateOne(
         { address: input.userAddress },
         {
           $set: {

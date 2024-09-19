@@ -142,7 +142,7 @@ export default function AccountPopup({
       setChangeNameMode(false);
       return;
     }
-    account.nameMutator(userName);
+    account.nameMutator?.(userName);
     // setNameMutation.mutate({
     //   userAddress: networkStore.address,
     //   name: userName,
@@ -268,7 +268,7 @@ export default function AccountPopup({
                         setAvatarMode(false);
                         return;
                       }
-                      account.avatarIdMutator(index)
+                      account.avatarIdMutator?.(index)
                       // setAvatarMutation.mutate({
                       //   userAddress: networkStore.address,
                       //   avatarId: index,

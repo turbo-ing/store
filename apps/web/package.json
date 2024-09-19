@@ -59,7 +59,8 @@
     "yup": "^1.4.0",
     "zknoid-chain-dev": "workspace:*",
     "zod": "^3.22.4",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "bson": "^6.8.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

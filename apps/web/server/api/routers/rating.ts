@@ -4,12 +4,14 @@ import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '../../../server/api/trpc';
 
 const client = await clientPromise;
-const db = client.db(process.env.MONGODB_DB);
+const db = client?.db(process.env.MONGODB_DB);
 
 export const ratingsRouter = createTRPCRouter({
   getGameRating: publicProcedure
     .input(z.object({ gameId: z.string() }))
     .query(async ({ ctx, input }) => {
+      if (!db) return;
+
       const aggregated = await db
         .collection('ratings')
         .aggregate([
@@ -44,6 +46,8 @@ export const ratingsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      if (!db) return;
+
       await db.collection('ratings').updateOne(
         { gameId: input.gameId, userAddress: input.userAddress },
         {

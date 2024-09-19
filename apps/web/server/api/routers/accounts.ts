@@ -5,12 +5,13 @@ import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '../../../server/api/trpc';
 
 const client = await clientPromise;
-const db = client.db(process.env.MONGODB_DB);
+const db = client?.db(process.env.MONGODB_DB);
 
 export const accountsRouter = createTRPCRouter({
   getAccount: publicProcedure
     .input(z.object({ userAddress: z.string() }))
     .query(async ({ input }) => {
+      if (!db) return;
       return {
         account: await db
           .collection('accounts')
@@ -20,6 +21,8 @@ export const accountsRouter = createTRPCRouter({
   getAccounts: publicProcedure
     .input(z.object({ userAddresses: z.array(z.string()) }))
     .query(async ({ input }) => {
+      if (!db) return;
+
       return {
         accounts: await db
           .collection('accounts')
@@ -30,6 +33,8 @@ export const accountsRouter = createTRPCRouter({
   setName: publicProcedure
     .input(z.object({ userAddress: z.string(), name: z.string() }))
     .mutation(async ({ input }) => {
+      if (!db) return;
+
       await db.collection('accounts').updateOne(
         { userAddress: input.userAddress },
         {
@@ -47,6 +52,8 @@ export const accountsRouter = createTRPCRouter({
   checkNameUnique: publicProcedure
     .input(z.object({ name: z.string() }))
     .query(async ({ input }) => {
+      if (!db) return;
+
       const account = await db
         .collection('accounts')
         .findOne({ name: input.name });
@@ -55,6 +62,8 @@ export const accountsRouter = createTRPCRouter({
   setAvatar: publicProcedure
     .input(z.object({ userAddress: z.string(), avatarId: z.number() }))
     .mutation(async ({ input }) => {
+      if (!db) return;
+
       await db.collection('accounts').updateOne(
         { userAddress: input.userAddress },
         {

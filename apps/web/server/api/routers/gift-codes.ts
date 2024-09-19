@@ -5,12 +5,14 @@ import { createTRPCRouter, publicProcedure } from '../../../server/api/trpc';
 
 
 const client = await clientPromise;
-const db = client.db(process.env.MONGODB_DB);
+const db = client?.db(process.env.MONGODB_DB);
 
 export const giftCodesRouter = createTRPCRouter({
   getUserGiftCodes: publicProcedure
     .input(z.object({ userAddress: z.string() }))
     .query(async ({ input }) => {
+      if (!db) return;
+
       return {
         giftCodes: await db
           .collection('gift-codes')
@@ -27,6 +29,8 @@ export const giftCodesRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
+      if (!db) return;
+
       await db.collection('gift-codes').insertOne({
         userAddress: input.userAddress,
         transactionHash: input.transactionHash,
@@ -55,6 +59,8 @@ export const giftCodesRouter = createTRPCRouter({
         .array()
     )
     .mutation(async ({ input }) => {
+      if (!db) return;
+
       await db.collection('gift-codes').insertMany(
         input.map((item) => ({
           userAddress: item.userAddress,
@@ -77,6 +83,8 @@ export const giftCodesRouter = createTRPCRouter({
   checkGiftCodeValidity: publicProcedure
     .input(z.object({ code: z.string() }))
     .query(async ({ input }) => {
+      if (!db) return;
+
       const code = await db
         .collection('gift-codes')
         .findOne({ code: input.code, used: false, deleted: false });
@@ -85,6 +93,8 @@ export const giftCodesRouter = createTRPCRouter({
   useGiftCode: publicProcedure
     .input(z.object({ giftCode: z.string() }))
     .mutation(async ({ input }) => {
+      if (!db) return;
+
       await db
         .collection('gift-codes')
         .updateOne({ code: input.giftCode }, { $set: { used: true } });
@@ -92,6 +102,8 @@ export const giftCodesRouter = createTRPCRouter({
   removeUsedGiftCodes: publicProcedure
     .input(z.object({ userAddress: z.string() }))
     .mutation(async ({ input }) => {
+      if (!db) return;
+
       await db
         .collection('gift-codes')
         .updateMany(
@@ -111,6 +123,8 @@ export const giftCodesRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
+      if (!db) return;
+
       await db.collection('promo_tickets_queue').insertOne({
         userAddress: input.userAddress,
         giftCode: input.giftCode,

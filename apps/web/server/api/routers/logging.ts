@@ -6,14 +6,14 @@ import telegramBot from '../../../app/lib/telegram_bot';
 import { formatUnits } from '@zknoid/sdk/lib/unit';
 
 const client = await clientPromise;
-const db = client.db(process.env.MONGODB_DB);
+const db = client?.db(process.env.MONGODB_DB);
 
 // Current game, hostname,
 const EnvContext = z.record(z.string(), z.string());
 
 const settings = process.env.NOTIFICATIONS_VERSION
   ? ((
-      await db.collection('notifications').findOne({
+      await db?.collection('notifications').findOne({
         version: process.env.NOTIFICATIONS_VERSION,
       })
     )?.settings ?? {})
@@ -24,6 +24,7 @@ export const loggingRouter = createTRPCRouter({
     .input(z.object({ envContext: EnvContext, userAddress: z.string() }))
     .mutation(async ({ ctx, input }) => {
       if (process.env.NODE_ENV != 'production') return;
+      if (!db) return;
 
       const event = 'wallet_connected';
 
@@ -71,6 +72,7 @@ export const loggingRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       if (process.env.NODE_ENV != 'production') return;
+      if (!db) return;
 
       const event = 'test_balance_received';
       if (settings?.[event] && process.env.MAIN_CHAT_ID) {
@@ -106,6 +108,7 @@ export const loggingRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       if (process.env.NODE_ENV != 'production') return;
+      if (!db) return;
 
       const event = 'tokens_bridged';
       if (settings?.[event] && process.env.MAIN_CHAT_ID) {
@@ -146,6 +149,7 @@ export const loggingRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       if (process.env.NODE_ENV != 'production') return;
+      if (!db) return;
 
       const event = 'matchmaking_entered';
       if (settings?.[event] && process.env.MAIN_CHAT_ID) {
@@ -182,6 +186,7 @@ export const loggingRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       if (process.env.NODE_ENV != 'production') return;
+      if (!db) return;
 
       const event = 'game_opened';
 
@@ -236,6 +241,7 @@ export const loggingRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       if (process.env.NODE_ENV != 'production') return;
+      if (!db) return;
 
       const event = 'game_started';
 

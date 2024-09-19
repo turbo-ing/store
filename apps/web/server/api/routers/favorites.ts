@@ -5,12 +5,14 @@ import { createTRPCRouter, publicProcedure } from '../../../server/api/trpc';
 
 
 const client = await clientPromise;
-const db = client.db(process.env.MONGODB_DB);
+const db = client?.db(process.env.MONGODB_DB);
 
 export const favoritesRouter = createTRPCRouter({
   getFavoriteGames: publicProcedure
     .input(z.object({ userAddress: z.string() }))
     .query(async ({ ctx, input }) => {
+      if (!db) return;
+
       return {
         favorites: await db
           .collection('favorites')
@@ -30,6 +32,8 @@ export const favoritesRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      if (!db) return;
+
       await db.collection('favorites').updateOne(
         { gameId: input.gameId, userAddress: input.userAddress },
         {

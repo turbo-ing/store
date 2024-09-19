@@ -6,8 +6,8 @@ interface ISetupStoreContext {
     account: {
         name: string | undefined;
         avatarId: number | undefined;
-        nameMutator: (name: string) => void | undefined
-        avatarIdMutator: (avatarId: number) => void | undefined
+        nameMutator: ((name: string) => void) | undefined
+        avatarIdMutator: ((avatarId: number) => void) | undefined
     }
 }
 
