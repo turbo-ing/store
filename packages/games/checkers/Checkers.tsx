@@ -15,7 +15,7 @@ import { ClientAppChain, PENDING_BLOCKS_NUM_CONST } from "zknoid-chain-dev";
 import { checkersConfig } from "./config";
 import ZkNoidGameContext from "@zknoid/sdk/lib/contexts/ZkNoidGameContext";
 import { useProtokitChainStore } from "@zknoid/sdk/lib/stores/protokitChain";
-import { MOVE_TIMEOUT_IN_BLOCKS } from "zknoid-chain-dev/dist/src/engine/MatchMaker";
+import { MOVE_TIMEOUT_IN_BLOCKS } from "zknoid-chain-dev";
 import {
   MainButtonState,
   PvPGameView,

@@ -1,5 +1,5 @@
 // import { api } from "@zknoid/sdk/trpc/react";
-import { DEFAULT_PARTICIPATION_FEE } from "zknoid-chain-dev/dist/src/engine/LobbyManager";
+import { DEFAULT_PARTICIPATION_FEE } from "zknoid-chain-dev";
 import { getEnvContext } from "@zknoid/sdk/lib/envContext";
 import { PublicKey, UInt64 } from "o1js";
 import { useStore } from "zustand";

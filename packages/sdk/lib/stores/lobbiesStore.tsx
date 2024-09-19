@@ -1,7 +1,7 @@
 import { immer } from "zustand/middleware/immer";
 import { Bool, PublicKey, UInt64 } from "o1js";
 import { type ModuleQuery } from "@proto-kit/sequencer";
-import { LobbyManager } from "zknoid-chain-dev/dist/src/engine/LobbyManager";
+import { LobbyManager } from "zknoid-chain-dev";
 import { ILobby } from "../types";
 import { Currency } from "../../constants/currency";
 import { ClientAppChain, MatchMaker } from "zknoid-chain-dev";
@@ -10,7 +10,7 @@ import { useProtokitChainStore } from "./protokitChain";
 import { useNetworkStore } from "./network";
 import { useContext, useEffect } from "react";
 import ZkNoidGameContext from "../contexts/ZkNoidGameContext";
-import { PendingLobbyIndex } from "zknoid-chain-dev/dist/src/engine/MatchMaker";
+import { PendingLobbyIndex } from "zknoid-chain-dev";
 
 export interface IMatchamkingOption {
   id: number;

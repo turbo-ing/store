@@ -52,6 +52,7 @@ import {
   CHUNK_LENGTH,
   ACCELERATION_TIME,
   ACCELERATION,
+  PLATFORM_WIDTH,
 } from './constants.js';
 import { defaultLevel, getDefaultCompetitions } from './levels.js';
 
@@ -93,6 +94,7 @@ export {
   ACCELERATION,
   ACCELERATION_TIME,
   DEFAULT_PLATFORM_SPEED,
+  PLATFORM_WIDTH,
   GameRecord,
   getDefaultCompetitions,
 };

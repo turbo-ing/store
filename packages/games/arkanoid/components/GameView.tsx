@@ -21,7 +21,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Int64, UInt64, Bool } from "o1js";
 import { Ball, Cart, IBrick } from "@zknoid/sdk/lib/types";
-import { PLATFORM_WIDTH } from "zknoid-chain-dev/dist/src/arkanoid/constants";
+import { PLATFORM_WIDTH } from "zknoid-chain-dev";
 
 export interface ITick {
   action: number;

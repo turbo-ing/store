@@ -23,8 +23,8 @@ import { MainButtonState } from "@zknoid/sdk/components/framework/GamePage/PvPGa
 import RandzuCoverSVG from "./assets/game-cover.svg";
 // import { api } from "@zknoid/sdk/trpc/react";
 import { getEnvContext } from "@zknoid/sdk/lib/envContext";
-import { DEFAULT_PARTICIPATION_FEE } from "zknoid-chain-dev/dist/src/engine/LobbyManager";
-import { MOVE_TIMEOUT_IN_BLOCKS } from "zknoid-chain-dev/dist/src/engine/MatchMaker";
+import { DEFAULT_PARTICIPATION_FEE } from "zknoid-chain-dev";
+import { MOVE_TIMEOUT_IN_BLOCKS } from "zknoid-chain-dev";
 import RandzuCoverMobileSVG from "./assets/game-cover-mobile.svg";
 import GameWidget from "@zknoid/sdk/components/framework/GameWidget";
 import { motion } from "framer-motion";
