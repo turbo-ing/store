@@ -1,81 +1,58 @@
-# Turborepo starter
+# ZkNoid
 
-This is an official starter Turborepo.
+ZkNoid store is a repository for the easiest way for building provable games on [Mina protocol](https://minaprotocol.com/).
 
-## Using this example
+🚀 Founded on hackathon with the idea to provide infrastructure for #ZkDevs and unify the provable gaming ecosystem!
 
-Run the following command:
+ZkNoid store is a home for provable games. Modular framework is provided for developers bringing all the infrastructure they need to easily deploy games on Mina Protocol. After Zk Proofs integration to the game process, game is listed on the store becoming a part of the project ecosystem
 
-```sh
-npx create-turbo@latest
+Learn more about ZkNoid on [zknoid.io](https://www.zknoid.io/)
+- [Deployed Games Store](https://app.zknoid.io/)
+- [Docs](https://docs.zknoid.io/)
+- [Blog](https://zknoid.medium.com/)
+
+### Get started
+
+If you want to create your own provable game, please check out the [hacker's guide](https://zknoid.medium.com/building-a-simple-zknoid-game-from-scratch-hackers-guide-0898bf30fdfb)
+
+### Repository
+
+Repository contains ZkNoid game platform turborepo. 
+Monorepo 
+
+### Setup
+Project can be used localy. Here are the commands for set-up
+
+```bash
+git clone https://github.com/ZkNoid/store
+cd zknoid
+ 
+# ensures you have the right node js version
+# !important! Without this step the app may not work!
+# If nvm is not installed please install it. 
+# `nvm install` may be needed to install correct node version
+nvm use
+
+pnpm install
+
+pnpm env:inmemory dev
 ```
 
-## What's inside?
+### Implementing your own game
+ZkNoid is a modular platform that makes it easy to implement you own game using platform infrastructure. 
+To build a game you need to create a game folder inside [packages/games](https://github.com/ZkNoid/store/tree/main/packages/games).
+Define game config and implement front-end and contracts part in [packages/chain/src/games](https://github.com/ZkNoid/store/blob/main/packages/chain/src/games)
 
-This Turborepo includes the following packages/apps:
+- Read more in [hacker's guide](https://zknoid.medium.com/building-a-simple-zknoid-game-from-scratch-hackers-guide-0898bf30fdfb)
+- Learn more about SDK [here](https://docs.zknoid.io/docs/sdk)
+- Learn more about your game implementation [here](https://docs.zknoid.io/docs/game_building)
 
-### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Interesting places
+- Arkanoid game verification – [arkanoid/GameContexts.ts](https://github.com/ZkNoid/store/blob/main/packages/chain/src/games/arkanoid/GameContext.ts)
+- Competitions and leaderboard system SDK module [engine/GameHub.ts](https://github.com/ZkNoid/zknoid/blob/develop/packages/chain/src/engine/GameHub.ts)
+- Matchmaking system – [engine/MatchMaker.ts](https://github.com/ZkNoid/zknoid/blob/develop/packages/chain/src/engine/MatchMaker.ts)
+- Randzu logic implementation – [randzu/RandzuLogic.ts](https://github.com/ZkNoid/zknoid/blob/develop/packages/chain/src/randzu/RandzuLogic.ts)
+- Games frontend implementation [apps/store/games](https://github.com/ZkNoid/zknoid/tree/develop/apps/store/games)
+- Games contracts implementation [packages/chain/src/](https://github.com/ZkNoid/zknoid/blob/develop/packages/chain/src/)
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
