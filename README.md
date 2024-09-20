@@ -43,7 +43,7 @@ ZkNoid is a modular platform that makes it easy to implement you own game using 
 To build a game you need to create a game folder inside [packages/games](https://github.com/ZkNoid/store/tree/main/packages/games).
 Define game config and implement front-end and contracts part in [packages/chain/src/games](https://github.com/ZkNoid/store/blob/main/packages/chain/src/games)
 
-- Read more in [hacker's guide](https://zknoid.medium.com/building-a-simple-zknoid-game-from-scratch-hackers-guide-0898bf30fdfb)
+- Read more in [hacker's guide](https://zknoid.medium.com/zknoid-hackers-guide-v2-try-yourself-the-updated-store-benefits-c736ca1c76e8)
 - Learn more about SDK [here](https://docs.zknoid.io/docs/sdk)
 - Learn more about your game implementation [here](https://docs.zknoid.io/docs/game_building)
 
