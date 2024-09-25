@@ -1,3 +1,3 @@
-import { GameRecord } from '../src/games/arkanoid/ArkanoidGameHub';
+import { GameRecord } from '../src/arkanoid/ArkanoidGameHub';
 
 console.log(await GameRecord.compile());
