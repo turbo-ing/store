@@ -2,62 +2,48 @@
 // if the static image import handling is enabled
 
 declare module '*.png' {
-  const content: import('../dist/shared/lib/image-external').StaticImageData
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare module '*.svg' {
-  /**
-   * Use `any` to avoid conflicts with
-   * `@svgr/webpack` plugin or
-   * `babel-plugin-inline-react-svg` plugin.
-   */
-  const content: any
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare module '*.jpg' {
-  const content: import('../dist/shared/lib/image-external').StaticImageData
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare module '*.jpeg' {
-  const content: import('../dist/shared/lib/image-external').StaticImageData
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare module '*.gif' {
-  const content: import('../dist/shared/lib/image-external').StaticImageData
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare module '*.webp' {
-  const content: import('../dist/shared/lib/image-external').StaticImageData
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare module '*.avif' {
-  const content: import('../dist/shared/lib/image-external').StaticImageData
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare module '*.ico' {
-  const content: import('../dist/shared/lib/image-external').StaticImageData
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare module '*.bmp' {
-  const content: import('../dist/shared/lib/image-external').StaticImageData
-
-  export default content
+  const value: any;
+  export = value;
 }
 
 declare var mina:

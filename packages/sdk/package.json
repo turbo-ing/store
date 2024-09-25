@@ -150,6 +150,7 @@
     "./public/image/tokens/mina.svg": "./public/image/tokens/mina.svg",
     "./public/image/games/lottery/cat-wife.svg": "./public/image/games/lottery/cat-wife.svg",
     "./public/image/misc/no-gift-codes.svg": "./public/image/misc/no-gift-codes.svg",
+    "./public/image/zknoid-logo.svg": "./public/image/zknoid-logo.svg",
     "./constants/currency": "./constants/currency.ts",
     "./constants/games": "./constants/games.ts",
     "./constants/snakeNames": "./constants/snakeNames.ts",

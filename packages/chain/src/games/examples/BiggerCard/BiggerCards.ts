@@ -13,8 +13,8 @@ import {
   PokerEncryptedCard,
   PokerEncryptedDeck,
   PokerShuffleProof,
-} from '../../../engine/cards/base-decks/PokerDeck';
-import { CardGameBase } from '../../../engine/cards/CardGameBase';
+} from '@zknoid/chain-sdk/dist/engine/cards/base-decks/PokerDeck';
+import { CardGameBase } from '@zknoid/chain-sdk/dist/engine/cards/CardGameBase';
 
 export const GameStatuses = {
   INIT: UInt64.from(0),

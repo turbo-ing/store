@@ -1,6 +1,6 @@
 import { Field, UInt64, Bool, SelfProof, Struct, Int64, ZkProgram } from 'o1js';
 import { runtimeMethod, runtimeModule } from '@proto-kit/module';
-import { Gamehub } from '../../engine/GameHub';
+import { Gamehub } from '@zknoid/chain-sdk/dist/engine/GameHub';
 import { Bricks, GameInputs } from './types';
 import {
   GameContext,
