@@ -2,7 +2,7 @@ import { UInt64 } from '@proto-kit/library';
 import { ArkanoidGameHub } from './games/arkanoid/ArkanoidGameHub';
 import { RandzuLogic } from './games/randzu/RandzuLogic';
 import { ThimblerigLogic } from './games/thimblerig/ThimblerigLogic';
-import { Balances } from './framework';
+import { Balances } from '@zknoid/chain-sdk/dist/framework';
 import { ModulesConfig } from '@proto-kit/common';
 import { CheckersLogic } from './games/checkers';
 import { GuessGame } from './games/number_guessing';
