@@ -34,7 +34,7 @@ export default function Storefront() {
     []
   );
   useEffect(() => {
-    const zkNoidConfig = import('@/games/config');
+    const zkNoidConfig = import('@zknoid/games/config');
 
     zkNoidConfig.then((zkNoidGames) => {
       setGames(
