@@ -1,5 +1,5 @@
 {
-    "name": "zknoid-chain-dev",
+    "name": "@zknoid/chain-games",
     "version": "1.4.5",
     "type": "module",
     "main": "dist/src/index.js",
@@ -14,16 +14,7 @@
         }
     },
     "scripts": {
-        "lint": "eslint .",
-        "test": "node --experimental-vm-modules --experimental-wasm-modules --experimental-wasm-threads ./node_modules/jest/bin/jest.js",
-        "test:watch": "npm run test --watchAll",
-        "build": "pnpm run prisma:generate && tsc -p tsconfig.json",
-        "on-startup-scripts": "sleep 10 && node --experimental-specifier-resolution=node --experimental-vm-modules --experimental-wasm-modules --experimental-wasm-threads dist/on_startup_scripts/set-default-games.js",
-        "start": "node --experimental-vm-modules --experimental-wasm-modules --experimental-wasm-threads --es-module-specifier-resolution=node ./dist/start.js",
-        "dev:run": "node --loader ts-node/esm --experimental-vm-modules --experimental-wasm-modules --experimental-wasm-threads --es-module-specifier-resolution=node ./src/start.ts start \"./environments/${PROTOKIT_ENV_FOLDER}/chain.config.ts\" $1",
-        "dev": "pnpm run prisma:generate && tsc -p tsconfig.json && concurrently 'pnpm on-startup-scripts' 'nodemon --watch src -e ts --exec \"pnpm dev:run\"' ",
-        "migrate": "prisma migrate deploy --schema ./node_modules/@proto-kit/persistance/prisma/schema.prisma",
-        "prisma:generate": "prisma generate --schema ./node_modules/@proto-kit/persistance/prisma/schema.prisma"
+        "build": "tsc -p tsconfig.json"
     },
     "devDependencies": {
         "@jest/globals": "^29.6.1",
@@ -68,7 +59,6 @@
         "concurrently": "^8.2.2",
         "o1js": "1.6.0",
         "tsyringe": "^4.7.0",
-        "@zknoid/chain-sdk": "workspace:*",
-        "@zknoid/chain-games": "workspace:*"
+        "@zknoid/chain-sdk": "workspace:*"
     }
 }
