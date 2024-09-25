@@ -1,11 +1,11 @@
 import { UInt64 } from '@proto-kit/library';
-import { ArkanoidGameHub } from './games/arkanoid/ArkanoidGameHub';
-import { RandzuLogic } from './games/randzu/RandzuLogic';
-import { ThimblerigLogic } from './games/thimblerig/ThimblerigLogic';
+import { ArkanoidGameHub } from './arkanoid/ArkanoidGameHub';
+import { RandzuLogic } from './randzu/RandzuLogic';
+import { ThimblerigLogic } from './thimblerig/ThimblerigLogic';
 import { Balances } from '@zknoid/chain-sdk/dist/framework';
 import { ModulesConfig } from '@proto-kit/common';
-import { CheckersLogic } from './games/checkers';
-import { GuessGame } from './games/number_guessing';
+import { CheckersLogic } from './checkers';
+import { GuessGame } from './number_guessing';
 
 const modules = {
   ArkanoidGameHub,
