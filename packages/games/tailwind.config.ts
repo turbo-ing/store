@@ -5,9 +5,9 @@ const plugin = require('tailwindcss/plugin');
 module.exports = {
   darkMode: ['class'],
   content: [
-    './*/{ui,components}/**/*.{vue,js,ts,jsx,tsx}',
-    './game-template/**/*.{vue,js,ts,jsx,tsx}',
-
+    './*/{ui,components}/*.{ts,tsx}',
+    './*/{ui,components}/**/*.{ts,tsx}',
+    './game-template/**/*.{ts,tsx}',
   ],
   theme: {
     container: {
