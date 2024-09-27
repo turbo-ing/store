@@ -64,7 +64,7 @@ export interface ClientState {
   ) => Promise<any>;
 }
 
-export const useWorkerClientStore = create<
+export const useWorkerClientStoree = create<
   ClientState,
   [["zustand/immer", never]]
 >(
@@ -304,11 +304,3 @@ export const useWorkerClientStore = create<
     },
   }))
 );
-
-export const useRegisterWorkerClient = () => {
-  const workerClientStore = useWorkerClientStore();
-
-  useEffect(() => {
-    if (workerClientStore.status == "Not loaded") workerClientStore.start();
-  }, []);
-};

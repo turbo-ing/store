@@ -1,5 +1,4 @@
 import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
-import { useRegisterWorkerClient } from '@zknoid/sdk/lib/stores/workerClient';
 import {
   ALL_NETWORKS,
   Network,

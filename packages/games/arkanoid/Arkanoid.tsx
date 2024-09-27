@@ -5,7 +5,7 @@ import { GameView, ITick } from "./components/GameView";
 import { Bricks } from "zknoid-chain-dev";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { useSwitchWidgetStorage } from "@zknoid/sdk/lib/stores/switchWidgetStorage";
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useRegisterWorkerClient, useWorkerClientStore } from "./workers/workerClientStore";
 import {
   useArkanoidLeaderboardStore,
   useObserveArkanoidLeaderboard,
@@ -96,6 +96,8 @@ export default function Arkanoid({
       setIsPreRegModalOpen(true);
     }
   }, [competition]);
+
+  useRegisterWorkerClient();
 
   return (
     <GamePage gameConfig={arkanoidConfig} gameTitleImage={ArkanoidCoverSVG}>
@@ -201,7 +203,7 @@ export default function Arkanoid({
                           }
                         >
                           {" "}
-                          Wait for initialization
+                          Wait for initialization {workerClientStore.status}
                         </div>
                       )}
                     </div>

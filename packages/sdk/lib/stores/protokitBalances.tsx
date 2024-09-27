@@ -69,21 +69,6 @@ export const useProtokitBalancesStore = create<
         PrivateKey.random().toPublicKey()
       );
 
-      const point1 = { x: Field(10), y: Field(4) };
-      const point2 = { x: Field(1), y: Field(2) };
-
-      const pointSum = Point.add(point1, point2);
-
-      console.log(`pointSum Fields: ${Point.toFields(pointSum)}`);
-
-      console.log(
-        'Bug',
-        TokenId.toFields(key.tokenId),
-        PublicKey.toFields(key.address)
-      );
-      console.log('Bug1', BalancesKey1.toFields(key));
-      // console.log('Bug2', BalancesKey.toFields(key));
-
       const balance = await client.query.runtime.Balances.balances.get(
         // @ts-ignore
         new BalancesKey({

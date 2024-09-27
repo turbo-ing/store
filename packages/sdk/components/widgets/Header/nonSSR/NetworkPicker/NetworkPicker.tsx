@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { ALL_NETWORKS, Network } from "../../../../../constants/networks";
 import { requestAccounts, walletInstalled } from "../../../../../lib/helpers";
 import { useNetworkStore } from "../../../../../lib/stores/network";
-import { useRegisterWorkerClient } from "../../../../../lib/stores/workerClient";
 import { AnimatePresence, motion } from "framer-motion";
 import NetworkPickerCard from "./ui/NetworkPickerCard";
 import zekoLogo from "../../../../../public/image/cards/zekoLogo.svg";
@@ -18,7 +17,6 @@ export default function NetworkPicker({
   setExpanded: (expanded: boolean) => void;
 }) {
   const networkStore = useNetworkStore();
-  useRegisterWorkerClient();
 
   const switchNetwork = async (network: Network) => {
     console.log("Switching to", network);

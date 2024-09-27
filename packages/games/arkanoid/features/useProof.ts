@@ -2,9 +2,9 @@ import { CHUNK_LENGTH, GameInputs, Tick } from "zknoid-chain-dev";
 import { Bool, Field, Int64, PublicKey, UInt64 } from "o1js";
 import { getEnvContext } from "@zknoid/sdk/lib/envContext";
 import { ITick } from "../components/GameView";
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useWorkerClientStore } from "../workers/workerClientStore";
 import { ICompetition } from "@zknoid/sdk/lib/types";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ZkNoidGameContext from "@zknoid/sdk/lib/contexts/ZkNoidGameContext";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 // import { api } from "@zknoid/sdk/trpc/react";
@@ -16,6 +16,11 @@ export const useProof = (
   score: number
 ) => {
   const workerClientStore = useWorkerClientStore();
+
+  useEffect(() => {
+    workerClientStore.start();
+  }, []);
+  
   const networkStore = useNetworkStore();
   const { client } = useContext(ZkNoidGameContext);
   // const progress = api.progress.setSolvedQuests.useMutation();

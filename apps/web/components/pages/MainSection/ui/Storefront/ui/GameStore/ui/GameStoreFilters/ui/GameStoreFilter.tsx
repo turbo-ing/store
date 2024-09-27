@@ -80,7 +80,7 @@ export function GameStoreFilter<T extends string>({
             d="M39 1H3.82843C2.04662 1 1.15428 3.15428 2.41421 4.41421L37.5858 39.5858C38.8457 40.8457 41 39.9534 41 38.1716V3C41 1.89543 40.1046 1 39 1Z"
             fill="#D2FF00"
             stroke="#D2FF00"
-            stroke-width="2"
+            strokeWidth="2"
             className={cn({ 'fill-none': !isOpen })}
           />
         </svg>
