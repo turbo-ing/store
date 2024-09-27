@@ -64,7 +64,7 @@ export interface ClientState {
   ) => Promise<any>;
 }
 
-export const useWorkerClientStoree = create<
+export const useWorkerClientStore = create<
   ClientState,
   [["zustand/immer", never]]
 >(
