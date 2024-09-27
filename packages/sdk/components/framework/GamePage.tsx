@@ -51,7 +51,7 @@ export function TabsSwitch({
             "absolute top-0 flex h-[4vw] w-[18vw] cursor-pointer flex-row items-center justify-center gap-[0.781vw] hover:opacity-80",
             !tabs && !competitionsSupported && !lobbiesSupported
               ? "left-0"
-              : "-left-[1vw]"
+              : "-left-[1vw]",
           )}
         >
           <svg
@@ -70,7 +70,7 @@ export function TabsSwitch({
                   !pathname.includes("lobby") &&
                   !pathname.includes("competitions-list")
                   ? "fill-left-accent"
-                  : "fill-foreground"
+                  : "fill-foreground",
               )}
             />
           </svg>
@@ -81,7 +81,7 @@ export function TabsSwitch({
                 !pathname.includes("lobby") &&
                 !pathname.includes("competitions-list")
                 ? "text-left-accent"
-                : "text-foreground"
+                : "text-foreground",
             )}
           >
             {gameName}
@@ -112,7 +112,7 @@ export function TabsSwitch({
             href={`/games/${gameId}/competitions-list`}
             className={cn(
               "absolute top-0 flex h-[4vw] w-[18vw] cursor-pointer flex-row items-center justify-center gap-[0.781vw] hover:opacity-80",
-              !tabs ? "left-0" : "-left-[1vw]"
+              !tabs ? "left-0" : "-left-[1vw]",
             )}
           >
             <svg
@@ -130,7 +130,7 @@ export function TabsSwitch({
                   className={cn(
                     pathname.includes("competitions-list")
                       ? "fill-left-accent"
-                      : "fill-foreground"
+                      : "fill-foreground",
                   )}
                 />
                 <path
@@ -139,7 +139,7 @@ export function TabsSwitch({
                   className={cn(
                     pathname.includes("competitions-list")
                       ? "fill-left-accent"
-                      : "fill-foreground"
+                      : "fill-foreground",
                   )}
                 />
                 <path
@@ -148,7 +148,7 @@ export function TabsSwitch({
                   className={cn(
                     pathname.includes("competitions-list")
                       ? "fill-left-accent"
-                      : "fill-foreground"
+                      : "fill-foreground",
                   )}
                 />
                 <path
@@ -157,7 +157,7 @@ export function TabsSwitch({
                   className={cn(
                     pathname.includes("competitions-list")
                       ? "fill-left-accent"
-                      : "fill-foreground"
+                      : "fill-foreground",
                   )}
                 />
               </g>
@@ -172,7 +172,7 @@ export function TabsSwitch({
                 "font-museo text-[1.25vw] font-medium",
                 pathname.includes("competitions-list")
                   ? "text-left-accent"
-                  : "text-foreground"
+                  : "text-foreground",
               )}
             >
               Competitions list
@@ -204,7 +204,7 @@ export function TabsSwitch({
             href={`/games/${gameId}/lobby/undefined`}
             className={cn(
               "absolute top-0 flex h-[4vw] w-[18vw] cursor-pointer flex-row items-center justify-center gap-[0.781vw] hover:opacity-80",
-              !tabs ? "left-0" : "-left-[1vw]"
+              !tabs ? "left-0" : "-left-[1vw]",
             )}
           >
             <svg
@@ -222,7 +222,7 @@ export function TabsSwitch({
                   className={cn(
                     pathname.includes("lobby")
                       ? "fill-left-accent"
-                      : "fill-foreground"
+                      : "fill-foreground",
                   )}
                 />
                 <path
@@ -231,7 +231,7 @@ export function TabsSwitch({
                   className={cn(
                     pathname.includes("lobby")
                       ? "fill-left-accent"
-                      : "fill-foreground"
+                      : "fill-foreground",
                   )}
                 />
                 <path
@@ -240,7 +240,7 @@ export function TabsSwitch({
                   className={cn(
                     pathname.includes("lobby")
                       ? "fill-left-accent"
-                      : "fill-foreground"
+                      : "fill-foreground",
                   )}
                 />
                 <path
@@ -249,7 +249,7 @@ export function TabsSwitch({
                   className={cn(
                     pathname.includes("lobby")
                       ? "fill-left-accent"
-                      : "fill-foreground"
+                      : "fill-foreground",
                   )}
                 />
               </g>
@@ -264,7 +264,7 @@ export function TabsSwitch({
                 "font-museo text-[1.25vw] font-medium",
                 pathname.includes("lobby")
                   ? "text-left-accent"
-                  : "text-foreground"
+                  : "text-foreground",
               )}
             >
               Lobby list
@@ -297,7 +297,7 @@ export function TabsSwitch({
               href={`/games/${gameId}/undefined?tab=${tab.tab}`}
               className={cn(
                 "absolute  top-0 flex h-[4vw] w-[18vw] cursor-pointer flex-row items-center justify-center gap-[0.781vw] hover:opacity-80",
-                tabs.length == index + 1 ? "left-0" : "-left-[1vw]"
+                tabs.length == index + 1 ? "left-0" : "-left-[1vw]",
               )}
             >
               {tab.icon && (
@@ -309,7 +309,9 @@ export function TabsSwitch({
               <span
                 className={cn(
                   "font-museo text-[1.25vw] font-medium",
-                  currentTab == tab.tab ? "text-left-accent" : "text-foreground"
+                  currentTab == tab.tab
+                    ? "text-left-accent"
+                    : "text-foreground",
                 )}
               >
                 {tab.name}
@@ -360,7 +362,7 @@ export default function GamePage<RuntimeModules extends RuntimeModulesRecord>({
           <div
             className={cn(
               "w-full border-2 rounded-[1.042vw] border-left-accent h-[15.625vw] overflow-hidden",
-              useTabs ? "mb-[7.813vw]" : "mb-[5.208vw]"
+              useTabs ? "mb-[7.813vw]" : "mb-[5.208vw]",
             )}
           >
             <Image

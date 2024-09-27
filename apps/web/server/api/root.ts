@@ -6,6 +6,7 @@ import { progressRouter } from "./routers/progress";
 import { accountsRouter } from "./routers/accounts";
 import { giftCodesRouter } from "./routers/gift-codes";
 import { leaderboardRouter } from "./routers/leaderboard";
+import { lotteryBackendRouter } from "./routers/lottery-backend";
 
 /**
  * This is the primary router for your server.
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   accounts: accountsRouter,
   giftCodes: giftCodesRouter,
   leaderboard: leaderboardRouter,
+  lotteryBackend: lotteryBackendRouter,
 });
 
 // export type definition of API

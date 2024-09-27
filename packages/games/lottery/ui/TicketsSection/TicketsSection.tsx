@@ -1,24 +1,22 @@
-import { cn } from '@zknoid/sdk/lib/helpers';
-import TicketCard from './ui/TicketCard';
-import BuyInfoCard from './ui/BuyInfoCard';
-import { useEffect, useState } from 'react';
-import OwnedTickets from './OwnedTickets';
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
-import { AnimatePresence } from 'framer-motion';
-import PreviousRounds from './PreviousRounds';
-import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
-import { useRoundsStore } from '../../lib/roundsStore';
-import OwnedGiftCodes from './GiftCodes/OwnedGiftCodes';
-import BoughtGiftCodes from './GiftCodes/BoughtGiftCodes';
-import UseGiftCodeForm from './GiftCodes/UseGiftCodeForm';
-import ValidGiftCode from './GiftCodes/ValidGiftCode';
-import NoUserGiftCodes from './GiftCodes/NoUserGiftCodes';
-import BuyGiftCodesCounter from './GiftCodes/BuyGiftCodesCounter';
-// import { api } from '@/trpc/react';
-import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
-import { VoucherMode } from './lib/voucherMode';
-
-// import GetMoreTicketsButton from './ui/GetMoreTicketsButton';
+import { cn } from "@zknoid/sdk/lib/helpers";
+import TicketCard from "./ui/TicketCard";
+import BuyInfoCard from "./ui/BuyInfoCard";
+import { useContext, useEffect, useState } from "react";
+import OwnedTickets from "./OwnedTickets";
+import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { AnimatePresence } from "framer-motion";
+import PreviousRounds from "./PreviousRounds";
+import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
+import { useRoundsStore } from "../../lib/roundsStore";
+import OwnedGiftCodes from "./GiftCodes/OwnedGiftCodes";
+import BoughtGiftCodes from "./GiftCodes/BoughtGiftCodes";
+import UseGiftCodeForm from "./GiftCodes/UseGiftCodeForm";
+import ValidGiftCode from "./GiftCodes/ValidGiftCode";
+import NoUserGiftCodes from "./GiftCodes/NoUserGiftCodes";
+import BuyGiftCodesCounter from "./GiftCodes/BuyGiftCodesCounter";
+import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
+import { VoucherMode } from "./lib/voucherMode";
+import GamesContext from "../../../../sdk/lib/contexts/GamesContext";
 
 interface TicketInfo {
   amount: number;
@@ -31,37 +29,18 @@ export default function TicketsSection() {
   const roundsStore = useRoundsStore();
   const notificationStore = useNotificationStore();
   const networkStore = useNetworkStore();
+  const { lotteryContext } = useContext(GamesContext);
 
   const [tickets, setTickets] = useState<TicketInfo[]>([]);
   const [blankTicket, setBlankTicket] = useState<boolean>(true);
   const [voucherMode, setVoucherMode] = useState<VoucherMode>(
-    VoucherMode.Closed
+    VoucherMode.Closed,
   );
-  const [giftCode, setGiftCode] = useState<string>('');
+  const [giftCode, setGiftCode] = useState<string>("");
   const [giftCodeToBuyAmount, setGiftCodeToBuyAmount] = useState<number>(1);
   const [boughtGiftCodes, setBoughtGiftCodes] = useState<string[]>([]);
-  const [userGiftCodes, setUserGiftCodes] = useState<
-    { code: string; used: boolean; createdAt: string }[]
-  >([]);
   const [hasOwnedTickets, setHasOwnedTickets] = useState<boolean>(false);
-
-  // const getUserTicketQuery = api.giftCodes.getUserGiftCodes.useQuery({
-  //   userAddress: networkStore.address || '',
-  // });
-
-  // useEffect(() => {
-  //   if (getUserTicketQuery.data) {
-  //     if (getUserTicketQuery.data.giftCodes) {
-  //       setUserGiftCodes(
-  //         getUserTicketQuery.data.giftCodes.map((item) => ({
-  //           code: item.code,
-  //           used: item.used,
-  //           createdAt: item.createdAt,
-  //         }))
-  //       );
-  //     }
-  //   }
-  // }, [getUserTicketQuery.data]);
+  const userGiftCodes = lotteryContext.userGiftCodes;
 
   useEffect(() => {
     setTickets([]);
@@ -81,20 +60,20 @@ export default function TicketsSection() {
   return (
     <div
       className={cn(
-        'relative flex flex-col rounded-[0.67vw] border border-left-accent bg-bg-grey px-[2vw] py-[2.67vw]',
+        "relative flex flex-col rounded-[0.67vw] border border-left-accent bg-bg-grey px-[2vw] py-[2.67vw]",
         {
-          'gap-[2.604vw]':
+          "gap-[2.604vw]":
             hasOwnedTickets ||
             roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
-        }
+        },
       )}
     >
       <div className="">
         <div
-          className={cn('grid gap-[2vw]', {
-            'grid-cols-2':
+          className={cn("grid gap-[2vw]", {
+            "grid-cols-2":
               roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
-            'grid-cols-1':
+            "grid-cols-1":
               roundsStore.roundToShowId != lotteryStore.lotteryRoundId,
           })}
         >
@@ -103,25 +82,25 @@ export default function TicketsSection() {
             setHasOwnedTickets={setHasOwnedTickets}
           />
           {roundsStore.roundToShowId == lotteryStore.lotteryRoundId && (
-            <div className={'flex flex-col'}>
+            <div className={"flex flex-col"}>
               <div className="mb-[1.33vw] text-[2.13vw]">Buy tickets</div>
-              <div className={'flex flex-row gap-[1.33vw]'}>
-                <div className={'flex flex-col gap-[0.521vw]'}>
+              <div className={"flex flex-row gap-[1.33vw]"}>
+                <div className={"flex flex-col gap-[0.521vw]"}>
                   {(voucherMode == VoucherMode.Closed ||
                     voucherMode == VoucherMode.Use ||
                     voucherMode == VoucherMode.UseValid) && (
                     <div
                       className={cn({
-                        'flex flex-col gap-0':
+                        "flex flex-col gap-0":
                           voucherMode != VoucherMode.Closed,
                       })}
                     >
                       <button
                         className={cn(
-                          'flex w-[22.5vw] cursor-pointer flex-row items-center justify-center gap-[0.781vw] rounded-[0.521vw] bg-right-accent py-[0.365vw] hover:opacity-80 disabled:cursor-default disabled:hover:opacity-100',
+                          "flex w-[22.5vw] cursor-pointer flex-row items-center justify-center gap-[0.781vw] rounded-[0.521vw] bg-right-accent py-[0.365vw] hover:opacity-80 disabled:cursor-default disabled:hover:opacity-100",
                           {
-                            'rounded-b-none': voucherMode != VoucherMode.Closed,
-                          }
+                            "rounded-b-none": voucherMode != VoucherMode.Closed,
+                          },
                         )}
                         onClick={() => setVoucherMode(VoucherMode.Use)}
                         disabled={voucherMode != VoucherMode.Closed}
@@ -132,7 +111,7 @@ export default function TicketsSection() {
                           viewBox="0 0 25 25"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
-                          className={'my-[0.208vw] h-[1.302vw] w-[1.302vw]'}
+                          className={"my-[0.208vw] h-[1.302vw] w-[1.302vw]"}
                         >
                           <path
                             fillRule="evenodd"
@@ -147,7 +126,7 @@ export default function TicketsSection() {
                         </svg>
                         <span
                           className={
-                            'mt-[0.208vw] font-museo text-[0.833vw] font-medium text-bg-dark'
+                            "mt-[0.208vw] font-museo text-[0.833vw] font-medium text-bg-dark"
                           }
                         >
                           Use gift access code
@@ -166,21 +145,21 @@ export default function TicketsSection() {
                     voucherMode == VoucherMode.BuySuccess) && (
                     <div
                       className={
-                        'flex h-full w-[22.5vw] flex-col gap-0 rounded-b-[0.521vw] bg-[#252525]'
+                        "flex h-full w-[22.5vw] flex-col gap-0 rounded-b-[0.521vw] bg-[#252525]"
                       }
                     >
-                      <div className={'flex w-full flex-row'}>
+                      <div className={"flex w-full flex-row"}>
                         <button
                           className={cn(
-                            'w-[40%] cursor-pointer rounded-t-[0.26vw] text-center font-plexsans text-[0.833vw] font-medium uppercase hover:opacity-80 disabled:cursor-default disabled:hover:opacity-100',
+                            "w-[40%] cursor-pointer rounded-t-[0.26vw] text-center font-plexsans text-[0.833vw] font-medium uppercase hover:opacity-80 disabled:cursor-default disabled:hover:opacity-100",
                             {
-                              'border border-foreground text-foreground':
+                              "border border-foreground text-foreground":
                                 voucherMode != VoucherMode.Buy &&
                                 voucherMode != VoucherMode.BuySuccess,
-                              'bg-right-accent text-bg-dark':
+                              "bg-right-accent text-bg-dark":
                                 voucherMode == VoucherMode.Buy ||
                                 voucherMode == VoucherMode.BuySuccess,
-                            }
+                            },
                           )}
                           onClick={() => setVoucherMode(VoucherMode.Buy)}
                           disabled={voucherMode == VoucherMode.BuySuccess}
@@ -189,13 +168,13 @@ export default function TicketsSection() {
                         </button>
                         <button
                           className={cn(
-                            'w-[60%] cursor-pointer rounded-t-[0.26vw] bg-[#252525] text-center font-plexsans text-[0.833vw] font-medium uppercase hover:opacity-80',
+                            "w-[60%] cursor-pointer rounded-t-[0.26vw] bg-[#252525] text-center font-plexsans text-[0.833vw] font-medium uppercase hover:opacity-80",
                             {
-                              'border border-foreground text-foreground':
+                              "border border-foreground text-foreground":
                                 voucherMode != VoucherMode.List,
-                              'bg-right-accent text-bg-dark':
+                              "bg-right-accent text-bg-dark":
                                 voucherMode == VoucherMode.List,
-                            }
+                            },
                           )}
                           onClick={() => setVoucherMode(VoucherMode.List)}
                         >
@@ -228,7 +207,7 @@ export default function TicketsSection() {
                   )}
                   {(voucherMode == VoucherMode.Closed ||
                     voucherMode == VoucherMode.UseValid) && (
-                    <div className={'flex flex-col gap-0'}>
+                    <div className={"flex flex-col gap-0"}>
                       <AnimatePresence>
                         {renderTickets.map((_, index) => (
                           <TicketCard
@@ -244,8 +223,8 @@ export default function TicketsSection() {
                               }
                               setBlankTicket(false);
                               notificationStore.create({
-                                type: 'success',
-                                message: `Ticket ${ticket.numbers.toString().replaceAll(',', '')} submitted`,
+                                type: "success",
+                                message: `Ticket ${ticket.numbers.toString().replaceAll(",", "")} submitted`,
                                 isDismissible: true,
                                 dismissAfterDelay: true,
                               });
@@ -258,8 +237,8 @@ export default function TicketsSection() {
                                   tickets.splice(index, 1);
                                 }
                                 notificationStore.create({
-                                  type: 'success',
-                                  message: 'Ticket removed',
+                                  type: "success",
+                                  message: "Ticket removed",
                                   isDismissible: true,
                                   dismissAfterDelay: true,
                                 });
@@ -272,11 +251,11 @@ export default function TicketsSection() {
                   )}
                 </div>
 
-                <div className={'flex flex-col gap-[0.521vw]'}>
+                <div className={"flex flex-col gap-[0.521vw]"}>
                   {voucherMode == VoucherMode.Closed ? (
                     <button
                       className={
-                        'flex w-full cursor-pointer flex-row items-center justify-center gap-[0.781vw] rounded-[0.521vw] bg-[#252525] py-[0.365vw] hover:opacity-80'
+                        "flex w-full cursor-pointer flex-row items-center justify-center gap-[0.781vw] rounded-[0.521vw] bg-[#252525] py-[0.365vw] hover:opacity-80"
                       }
                       onClick={() => setVoucherMode(VoucherMode.Buy)}
                     >
@@ -286,7 +265,7 @@ export default function TicketsSection() {
                         viewBox="0 0 25 25"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className={'my-[0.208vw] h-[1.302vw] w-[1.302vw]'}
+                        className={"my-[0.208vw] h-[1.302vw] w-[1.302vw]"}
                       >
                         <path
                           fillRule="evenodd"
@@ -301,7 +280,7 @@ export default function TicketsSection() {
                       </svg>
                       <span
                         className={
-                          'mt-[0.208vw] font-museo text-[0.833vw] font-medium text-foreground'
+                          "mt-[0.208vw] font-museo text-[0.833vw] font-medium text-foreground"
                         }
                       >
                         Generate gift access code
@@ -310,7 +289,7 @@ export default function TicketsSection() {
                   ) : (
                     <button
                       className={
-                        'mb-[0.521vw] flex h-[1.354vw] w-[3.802vw] flex-row items-center justify-center rounded-[0.144vw] border border-foreground hover:opacity-80'
+                        "mb-[0.521vw] flex h-[1.354vw] w-[3.802vw] flex-row items-center justify-center rounded-[0.144vw] border border-foreground hover:opacity-80"
                       }
                       onClick={() => {
                         if (voucherMode == VoucherMode.BuySuccess)
@@ -324,7 +303,7 @@ export default function TicketsSection() {
                         viewBox="0 0 9 16"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className={'mr-[0.26vw] h-[0.781vw] w-[0.378vw]'}
+                        className={"mr-[0.26vw] h-[0.781vw] w-[0.378vw]"}
                       >
                         <path
                           d="M8.36328 0.5L1.10522 8L8.36328 15.5"
@@ -333,7 +312,7 @@ export default function TicketsSection() {
                       </svg>
                       <span
                         className={
-                          'pt-px font-museo text-[0.729vw] font-medium text-foreground'
+                          "pt-px font-museo text-[0.729vw] font-medium text-foreground"
                         }
                       >
                         Back
@@ -341,8 +320,8 @@ export default function TicketsSection() {
                     </button>
                   )}
                   <div
-                    className={'flex flex-col gap-[1.33vw]'}
-                    id={'ticketsToBuy'}
+                    className={"flex flex-col gap-[1.33vw]"}
+                    id={"ticketsToBuy"}
                   >
                     <BuyInfoCard
                       buttonActive={
