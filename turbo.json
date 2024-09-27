@@ -25,6 +25,13 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "web#dev": {
+      "dependsOn": [
+        "zknoid-chain-dev#build",
+        "@zknoid/chain-sdk#build",
+        "@zknoid/chain-games#build"
+      ]
     }
   }
 }
