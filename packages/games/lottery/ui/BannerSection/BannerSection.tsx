@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { cn } from "@zknoid/sdk/lib/helpers";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
 import Rules from "./ui/Rules";
 import BannerButton from "./ui/BannerButton";
@@ -8,9 +8,8 @@ import CenterConsole from "../../ui/BannerSection/ui/CenterConsole";
 import CurrentRoundInfo from "../../ui/BannerSection/ui/CurrentRoundInfo";
 import PrevRoundInfo from "../../ui/BannerSection/ui/PrevRoundInfo";
 import { Pages } from "../Lottery";
-// import { api } from '@/trpc/react';
-import { ILotteryRound } from "../../lib/types";
 import { useRoundsStore } from "../../lib/roundsStore";
+import GamesContext from "../../../../sdk/lib/contexts/GamesContext";
 
 export default function BannerSection({
   roundEndsIn,
@@ -20,28 +19,10 @@ export default function BannerSection({
   setPage: (page: Pages) => void;
 }) {
   const lotteryStore = useWorkerClientStore();
-  const [roundInfo, setRoundInfo] = useState<ILotteryRound | undefined>(
-    undefined
-  );
   const roundsStore = useRoundsStore();
 
-  // const getRoundQuery = api.lotteryBackend.getRoundInfo.useQuery(
-  //   {
-  //     roundId: roundsStore.roundToShowId,
-  //   },
-  //   {
-  //     refetchInterval: 5000,
-  //   }
-  // );
-
-  // useEffect(() => {
-  //   if (!getRoundQuery.data) return undefined;
-  //   setRoundInfo(getRoundQuery.data);
-  // }, [roundsStore.roundToShowId, getRoundQuery.data]);
-
-  // useEffect(() => {
-  //   roundsStore.setRoundToShowId(lotteryStore.lotteryRoundId);
-  // }, [lotteryStore.lotteryRoundId]);
+  const { lotteryContext } = useContext(GamesContext);
+  const roundInfo = lotteryContext.roundInfo;
 
   const ticketsNum = roundInfo?.tickets
     .map((x) => x.amount)
@@ -56,7 +37,7 @@ export default function BannerSection({
             roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
           "bg-[url('/image/games/lottery/TopBanner-2.svg')] bg-contain bg-center bg-no-repeat":
             roundsStore.roundToShowId != lotteryStore.lotteryRoundId,
-        }
+        },
       )}
     >
       <div className="absolute m-[1vw] flex h-[3.13vw] gap-[0.33vw]">

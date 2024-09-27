@@ -1,14 +1,14 @@
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
-import MyTicket from './ui/MyTicket';
-import { useEffect, useState } from 'react';
-import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
-import { cn } from '@zknoid/sdk/lib/helpers';
-import PageButton from './ui/PageButton';
-import { formatUnits } from '@zknoid/sdk/lib/unit';
-import { Currency } from '@zknoid/sdk/constants/currency';
-// import { api } from '@/trpc/react';
-import { useRoundsStore } from '../../../lib/roundsStore';
-import { ILotteryTicket } from '../../../lib/types';
+import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import MyTicket from "./ui/MyTicket";
+import { useContext, useEffect, useState } from "react";
+import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
+import { cn } from "@zknoid/sdk/lib/helpers";
+import PageButton from "./ui/PageButton";
+import { formatUnits } from "@zknoid/sdk/lib/unit";
+import { Currency } from "@zknoid/sdk/constants/currency";
+import { useRoundsStore } from "../../../lib/roundsStore";
+import { ILotteryTicket } from "../../../lib/types";
+import GamesContext from "../../../../../sdk/lib/contexts/GamesContext";
 
 interface ITicket extends ILotteryTicket {
   id: string;
@@ -22,84 +22,67 @@ export default function OwnedTickets({
   setHasOwnedTickets: (hasTickets: boolean) => void;
 }) {
   const roundsStore = useRoundsStore();
-  const [currentTicket, setCurrentTicket] = useState<ITicket | undefined>(
-    undefined
-  );
   const workerStore = useWorkerClientStore();
-  const [tickets, setTickets] = useState<ITicket[]>([]);
   const networkStore = useNetworkStore();
+  const { lotteryContext } = useContext(GamesContext);
+
+  const [page, setPage] = useState<number>(1);
+  const [tickets, setTickets] = useState<ITicket[]>([]);
+  const [currentTicket, setCurrentTicket] = useState<ITicket | undefined>(
+    undefined,
+  );
+
   const TICKETS_PER_PAGE =
     roundsStore.roundToShowId != workerStore.lotteryRoundId ? 6 : 4;
-  const [page, setPage] = useState<number>(1);
   const pagesAmount = Math.ceil(tickets.length / TICKETS_PER_PAGE);
   const renderTickets = tickets.slice(
     (page - 1) * TICKETS_PER_PAGE,
-    page * TICKETS_PER_PAGE
+    page * TICKETS_PER_PAGE,
   );
+  const roundInfo = lotteryContext.roundInfo;
 
-  // const getRoundQuery = api.lotteryBackend.getRoundInfo.useQuery(
-  //   {
-  //     roundId: roundsStore.roundToShowId,
-  //   },
-  //   {
-  //     refetchInterval: 5000,
-  //   }
-  // );
+  useEffect(() => {
+    if (!roundInfo?.tickets) return;
 
-  // useEffect(() => {
-  //   if (!getRoundQuery.data) return;
+    setTickets(
+      roundInfo.tickets
+        .filter(
+          (x: { owner: string | undefined }) => x.owner == networkStore.address,
+        )
+        .map((x, i) => ({
+          id: `${i}`,
+          numbers: x.numbers,
+          amount: x.amount,
+          funds: x.funds,
+          claimed: x.claimed,
+          owner: x.owner,
+          hash: x.hash,
+        })),
+    );
+  }, [roundsStore.roundToShowId, roundInfo]);
 
-  //   setTickets(
-  //     getRoundQuery.data.tickets
-  //       .filter(
-  //         (x: { owner: string | undefined }) => x.owner == networkStore.address
-  //       )
-  //       .map(
-  //         (
-  //           x: {
-  //             numbers: any;
-  //             amount: any;
-  //             funds: any;
-  //             claimed: any;
-  //             owner: any;
-  //             hash: any;
-  //           },
-  //           i: any
-  //         ) => ({
-  //           id: `${i}`,
-  //           numbers: x.numbers,
-  //           amount: x.amount,
-  //           funds: x.funds,
-  //           claimed: x.claimed,
-  //           owner: x.owner,
-  //           hash: x.hash,
-  //         })
-  //       )
-  //   );
-  // }, [roundsStore.roundToShowId, getRoundQuery.data]);
-
-  // useEffect(() => {
-  //   if (tickets.length != 0 && !hasOwnedTickets) {
-  //     setHasOwnedTickets(true);
-  //   }
-  // }, [tickets.length]);
+  useEffect(() => {
+    if (tickets.length != 0 && !hasOwnedTickets) {
+      setHasOwnedTickets(true);
+    }
+  }, [tickets.length]);
 
   return (
     <div
-      className={cn('flex w-full flex-col', tickets.length == 0 && 'hidden')}
+      className={cn("flex w-full flex-col", tickets.length == 0 && "hidden")}
     >
       <div
         className={
-          'mb-[1.33vw] flex flex-row items-center justify-start gap-[1vw]'
+          "mb-[1.33vw] flex flex-row items-center justify-start gap-[1vw]"
         }
       >
         <div className="text-[2.13vw]">Your tickets</div>
         {roundsStore.roundToShowId != workerStore.lotteryRoundId &&
           tickets.length > TICKETS_PER_PAGE && (
-            <div className={'flex flex-row gap-[0.5vw]'}>
+            <div className={"flex flex-row gap-[0.5vw]"}>
               <button
                 className={
-                  'flex h-[1.82vw] w-[1.82vw] items-center justify-center rounded-[0.26vw] border border-foreground hover:opacity-80 disabled:opacity-60'
+                  "flex h-[1.82vw] w-[1.82vw] items-center justify-center rounded-[0.26vw] border border-foreground hover:opacity-80 disabled:opacity-60"
                 }
                 onClick={() => setPage((prevState) => prevState - 1)}
                 disabled={page - 1 < 1}
@@ -121,7 +104,7 @@ export default function OwnedTickets({
 
               <button
                 className={
-                  'flex h-[1.82vw] w-[1.82vw] items-center justify-center rounded-[0.26vw] border border-foreground hover:opacity-80 disabled:opacity-60'
+                  "flex h-[1.82vw] w-[1.82vw] items-center justify-center rounded-[0.26vw] border border-foreground hover:opacity-80 disabled:opacity-60"
                 }
                 onClick={() => setPage((prevState) => prevState + 1)}
                 disabled={page + 1 > pagesAmount}
@@ -145,8 +128,8 @@ export default function OwnedTickets({
       </div>
 
       <div
-        className={cn('flex w-full flex-row gap-[0.3vw]', {
-          'flex-wrap gap-[1.042vw]':
+        className={cn("flex w-full flex-row gap-[0.3vw]", {
+          "flex-wrap gap-[1.042vw]":
             roundsStore.roundToShowId != workerStore.lotteryRoundId,
         })}
       >
@@ -154,8 +137,8 @@ export default function OwnedTickets({
           page != 1 &&
           roundsStore.roundToShowId == workerStore.lotteryRoundId && (
             <PageButton
-              text={'Previous page'}
-              symbol={'←'}
+              text={"Previous page"}
+              symbol={"←"}
               onClick={() => {
                 setPage((prevState) => prevState - 1);
                 setCurrentTicket(undefined);
@@ -196,8 +179,8 @@ export default function OwnedTickets({
           page + 1 <= pagesAmount &&
           roundsStore.roundToShowId == workerStore.lotteryRoundId && (
             <PageButton
-              text={'Next page'}
-              symbol={'→'}
+              text={"Next page"}
+              symbol={"→"}
               onClick={() => {
                 setPage((prevState) => prevState + 1);
                 setCurrentTicket(undefined);

@@ -1,34 +1,34 @@
-import type { Metadata } from 'next';
-import 'reflect-metadata';
-import {TRPCReactProvider} from '../trpc/react';
-import { plexMono, museoSlab, plexSans } from './fonts';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import NotificationsContainer from '@zknoid/sdk/components/shared/Notification/NotificationsContainer';
-import './globals.css'; 
+import type { Metadata } from "next";
+import "reflect-metadata";
+import { TRPCReactProvider } from "../trpc/react";
+import { plexMono, museoSlab, plexSans } from "./fonts";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import NotificationsContainer from "@zknoid/sdk/components/shared/Notification/NotificationsContainer";
+import "./globals.css";
 import "@zknoid/games/styles.css";
 import "@zknoid/sdk/styles.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://app.zknoid.io'),
+  metadataBase: new URL("https://app.zknoid.io"),
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   icons: {
-    icon: '/favicon.ico',
-    apple: '/favicon.ico',
+    icon: "/favicon.ico",
+    apple: "/favicon.ico",
   },
-  title: 'ZkNoid gaming platform',
+  title: "ZkNoid gaming platform",
   description:
-    'Revolutionizing competitive gaming using zero knowledge technologies',
+    "Revolutionizing competitive gaming using zero knowledge technologies",
   openGraph: {
-    title: 'ZkNoid gaming platform',
+    title: "ZkNoid gaming platform",
     description:
-      'Revolutionizing competitive gaming using zero knowledge technologies',
-    url: 'https://app.zknoid.io',
-    images: '/meta-preview.png',
-    siteName: 'ZkNoid gaming platform',
-    type: 'website',
+      "Revolutionizing competitive gaming using zero knowledge technologies",
+    url: "https://app.zknoid.io",
+    images: "/meta-preview.png",
+    siteName: "ZkNoid gaming platform",
+    type: "website",
   },
 };
 
@@ -40,15 +40,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <TRPCReactProvider>
-          <body
-              className={`${museoSlab.variable} ${plexMono.variable} ${plexSans.variable}`}
-          >
+        <body
+          className={`${museoSlab.variable} ${plexMono.variable} ${plexSans.variable}`}
+        >
           {children}
-          <Analytics/>
-          <SpeedInsights/>
+          <Analytics />
+          <SpeedInsights />
 
-          <NotificationsContainer/>
-          </body>
+          <NotificationsContainer />
+        </body>
       </TRPCReactProvider>
     </html>
   );

@@ -1,7 +1,7 @@
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
 import { lotteryConfig } from "../config";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import BannerSection from "./BannerSection";
 import TicketsSection from "./TicketsSection";
@@ -17,6 +17,7 @@ import { BLOCK_PER_ROUND } from "l1-lottery-contracts";
 import StateManager from "./StateManager";
 import ConnectWalletModal from "@zknoid/sdk/components/shared/ConnectWalletModal";
 import TicketsStorage from "./TicketsStorage";
+import GamesContext from "../../../sdk/lib/contexts/GamesContext";
 
 export enum Pages {
   Main,
@@ -26,13 +27,14 @@ export enum Pages {
 export default function Lottery({}: { params: { competitionId: string } }) {
   const networkStore = useNetworkStore();
   const [roundEndsIn, setRoundEndsIn] = useState<DateTime>(
-    DateTime.fromMillis(0)
+    DateTime.fromMillis(0),
   );
   const [page, setPage] = useState<Pages>(Pages.Main);
 
   const workerClientStore = useWorkerClientStore();
   const chainStore = useChainStore();
   // const events = api.lotteryBackend.getMinaEvents.useQuery({});
+  const { lotteryContext } = useContext(GamesContext);
 
   useEffect(() => {
     if (!networkStore.minaNetwork?.networkID) return;
@@ -56,7 +58,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       if (chainStore.block?.height) {
         const roundId = Math.floor(
           Number(chainStore.block!.slotSinceGenesis - onchainState.startBlock) /
-            BLOCK_PER_ROUND
+            BLOCK_PER_ROUND,
         );
 
         workerClientStore.setRoundId(roundId);
@@ -64,37 +66,38 @@ export default function Lottery({}: { params: { competitionId: string } }) {
     })();
   }, [networkStore.minaNetwork?.networkID, chainStore.block?.height]);
 
-  // useEffect(() => {
-  // console.log(
-  //   workerClientStore.client,
-  //   networkStore.minaNetwork?.networkID,
-  //   chainStore.block?.slotSinceGenesis,
-  //   events.data?.events,
-  //   !workerClientStore.lotteryGame
-  // );
-  //   if (
-  //     workerClientStore.client &&
-  //     networkStore.minaNetwork?.networkID &&
-  //     chainStore.block?.slotSinceGenesis &&
-  //     events.data?.events &&
-  //     !workerClientStore.lotteryGame &&
-  //     workerClientStore.onchainState
-  //   ) {
-  //     console.log('Starting lottery');
-  //     workerClientStore.startLottery(
-  //       networkStore.minaNetwork?.networkID!,
-  //       Number(chainStore.block?.slotSinceGenesis),
-  //       events.data?.events as unknown as object[]
-  //     );
-  //   }
-  // }, [
-  //   workerClientStore.client,
-  //   networkStore.minaNetwork?.networkID,
-  //   chainStore.block?.slotSinceGenesis,
-  //   events.data,
-  //   workerClientStore.onchainState,
-  //   workerClientStore.lotteryGame,
-  // ]);
+  useEffect(() => {
+    console.log(
+      workerClientStore.client,
+      networkStore.minaNetwork?.networkID,
+      chainStore.block?.slotSinceGenesis,
+      lotteryContext?.minaEvents?.events,
+      !workerClientStore.lotteryGame,
+    );
+    if (
+      workerClientStore.client &&
+      networkStore.minaNetwork?.networkID &&
+      chainStore.block?.slotSinceGenesis &&
+      lotteryContext?.minaEvents?.events &&
+      !workerClientStore.lotteryGame &&
+      workerClientStore.onchainState
+    ) {
+      console.log("Starting lottery");
+      workerClientStore.startLottery(
+        networkStore.minaNetwork?.networkID!,
+        Number(chainStore.block?.slotSinceGenesis),
+        // @ts-ignore
+        lotteryContext?.minaEvents?.events as unknown as object[],
+      );
+    }
+  }, [
+    workerClientStore.client,
+    networkStore.minaNetwork?.networkID,
+    chainStore.block?.slotSinceGenesis,
+    lotteryContext?.minaEvents,
+    workerClientStore.onchainState,
+    workerClientStore.lotteryGame,
+  ]);
 
   useEffect(() => {
     // Initialy onchain state initialized in startlottery.
@@ -122,8 +125,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
                   (Number(blockNum - startBlock) % BLOCK_PER_ROUND)) *
                 3 *
                 60,
-            })
-          )
+            }),
+          ),
         )
       : 0;
   }, [workerClientStore.onchainState, workerClientStore.lotteryRoundId]);

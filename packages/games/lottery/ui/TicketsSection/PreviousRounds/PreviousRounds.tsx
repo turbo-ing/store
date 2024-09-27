@@ -1,11 +1,11 @@
-import PreviousRoundItem from './ui/PreviousRoundItem';
-import { BLOCK_PER_ROUND } from 'l1-lottery-contracts';
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
-import { useChainStore } from '@zknoid/sdk/lib/stores/minaChain';
-import { useEffect, useState } from 'react';
-import { ILotteryRound } from '../../../lib/types';
-// import { api } from '@zknoid/sdk/trpc/react';
-import Skeleton from '@zknoid/sdk/components/shared/Skeleton';
+import PreviousRoundItem from "./ui/PreviousRoundItem";
+import { BLOCK_PER_ROUND } from "l1-lottery-contracts";
+import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
+import { useContext, useEffect, useState } from "react";
+import { ILotteryRound } from "../../../lib/types";
+import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
+import GamesContext from "../../../../../sdk/lib/contexts/GamesContext";
 
 export default function PreviousRounds() {
   const ROUNDS_PER_PAGE = 2;
@@ -13,45 +13,40 @@ export default function PreviousRounds() {
   const workerClientStore = useWorkerClientStore();
   const lotteryStore = useWorkerClientStore();
   const chainStore = useChainStore();
+  const { lotteryContext } = useContext(GamesContext);
 
   const [page, setPage] = useState<number>(0);
   const [roundInfos, setRoundInfos] = useState<ILotteryRound[] | undefined>(
-    undefined
+    undefined,
   );
 
   const roundsToShow = Array.from(
     { length: ROUNDS_PER_PAGE },
-    (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE
+    (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE,
   ).filter((x) => x >= 0);
+  const roundInfosData = lotteryContext.getRoundsInfosQuery(roundsToShow, {
+    refetchInterval: 5000,
+  });
 
-  // const getRoundQuery = api.lotteryBackend.getRoundInfos.useQuery(
-  //   {
-  //     roundIds: roundsToShow,
-  //   },
-  //   {
-  //     refetchInterval: 5000,
-  //   }
-  // );
+  useEffect(() => {
+    if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
 
-  // useEffect(() => {
-  //   if (!getRoundQuery.data || !chainStore.block?.slotSinceGenesis) return;
-
-  //   const roundInfos = getRoundQuery.data!;
-  //   setRoundInfos(Object.values(roundInfos));
-  // }, [getRoundQuery.data, chainStore.block?.slotSinceGenesis]);
+    const roundInfos = roundInfosData!;
+    setRoundInfos(Object.values(roundInfos));
+  }, [roundInfosData, chainStore.block?.slotSinceGenesis]);
 
   return (
     <div className="">
       <div className="mb-[1.33vw] text-[2.13vw]">Previous Lotteries</div>
       <div
-        className={'flex w-full flex-row gap-[1.042vw]'}
-        id={'previousLotteries'}
+        className={"flex w-full flex-row gap-[1.042vw]"}
+        id={"previousLotteries"}
       >
         {roundInfos !== undefined ? (
-          <div className={'flex w-full flex-row gap-[1.042vw]'}>
+          <div className={"flex w-full flex-row gap-[1.042vw]"}>
             <button
               className={
-                'flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.521vw] border border-left-accent hover:opacity-80 disabled:opacity-60'
+                "flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.521vw] border border-left-accent hover:opacity-80 disabled:opacity-60"
               }
               onClick={() => setPage(page + 1)}
               disabled={
@@ -68,7 +63,7 @@ export default function PreviousRounds() {
                 <path d="M26 46L4 24L26 2" stroke="#D2FF00" strokeWidth="5" />
               </svg>
             </button>
-            <div className={'grid w-full grid-cols-2 gap-[1.042vw]'}>
+            <div className={"grid w-full grid-cols-2 gap-[1.042vw]"}>
               {chainStore.block &&
                 lotteryStore.onchainStateInitialized &&
                 roundInfos.map((round, index) => (
@@ -80,23 +75,23 @@ export default function PreviousRounds() {
                         Date.now() -
                           (Number(
                             chainStore.block?.slotSinceGenesis! -
-                              lotteryStore.onchainState?.startBlock!
+                              lotteryStore.onchainState?.startBlock!,
                           ) -
                             round.id * BLOCK_PER_ROUND) *
                             3 *
                             60 *
-                            1000
+                            1000,
                       ),
                       end: new Date(
                         Date.now() -
                           (Number(
                             chainStore.block?.slotSinceGenesis! -
-                              lotteryStore.onchainState?.startBlock!
+                              lotteryStore.onchainState?.startBlock!,
                           ) -
                             (round.id + 1) * BLOCK_PER_ROUND) *
                             3 *
                             60 *
-                            1000
+                            1000,
                       ),
                     }}
                   />
@@ -104,7 +99,7 @@ export default function PreviousRounds() {
             </div>
             <button
               className={
-                'flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.521vw] border border-left-accent hover:opacity-80 disabled:opacity-60'
+                "flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.521vw] border border-left-accent hover:opacity-80 disabled:opacity-60"
               }
               onClick={() => setPage(page - 1)}
               disabled={page - 1 < 0}
@@ -125,16 +120,16 @@ export default function PreviousRounds() {
             </button>
           </div>
         ) : (
-          <div className={'grid w-full grid-cols-2 gap-[1.042vw] p-4'}>
+          <div className={"grid w-full grid-cols-2 gap-[1.042vw] p-4"}>
             <Skeleton
               isLoading={true}
-              className={'h-[15vw] w-full rounded-[0.67vw]'}
+              className={"h-[15vw] w-full rounded-[0.67vw]"}
             >
               <div />
             </Skeleton>
             <Skeleton
               isLoading={true}
-              className={'h-[15vw] w-full rounded-[0.67vw]'}
+              className={"h-[15vw] w-full rounded-[0.67vw]"}
             >
               <div />
             </Skeleton>

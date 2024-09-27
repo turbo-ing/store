@@ -1,5 +1,5 @@
 import { Pages } from "../Lottery";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { AnimatePresence, useScroll } from "framer-motion";
 import CustomScrollbar from "@zknoid/sdk/components/shared/CustomScrollbar";
@@ -7,10 +7,10 @@ import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
 import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
-// import { api } from '@/trpc/react';
 import { RoundsDropdown } from "./ui/RoundsDropdown";
 import { TicketItem } from "./ui/TicketItem";
 import { ILotteryRound } from "../../lib/types";
+import GamesContext from "../../../../sdk/lib/contexts/GamesContext";
 
 const CheckboxButton = ({
   text,
@@ -34,7 +34,7 @@ const CheckboxButton = ({
           {
             "border-foreground": !isActive,
             "border-left-accent bg-left-accent": isActive,
-          }
+          },
         )}
       >
         <svg
@@ -64,11 +64,12 @@ export default function TicketsStorage({
   const lotteryStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
   const chainStore = useChainStore();
+  const { lotteryContext } = useContext(GamesContext);
 
   const [onlyLoosing, setOnlyLoosing] = useState<boolean>(false);
   const [onlyClaimable, setOnlyClaimable] = useState<boolean>(false);
   const [currentRoundId, setCurrentRoundId] = useState<number | undefined>(
-    undefined
+    undefined,
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -79,53 +80,39 @@ export default function TicketsStorage({
   const [roundIds, setRoundsIds] = useState<
     { id: number; hasClaim: boolean }[]
   >([]);
+  const roundsToShow =
+    currentRoundId !== undefined
+      ? [currentRoundId]
+      : [...Array(lotteryStore.lotteryRoundId)].map((_, i) => i);
+  const roundInfosData = lotteryContext.getRoundsInfosQuery(roundsToShow, {
+    refetchInterval: 5000,
+  });
+  const roundIDSData = lotteryContext?.getRoundsInfosQuery(
+    [...Array(lotteryStore.lotteryRoundId)].map((_, i) => i),
+    { refetchInterval: 5000 },
+  );
 
-  // fetch for rounds ids
-  // const getRoundQueryIDS = api.lotteryBackend.getRoundInfos.useQuery(
-  //   {
-  //     roundIds: [...Array(lotteryStore.lotteryRoundId)].map((_, i) => i),
-  //   },
-  //   {
-  //     refetchInterval: 5000,
-  //   }
-  // );
+  useEffect(() => {
+    if (!roundIDSData || !chainStore.block?.slotSinceGenesis) return;
 
-  // useEffect(() => {
-  //   if (!getRoundQueryIDS.data || !chainStore.block?.slotSinceGenesis) return;
+    const roundInfos = roundIDSData!;
+    setRoundsIds(
+      Object.values(roundInfos).map((item) => ({
+        id: item.id,
+        hasClaim: !!item.tickets.find(
+          (ticket) => ticket.owner === networkStore.address && ticket.funds,
+        ),
+      })),
+    );
+  }, [roundIDSData]);
 
-  //   const roundInfos = getRoundQueryIDS.data!;
-  //   setRoundsIds(
-  //     Object.values(roundInfos).map((item) => ({
-  //       id: item.id,
-  //       hasClaim: !!item.tickets.find(
-  //         (ticket) => ticket.owner === networkStore.address && ticket.funds
-  //       ),
-  //     }))
-  //   );
-  // }, [getRoundQueryIDS.data]);
-
-  // const roundsToShow =
-  //   currentRoundId !== undefined
-  //     ? [currentRoundId]
-  //     : [...Array(lotteryStore.lotteryRoundId)].map((_, i) => i);
-
-  // // fetch for rounds
-  // const getRoundQuery = api.lotteryBackend.getRoundInfos.useQuery(
-  //   {
-  //     roundIds: roundsToShow,
-  //   },
-  //   {
-  //     refetchInterval: 5000,
-  //   }
-  // );
-
-  // useEffect(() => {
-  //   if (!getRoundQuery.data || !chainStore.block?.slotSinceGenesis) return;
-  //   const roundInfos = getRoundQuery.data!;
-  //   setRoundInfos(
-  //     Object.values(roundInfos).filter((round) => round.winningCombination)
-  //   );
-  // }, [currentRoundId, getRoundQuery.data]);
+  useEffect(() => {
+    if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
+    const roundInfos = roundInfosData!;
+    setRoundInfos(
+      Object.values(roundInfos).filter((round) => round.winningCombination),
+    );
+  }, [currentRoundId, roundInfosData]);
 
   const filterRound = (round: ILotteryRound) => {
     round.tickets = round.tickets.filter((ticket) =>
@@ -135,7 +122,7 @@ export default function TicketsStorage({
           ? ticket.owner === networkStore.address &&
             !!ticket.funds &&
             !ticket.claimed
-          : ticket.owner === networkStore.address && !ticket.funds
+          : ticket.owner === networkStore.address && !ticket.funds,
     );
     return round;
   };
@@ -146,7 +133,7 @@ export default function TicketsStorage({
     const rounds = roundInfos
       .slice(
         (currentPage - 1) * PAGINATION_LIMIT,
-        currentPage * PAGINATION_LIMIT
+        currentPage * PAGINATION_LIMIT,
       )
       .map((round) => filterRound(round))
       .filter((round) => round.tickets.length != 0);
@@ -310,7 +297,7 @@ export default function TicketsStorage({
                         win: round.winningCombination
                           ? number == round.winningCombination[numberIndex]
                           : false,
-                      })
+                      }),
                     )}
                     combination={ticket.numbers}
                     quantity={ticket.amount}
@@ -319,7 +306,7 @@ export default function TicketsStorage({
                     claimed={ticket.claimed}
                     hash={ticket.hash}
                   />
-                ))
+                )),
               )
             ) : (
               <div
