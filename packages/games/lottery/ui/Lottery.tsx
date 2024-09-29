@@ -5,7 +5,6 @@ import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import BannerSection from "./BannerSection";
 import TicketsSection from "./TicketsSection";
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
 import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
 import { DateTime, Duration } from "luxon";
 import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
@@ -18,6 +17,7 @@ import StateManager from "./StateManager";
 import ConnectWalletModal from "@zknoid/sdk/components/shared/ConnectWalletModal";
 import TicketsStorage from "./TicketsStorage";
 import GamesContext from "../../../sdk/lib/contexts/GamesContext";
+import { useRegisterWorkerClient, useWorkerClientStore } from "../workers/workerClientStore";
 
 export enum Pages {
   Main,
@@ -36,6 +36,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   // const events = api.lotteryBackend.getMinaEvents.useQuery({});
   const { lotteryContext } = useContext(GamesContext);
 
+  useRegisterWorkerClient();
+
   useEffect(() => {
     if (!networkStore.minaNetwork?.networkID) return;
 
@@ -53,6 +55,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
         startBlock: account.account?.zkapp?.appState[4].toBigInt()!,
       };
 
+      console.log('Onchain state', onchainState);
+
       await workerClientStore.setOnchainState(onchainState);
 
       if (chainStore.block?.height) {
@@ -67,7 +71,9 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   }, [networkStore.minaNetwork?.networkID, chainStore.block?.height]);
 
   useEffect(() => {
+    console.log('Lottery context', lotteryContext);
     console.log(
+      'Lottery hook context',
       workerClientStore.client,
       networkStore.minaNetwork?.networkID,
       chainStore.block?.slotSinceGenesis,
