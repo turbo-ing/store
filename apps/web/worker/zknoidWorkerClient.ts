@@ -83,19 +83,15 @@ export default class ZknoidWorkerClient {
     seed: Field;
     inputs: GameInputs[];
     debug: Bool;
-  }) {
+  }): Promise<GameRecordProof> {
     const result = await this._call('proveGameRecord', {
       seedJson: seed.toJSON(),
       inputs: JSON.stringify(inputs.map((elem) => GameInputs.toJSON(elem))),
       debug: Bool.toJSON(debug),
     }) as any;
     console.log('Restoring', result);
-    const restoredProof = new GameRecordProof({
-      proof: result.proof,
-      publicInput: result.publicInput,
-      publicOutput: result.publicOutput,
-      maxProofsVerified: result.maxProofsVerified
-    });
+    const restoredProof = await GameRecordProof.fromJSON(result! as any);
+    console.log('Restored', restoredProof);
 
     return restoredProof;
   }

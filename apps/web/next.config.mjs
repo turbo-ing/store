@@ -2,7 +2,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import ImageMinimizerPlugin from "image-minimizer-webpack-plugin";
+// import ImageMinimizerPlugin from "image-minimizer-webpack-plugin";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,31 +26,21 @@ const nextConfig = {
         ...config.resolve.alias,
         o1js: path.resolve(__dirname, 'node_modules/o1js/dist/web/index.js'),
       };
-
-      config.optimization.splitChunks.cacheGroups = {
-        ...config.optimization.splitChunks.cacheGroups,
-        victory: {
-          test: /o1js@1.6.0/,
-          name: 'o1js',
-          priority: 50,
-          reuseExistingChunk: true,
-        },
-      };
     }
 
     config.experiments = { ...config.experiments, topLevelAwait: true };
     return {
       ...config,
-      module: {
-        ...config.module,
-        rules: [
-          ...config.module.rules,
-          {
-            test: /\.(svg)$/i,
-            type: "asset",
-          },
-        ],
-      },    
+      // module: {
+      //   ...config.module,
+      //   rules: [
+      //     ...config.module.rules,
+      //     {
+      //       test: /\.(svg)$/i,
+      //       type: "asset",
+      //     },
+      //   ],
+      // },    
       optimization: {
         minimize: true,
         minimizer: [
@@ -69,35 +59,35 @@ const nextConfig = {
             },
             exclude: /node_modules/,
           }),
-          new ImageMinimizerPlugin({
-            minimizer: {
-              implementation: ImageMinimizerPlugin.svgoMinify,
-              options: {
-                plugins: [
-                  "svgo",
-                  {
-                    plugins: [
-                      {
-                        name: "preset-default",
-                        params: {
-                          overrides: {
-                            removeViewBox: false,
-                            addAttributesToSVGElement: {
-                              params: {
-                                attributes: [
-                                  { xmlns: "http://www.w3.org/2000/svg" },
-                                ],
-                              },
-                            },
-                          },
-                        },
-                      },
-                    ]
-                  }
-                ]
-              }
-            },
-          }),
+          // new ImageMinimizerPlugin({
+          //   minimizer: {
+          //     implementation: ImageMinimizerPlugin.svgoMinify,
+          //     options: {
+          //       plugins: [
+          //         "svgo",
+          //         {
+          //           plugins: [
+          //             {
+          //               name: "preset-default",
+          //               params: {
+          //                 overrides: {
+          //                   removeViewBox: false,
+          //                   addAttributesToSVGElement: {
+          //                     params: {
+          //                       attributes: [
+          //                         { xmlns: "http://www.w3.org/2000/svg" },
+          //                       ],
+          //                     },
+          //                   },
+          //                 },
+          //               },
+          //             },
+          //           ]
+          //         }
+          //       ]
+          //     }
+          //   },
+          // }),
         ],
       },
     };
