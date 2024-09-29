@@ -46,7 +46,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!getMinaEventsQuery.data) return undefined;
     setMinaEvents(getMinaEventsQuery.data);
-  }, []);
+  }, [getMinaEventsQuery.data]);
 
   useEffect(() => {
     if (!getUserGiftCodesQuery.data) return undefined;
