@@ -56,7 +56,7 @@ export default function CurrentRoundInfo({
               fill="#D2FF00"
             />
           </svg>
-          <span>{ticketsNum || 0}</span>
+          <span>{Number(ticketsNum || 0)}</span>
         </div>
       </div>
     </div>

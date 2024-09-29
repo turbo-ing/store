@@ -66,6 +66,7 @@ export default function PreviousRounds() {
             <div className={"grid w-full grid-cols-2 gap-[1.042vw]"}>
               {chainStore.block &&
                 lotteryStore.onchainStateInitialized &&
+                chainStore.block?.slotSinceGenesis &&
                 roundInfos.map((round, index) => (
                   <PreviousRoundItem
                     key={index}
