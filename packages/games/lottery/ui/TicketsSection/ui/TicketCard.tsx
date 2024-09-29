@@ -2,7 +2,7 @@ import { cn } from '@zknoid/sdk/lib/helpers';
 import { TicketBlockButton } from '../../../ui/buttons/TicketBlockButton';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
+import { useWorkerClientStore } from '../../../workers/workerClientStore';
 import { VoucherMode } from '../../../../../games/lottery/ui/TicketsSection/lib/voucherMode';
 
 const TicketsNumPicker = ({

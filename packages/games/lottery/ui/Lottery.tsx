@@ -18,6 +18,7 @@ import ConnectWalletModal from "@zknoid/sdk/components/shared/ConnectWalletModal
 import TicketsStorage from "./TicketsStorage";
 import GamesContext from "../../../sdk/lib/contexts/GamesContext";
 import { useRegisterWorkerClient, useWorkerClientStore } from "../workers/workerClientStore";
+import { useRoundsStore } from "../lib/roundsStore";
 
 export enum Pages {
   Main,
@@ -37,6 +38,13 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   const { lotteryContext } = useContext(GamesContext);
 
   useRegisterWorkerClient();
+  const roundsStore = useRoundsStore();
+  const lotteryStore = useWorkerClientStore();
+
+  useEffect(() => {
+    roundsStore.setRoundToShowId(lotteryStore.lotteryRoundId);
+  }, [lotteryStore.lotteryRoundId]);
+
 
   useEffect(() => {
     if (!networkStore.minaNetwork?.networkID) return;

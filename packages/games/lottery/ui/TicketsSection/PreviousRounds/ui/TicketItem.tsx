@@ -1,6 +1,6 @@
 import { cn, sendTransaction } from '@zknoid/sdk/lib/helpers';
 import { Currency } from '@zknoid/sdk/constants/currency';
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
+import { useWorkerClientStore } from '../../../../workers/workerClientStore';
 import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
 import Loader from '@zknoid/sdk/components/shared/Loader';
 import { formatUnits } from '@zknoid/sdk/lib/unit';

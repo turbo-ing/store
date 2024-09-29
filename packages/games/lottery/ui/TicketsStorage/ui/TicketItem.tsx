@@ -1,4 +1,4 @@
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
+import { useWorkerClientStore } from '../../../workers/workerClientStore';
 import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
 import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
 import { cn, sendTransaction } from '@zknoid/sdk/lib/helpers';

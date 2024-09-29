@@ -5,12 +5,10 @@ import GamesContext from "../../../../packages/sdk/lib/contexts/GamesContext";
 import { useRoundsStore } from "../../../../packages/games/lottery/lib/roundsStore";
 import { api } from "../../trpc/react";
 import { ILotteryRound } from "../../../../packages/games/lottery/lib/types";
-import { useWorkerClientStore } from "../../../../packages/sdk/lib/stores/workerClient";
 import { useNetworkStore } from "../../../../packages/sdk/lib/stores/network";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const roundsStore = useRoundsStore();
-  const lotteryStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
 
   const [roundInfo, setRoundInfo] = useState<ILotteryRound | undefined>();
@@ -39,9 +37,6 @@ export default function Layout({ children }: { children: ReactNode }) {
     setRoundInfo(getRoundQuery.data);
   }, [roundsStore.roundToShowId, getRoundQuery.data]);
 
-  useEffect(() => {
-    roundsStore.setRoundToShowId(lotteryStore.lotteryRoundId);
-  }, [lotteryStore.lotteryRoundId]);
 
   useEffect(() => {
     if (!getMinaEventsQuery.data) return undefined;

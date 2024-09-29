@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { useContext } from "react";
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useWorkerClientStore } from '../../workers/workerClientStore';
 import Rules from "./ui/Rules";
 import BannerButton from "./ui/BannerButton";
 import CenterConsole from "../../ui/BannerSection/ui/CenterConsole";

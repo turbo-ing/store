@@ -1,6 +1,6 @@
 import PreviousRoundItem from "./ui/PreviousRoundItem";
 import { BLOCK_PER_ROUND } from "l1-lottery-contracts";
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useWorkerClientStore } from '../../../workers/workerClientStore';
 import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
 import { useContext, useEffect, useState } from "react";
 import { ILotteryRound } from "../../../lib/types";

@@ -3,7 +3,7 @@ import TicketCard from "./ui/TicketCard";
 import BuyInfoCard from "./ui/BuyInfoCard";
 import { useContext, useEffect, useState } from "react";
 import OwnedTickets from "./OwnedTickets";
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useWorkerClientStore } from '../../workers/workerClientStore';
 import { AnimatePresence } from "framer-motion";
 import PreviousRounds from "./PreviousRounds";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";

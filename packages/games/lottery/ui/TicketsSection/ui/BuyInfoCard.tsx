@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { cn, requestAccounts, sendTransaction } from '@zknoid/sdk/lib/helpers';
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
+import { useWorkerClientStore } from '../../../workers/workerClientStore';
 import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
 import { useChainStore } from '@zknoid/sdk/lib/stores/minaChain';
 import { TICKET_PRICE } from 'l1-lottery-contracts';

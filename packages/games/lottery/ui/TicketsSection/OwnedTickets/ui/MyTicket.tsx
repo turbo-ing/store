@@ -13,7 +13,7 @@ import TicketBG10 from '../assets/ticket-bg-10.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
+import { useWorkerClientStore } from '../../../../workers/workerClientStore';
 import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
 import Link from 'next/link';
 

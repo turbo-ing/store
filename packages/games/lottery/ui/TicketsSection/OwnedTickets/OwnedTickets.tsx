@@ -1,4 +1,4 @@
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useWorkerClientStore } from '../../../workers/workerClientStore';
 import MyTicket from "./ui/MyTicket";
 import { useContext, useEffect, useState } from "react";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";

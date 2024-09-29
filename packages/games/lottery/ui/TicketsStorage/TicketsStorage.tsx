@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { AnimatePresence, useScroll } from "framer-motion";
 import CustomScrollbar from "@zknoid/sdk/components/shared/CustomScrollbar";
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useWorkerClientStore } from '../../workers/workerClientStore';
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
 import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";

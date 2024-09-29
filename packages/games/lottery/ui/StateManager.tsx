@@ -1,4 +1,4 @@
-import { useWorkerClientStore } from '@zknoid/sdk/lib/stores/workerClient';
+import { useWorkerClientStore } from '../workers/workerClientStore';
 import Loader from '@zknoid/sdk/components/shared/Loader';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';

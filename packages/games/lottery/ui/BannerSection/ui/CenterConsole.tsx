@@ -1,6 +1,6 @@
 import { cn, formatAddress } from "@zknoid/sdk/lib/helpers";
 import { useRoundTimer } from "../../../features/useRoundTimer";
-import { useWorkerClientStore } from "@zknoid/sdk/lib/stores/workerClient";
+import { useWorkerClientStore } from '../../../workers/workerClientStore';
 import { DateTime } from "luxon";
 import BouncyLoader from "@zknoid/sdk/components/shared/BouncyLoader";
 import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
