@@ -95,11 +95,6 @@ export const useWorkerClientStore = create<
       await zkappWorkerClient.waitFor();
 
       set((state) => {
-        state.status = 'Loading contracts';
-      });
-
-      set((state) => {
-        state.status = 'Initialized';
         state.client = zkappWorkerClient;
       });
 
