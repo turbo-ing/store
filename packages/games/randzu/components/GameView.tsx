@@ -3,6 +3,11 @@
 import { IGameInfo } from "@zknoid/sdk/lib/stores/matchQueue";
 import { RandzuField } from "zknoid-chain-dev";
 import { useEffect, useRef, useState } from "react";
+import { cn } from "@zknoid/sdk/lib/helpers";
+import ballGreen from "../assets/ball_green.png";
+import ballBlue from "../assets/ball_blue.png";
+
+import Image from "next/image";
 
 interface IGameViewProps {
   gameInfo: IGameInfo<RandzuField> | undefined;
@@ -57,39 +62,78 @@ export const GameView = (props: IGameViewProps) => {
         [...Array(15).keys()].map((j) => (
           <div
             key={`${i}_${j}`}
-            className={`
-              bg-bg-dark ${
-                highlightCells ? "hover:border-bg-dark/50" : ""
-              } m-px h-auto max-w-full border border-foreground/50 bg-[length:15px_15px] bg-center bg-no-repeat p-[10px] lg:bg-[length:auto_auto] lg:p-4
-              ${
-                displayBall(i, j) &&
+            className={cn(
+              "bg-bg-dark",
+              highlightCells && "hover:border-bg-dark/50",
+              "m-px h-auto max-w-full border border-foreground/50 bg-[length:15px_15px] bg-center bg-no-repeat lg:!bg-[length:auto_auto]",
+              "flex items-center justify-center",
+              highlightCells && "hover:border-bg-dark/50",
+              displayBall(i, j) &&
                 (isCurrentRedBall
-                  ? "hover:bg-[url('/ball_green.png')]"
-                  : "hover:bg-[url('/ball_blue.png')]")
-              }
-              ${
-                props.gameInfo && +props.gameInfo.field.value[j][i] == 1
-                  ? "bg-[url('/ball_green.png')]"
-                  : ""
-              }
-              ${
-                props.gameInfo && +props.gameInfo.field.value[j][i] == 2
-                  ? "bg-[url('/ball_blue.png')]"
-                  : ""
-              }
-              ${
-                isLoadingBall(i, j) &&
+                  ? `hover:!bg-[url('/ball_green.png')]`
+                  : "hover:!bg-[url('/ball_blue.png')]"),
+              props.gameInfo && +props.gameInfo.field.value[j][i] == 1
+                ? "bg-[url('/ball_green.png')]"
+                : "",
+              props.gameInfo && +props.gameInfo.field.value[j][i] == 2
+                ? "bg-[url('/ball_blue.png')]"
+                : "",
+              isLoadingBall(i, j) &&
                 (isCurrentRedBall
                   ? "bg-opacity-50 bg-[url('/ball_green.png')]"
-                  : "bg-opacity-50 bg-[url('/ball_blue.png')]")
-              }
-            `}
+                  : "bg-opacity-50 bg-[url('/ball_blue.png')]"),
+              "group",
+              "relative"
+            )}
             style={{
               imageRendering: "pixelated",
             }}
             id={`${i}_${j}`}
             onClick={() => props.onCellClicked(i, j)}
-          ></div>
+          >
+            {displayBall(i, j) &&
+              (isCurrentRedBall ? (
+                <Image
+                  src={ballGreen}
+                  alt="w-full h-full"
+                  className="hidden group-hover:!inline-block absolute top-0 left-0 w-full h-full p-[0.2vw]"
+                ></Image>
+              ) : (
+                <Image
+                  src={ballBlue}
+                  alt=""
+                  className="hidden group-hover:!inline-block absolute top-0 left-0 w-full h-full p-[0.2vw]"
+                ></Image>
+              ))}
+            {props.gameInfo && +props.gameInfo.field.value[j][i] == 1 && (
+              <Image
+                src={ballGreen}
+                alt=""
+                className="absolute top-0 left-0 w-full h-full p-[0.2vw]"
+              ></Image>
+            )}
+            {props.gameInfo && +props.gameInfo.field.value[j][i] == 2 && (
+              <Image
+                src={ballBlue}
+                alt=""
+                className="absolute top-0 left-0 w-full h-full p-[0.2vw]"
+              ></Image>
+            )}
+            {isLoadingBall(i, j) &&
+              (isCurrentRedBall ? (
+                <Image
+                  src={ballGreen}
+                  alt="w-full h-full"
+                  className="absolute top-0 left-0 w-full h-full p-[0.2vw] opacity-50"
+                ></Image>
+              ) : (
+                <Image
+                  src={ballBlue}
+                  alt=""
+                  className="absolute top-0 left-0 w-full h-full p-[0.2vw] opacity-50"
+                ></Image>
+              ))}
+          </div>
         ))
       )}
     </div>
