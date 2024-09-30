@@ -25,7 +25,7 @@ export class ZkNoidSigner extends AppChainModule<unknown> implements Signer {
       } else {
         const response = await (window as any).mina.request({
           method: 'mina_signFields',
-          params: { fields: [0] },
+          params: { fields: message.map((field) => field.toString()) },
         });
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         return Signature.fromBase58(response.result.signature);
