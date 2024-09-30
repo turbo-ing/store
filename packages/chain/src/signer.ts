@@ -27,6 +27,8 @@ export class ZkNoidSigner extends AppChainModule<unknown> implements Signer {
           method: 'mina_signFields',
           params: { fields: message.map((field) => field.toString()) },
         });
+        console.log('Signature response', response);
+        console.log(response.result.signature);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         return Signature.fromBase58(response.result.signature);
       }
@@ -35,6 +37,7 @@ export class ZkNoidSigner extends AppChainModule<unknown> implements Signer {
         await requestAccounts();
         return await this.sign(message);
       } else {
+        console.log('Signing error', e);
         throw e;
       }
     }
