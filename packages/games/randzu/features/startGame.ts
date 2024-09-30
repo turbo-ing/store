@@ -1,4 +1,3 @@
-import { DEFAULT_PARTICIPATION_FEE } from "zknoid-chain-dev";
 import { getEnvContext } from "@zknoid/sdk/lib/envContext";
 import { PublicKey, UInt64 } from "o1js";
 import { GameState } from "../lib/gameState";
@@ -23,8 +22,6 @@ export const useStartGame = (
   // const progress = api.progress.setSolvedQuests.useMutation();
 
   return async () => {
-    if (await bridge(DEFAULT_PARTICIPATION_FEE.toBigInt())) return;
-
     // gameStartedMutation.mutate({
     //   gameId: "randzu",
     //   userAddress: networkStore.address ?? "",

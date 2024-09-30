@@ -23,7 +23,6 @@ import { MainButtonState } from "@zknoid/sdk/components/framework/GamePage/PvPGa
 import RandzuCoverSVG from "./assets/game-cover.svg";
 // import { api } from "@zknoid/sdk/trpc/react";
 import { getEnvContext } from "@zknoid/sdk/lib/envContext";
-import { DEFAULT_PARTICIPATION_FEE } from "zknoid-chain-dev";
 import { MOVE_TIMEOUT_IN_BLOCKS } from "zknoid-chain-dev";
 import RandzuCoverMobileSVG from "./assets/game-cover-mobile.svg";
 import GameWidget from "@zknoid/sdk/components/framework/GameWidget";
@@ -58,7 +57,7 @@ import GamePage from "@zknoid/sdk/components/framework/GamePage";
 const competition = {
   id: "global",
   name: "Global competition",
-  enteringPrice: BigInt(+DEFAULT_PARTICIPATION_FEE.toString()),
+  enteringPrice: BigInt(0),
   prizeFund: 0n,
 };
 

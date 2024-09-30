@@ -1,10 +1,8 @@
 // import { api } from "@zknoid/sdk/trpc/react";
-import { DEFAULT_PARTICIPATION_FEE } from "zknoid-chain-dev";
 import { getEnvContext } from "@zknoid/sdk/lib/envContext";
 import { PublicKey, UInt64 } from "o1js";
 import { useStore } from "zustand";
 import { useSessionKeyStore } from "@zknoid/sdk/lib/stores/sessionKeyStorage";
-import { useMinaBridge } from "@zknoid/sdk/lib/stores/protokitBalances";
 import { client } from "zknoid-chain-dev";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { GameState } from "../lib/gameState";
@@ -14,11 +12,8 @@ export const useStartGame = (setGameState: (state: GameState) => void) => {
   const sessionPublicKey = useStore(useSessionKeyStore, (state) =>
     state.getSessionKey()
   ).toPublicKey();
-  const bridge = useMinaBridge();
   const networkStore = useNetworkStore();
   return async () => {
-    if (await bridge(DEFAULT_PARTICIPATION_FEE.toBigInt())) return;
-
     // gameStartedMutation.mutate({
     //   gameId: "checkers",
     //   userAddress: networkStore.address ?? "",

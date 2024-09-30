@@ -1,4 +1,3 @@
-import { DEFAULT_PARTICIPATION_FEE } from "zknoid-chain-dev";
 import { getEnvContext } from "@zknoid/sdk/lib/envContext";
 import { PublicKey, UInt64 } from "o1js";
 import { GameState } from "../lib/gameState";
@@ -18,8 +17,6 @@ export const useStartGame = (setGameState: (state: GameState) => void) => {
   // const gameStartedMutation = api.logging.logGameStarted.useMutation();
 
   return async () => {
-    if (await bridge(DEFAULT_PARTICIPATION_FEE.toBigInt())) return;
-
     // gameStartedMutation.mutate({
     //   gameId: "thimblerig",
     //   userAddress: networkStore.address ?? "",
