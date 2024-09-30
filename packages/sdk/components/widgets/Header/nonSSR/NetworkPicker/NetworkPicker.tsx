@@ -38,8 +38,9 @@ export default function NetworkPicker({
         if (e?.code == 1001) {
           await requestAccounts();
           await switchNetwork(network);
+        } else {
+          throw e;
         }
-        throw e;
       }
     }
   };

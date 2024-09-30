@@ -17,7 +17,7 @@
     "declarationMap": true,
     "strictFunctionTypes": true,
     "baseUrl": ".",
-    "lib": ["es2020"]
+    "lib": ["es2020", "DOM"]
   },
   "files": ["node_modules/jest-expect-message/types/index.d.ts"],
   "include": ["./src/**/*", "./bin/**/*", "./on_startup_scripts/**/*"],

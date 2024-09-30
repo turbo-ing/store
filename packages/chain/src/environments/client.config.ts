@@ -1,7 +1,10 @@
-import { AuroSigner, ClientAppChain } from "@proto-kit/sdk";
+import { ClientAppChain } from "@proto-kit/sdk";
 import runtime from "../runtime";
+import { ZkNoidSigner } from "../signer";
 
-const appChain = ClientAppChain.fromRuntime(runtime.modules, AuroSigner);
+
+
+const appChain = ClientAppChain.fromRuntime(runtime.modules, ZkNoidSigner);
 
 appChain.configurePartial({
   Runtime: runtime.config,
