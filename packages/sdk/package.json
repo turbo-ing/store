@@ -101,6 +101,7 @@
     "./lib/stores/rateGameStore": "./lib/stores/rateGameStore.ts",
     "./components/shared/RateGameModal": "./components/shared/RateGameModal/index.ts",
     "./components/shared/ConnectWalletModal": "./components/shared/ConnectWalletModal/index.ts",
+    "./components/shared/ChooseWalletProviderModal": "./components/shared/ChooseWalletProviderModal/index.ts",
     "./components/shared/CustomScrollbar": "./components/shared/CustomScrollbar/index.ts",
     "./components/shared/misc/svg": "./components/shared/misc/svg.tsx",
 

@@ -16,11 +16,20 @@ export async function requestAccounts() {
 export class ZkNoidSigner extends AppChainModule<unknown> implements Signer {
   public async sign(message: Field[]): Promise<Signature> {
     try {
-      const response = await (window as any).mina.signFields({
-        message: message.map((field) => field.toString()),
-      });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      return Signature.fromBase58(response.signature);
+      if (!(window as any).mina?.isPallad) {
+        const response = await (window as any).mina.signFields({
+          message: message.map((field) => field.toString()),
+        });
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        return Signature.fromBase58(response.signature);
+      } else {
+        const response = await (window as any).mina.request({
+          method: 'mina_signFields',
+          params: { fields: [0] },
+        });
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        return Signature.fromBase58(response.result.signature);
+      }
     } catch (e: any) {
       if (e?.code == 1001) {
         await requestAccounts();
