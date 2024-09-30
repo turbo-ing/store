@@ -3,11 +3,11 @@ import {
   GAME_EVENTS,
   getEventType,
   ZkNoidEventType,
-} from '@zknoid/sdk/lib/platform/game_events';
-import Lottie from 'react-lottie';
-import SnakeNoEvents from '@/components/pages/MainSection/ui/Storefront/ui/Favorites/assets/ZKNoid_Snake_Intro_03_05.json';
-import { EventFilter } from './ui/EventFilter';
-import { EventItem } from './ui/EventItem';
+} from "@zknoid/sdk/lib/platform/game_events";
+import Lottie from "react-lottie";
+import SnakeNoEvents from "@/components/pages/MainSection/ui/Storefront/ui/Favorites/assets/ZKNoid_Snake_Intro_03_05.json";
+import { EventFilter } from "./ui/EventFilter";
+import { EventItem } from "./ui/EventItem";
 
 export default function Events({
   eventTypesSelected,
@@ -20,15 +20,15 @@ export default function Events({
     (x) =>
       (eventTypesSelected.includes(getEventType(x)) ||
         eventTypesSelected.length == 0) &&
-      x.eventEnds > Date.now()
+      x.eventEnds > Date.now(),
   );
 
   return (
-    <div id={'events'} className="flex flex-col gap-[0.833vw]">
-      <span className={'font-museo text-[1.667vw] font-bold text-foreground'}>
+    <div id={"events"} className="flex flex-col gap-[0.833vw]">
+      <span className={"font-museo text-[1.667vw] font-bold text-foreground"}>
         Events & Competitions
       </span>
-      <div className={'flex flex-row gap-[0.781vw]'}>
+      <div className={"flex flex-row gap-[0.781vw]"}>
         {ALL_GAME_EVENT_TYPES.map((eventType) => (
           <EventFilter
             key={eventType}
@@ -45,14 +45,16 @@ export default function Events({
             options={{
               animationData: SnakeNoEvents,
               rendererSettings: {
-                className: 'z-0 h-full',
+                className: "z-0 h-full",
               },
             }}
           ></Lottie>
         </div>
       )}
       {filteredEvents.length > 0 && (
-        <div className={'grid w-full grid-cols-1 lg:grid-cols-2'}>
+        <div
+          className={"grid w-full grid-cols-1 gap-[0.938vw] lg:!grid-cols-2"}
+        >
           {filteredEvents.map((event) => (
             <EventItem
               key={event.name}
@@ -60,6 +62,8 @@ export default function Events({
               description={event.description}
               event={event}
               image={event.image}
+              imageFullWidth={event.imageFullWidth}
+              textColor={event.textColor}
             />
           ))}
         </div>

@@ -1,18 +1,18 @@
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
-import Image from 'next/image';
-import defaultSlide from '@/public/image/slides/slide1.svg';
-import mobileCoverIMG from '@/public/image/section1/mobile-cover.svg';
-import lotterySlide from '@/public/image/slides/lottery.svg';
-import tileVilleSlide from '@/public/image/slides/tileville.svg';
-import Link from 'next/link';
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import Image from "next/image";
+import defaultSlide from "@/public/image/slides/slide1.svg";
+import mobileCoverIMG from "@/public/image/section1/mobile-cover.svg";
+import lotterySlide from "@/public/image/slides/lottery.svg";
+import ethSingaporeSlide from "@/public/image/slides/eth-singapore.svg";
+import Link from "next/link";
 
 export default function Swiper() {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
     },
-    [Autoplay({ playOnInit: true, delay: 8000 })]
+    [Autoplay({ playOnInit: true, delay: 8000 })],
   );
 
   const slides: { image: any; link?: string; openAsNewTab?: boolean }[] = [
@@ -21,12 +21,12 @@ export default function Swiper() {
     },
     {
       image: lotterySlide,
-      link: 'https://forums.minaprotocol.com/t/zknoid-l1-lottery/6269',
+      link: "https://forums.minaprotocol.com/t/zknoid-l1-lottery/6269",
       openAsNewTab: true,
     },
     {
-      image: tileVilleSlide,
-      link: 'https://www.tileville.xyz',
+      image: ethSingaporeSlide,
+      link: "https://ethglobal.com/events/singapore2024",
       openAsNewTab: true,
     },
   ];
@@ -65,8 +65,8 @@ export default function Swiper() {
                   <Link
                     key={index}
                     href={slide.link}
-                    target={slide.openAsNewTab ? '_blank' : undefined}
-                    rel={slide.openAsNewTab ? 'noopener noreferrer' : undefined}
+                    target={slide.openAsNewTab ? "_blank" : undefined}
+                    rel={slide.openAsNewTab ? "noopener noreferrer" : undefined}
                     className="min-w-0 flex-[0_0_100%]"
                   >
                     <div className="flex h-full w-full items-center justify-center">
@@ -79,7 +79,7 @@ export default function Swiper() {
                       <Image src={slide.image} alt="Slide" className="w-full" />
                     </div>
                   </div>
-                )
+                ),
               )}
             </div>
           </div>
@@ -87,7 +87,7 @@ export default function Swiper() {
 
         <div
           className={
-            'block h-full w-full rounded-[0.521vw] border border-left-accent lg:hidden'
+            "block h-full w-full rounded-[0.521vw] border border-left-accent lg:hidden"
           }
         >
           <div
@@ -97,12 +97,12 @@ export default function Swiper() {
           >
             <Image
               src={mobileCoverIMG}
-              alt={'MobileCover'}
-              className={'min-h-[450px]'}
+              alt={"MobileCover"}
+              className={"min-h-[450px]"}
             />
             <div
               className={
-                'absolute bottom-[18%] px-[2%] text-center text-[1.042vw] font-medium text-left-accent'
+                "absolute bottom-[18%] px-[2%] text-center text-[1.042vw] font-medium text-left-accent"
               }
             >
               This is just a preview page. If you want to play games or take a
