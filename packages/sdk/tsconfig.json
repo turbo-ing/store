@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/react-library.json",
+  "extends": "@zknoid/tsconfig/react-library.json",
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",

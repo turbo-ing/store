@@ -191,9 +191,6 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       '@types/luxon':
         specifier: ^3.4.2
         version: 3.4.2
@@ -212,6 +209,9 @@ importers:
       '@types/react-lottie':
         specifier: ^1.2.10
         version: 1.2.10
+      '@zknoid/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.20(postcss@8.4.45)
@@ -311,7 +311,7 @@ importers:
         version: 17.0.33
       '@zknoid/tsconfig':
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../typescript-config
       assert:
         specifier: ^2.0.0
         version: 2.1.0
@@ -438,7 +438,7 @@ importers:
         version: 17.0.33
       '@zknoid/tsconfig':
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../typescript-config
       assert:
         specifier: ^2.0.0
         version: 2.1.0
@@ -562,7 +562,7 @@ importers:
         version: 17.0.33
       '@zknoid/tsconfig':
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../typescript-config
       assert:
         specifier: ^2.0.0
         version: 2.1.0
@@ -795,9 +795,6 @@ importers:
       '@vercel/speed-insights':
         specifier: ^1.0.10
         version: 1.0.12(next@15.0.0-canary.148(react-dom@19.0.0-rc-4c2e457c7c-20240522(react@19.0.0-rc-4c2e457c7c-20240522))(react@19.0.0-rc-4c2e457c7c-20240522))(react@19.0.0-rc-4c2e457c7c-20240522)
-      '@zknoid/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
       clsx:
         specifier: ^2.1.0
         version: 2.1.1
@@ -871,9 +868,6 @@ importers:
         specifier: ^4.5.2
         version: 4.5.5(@types/react@18.3.5)(immer@10.1.1)(react@19.0.0-rc-4c2e457c7c-20240522)
     devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
       '@types/luxon':
         specifier: ^3.4.2
         version: 3.4.2
@@ -892,6 +886,9 @@ importers:
       '@types/react-lottie':
         specifier: ^1.2.10
         version: 1.2.10
+      '@zknoid/tsconfig':
+        specifier: workspace:*
+        version: link:../typescript-config
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.20(postcss@8.4.45)
@@ -916,8 +913,6 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.5.4
-
-  packages/tsconfig: {}
 
   packages/typescript-config: {}
 

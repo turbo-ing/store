@@ -48,11 +48,10 @@
     "yup": "^1.4.0",
     "zknoid-chain-dev": "workspace:*",
     "zod": "^3.22.4",
-    "zustand": "^4.5.2",
-    "@zknoid/tsconfig": "workspace:*"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@zknoid/tsconfig": "workspace:*",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.12.7",
     "@types/node-telegram-bot-api": "^0.64.6",

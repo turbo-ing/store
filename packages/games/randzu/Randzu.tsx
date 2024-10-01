@@ -103,8 +103,7 @@ export default function Randzu({
   const query = networkStore.protokitClientStarted
     ? client_.query.runtime.RandzuLogic
     : undefined;
-
-  useObserveLobbiesStore(query);
+  useObserveLobbiesStore(query, 3);
   const lobbiesStore = useLobbiesStore();
 
   console.log("Active lobby", lobbiesStore.activeLobby);
