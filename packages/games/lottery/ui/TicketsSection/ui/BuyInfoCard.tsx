@@ -52,11 +52,6 @@ export default function BuyInfoCard({
     useGiftCodeMutation,
   } = useContext(LotteryContext);
 
-  // const addGiftCodeMutation = api.giftCodes.addGiftCode.useMutation();
-  // const addGiftCodesMutation = api.giftCodes.addGiftCodes.useMutation();
-  // const sendTicketQueueMutation = api.giftCodes.sendTicketQueue.useMutation();
-  // const useGiftCodeMutation = api.giftCodes.useGiftCode.useMutation();
-
   const numberOfTickets =
     voucherMode == VoucherMode.Buy
       ? giftCodeToBuyAmount
@@ -112,8 +107,8 @@ export default function BuyInfoCard({
     try {
       const tx = await (window as any).mina.sendPayment({
         memo: `zknoid.io game bridging #${process.env.BRIDGE_ID ?? 100}`,
-        to: PublicKey.empty(),
-        amount: formatUnits(totalPrice),
+        to: PublicKey.empty().toBase58(),
+        amount: parseFloat(formatUnits(totalPrice)),
       });
       if (numberOfTickets > 1) {
         const codes = [];
@@ -126,7 +121,6 @@ export default function BuyInfoCard({
           codes.push(code);
         }
         addGiftCodesMutation(codes);
-        // addGiftCodesMutation.mutate(codes);
         setBoughtGiftCodes(codes.map((item) => item.code));
         setGiftCodeToBuyAmount(1);
         setVoucherMode(VoucherMode.BuySuccess);
@@ -137,7 +131,6 @@ export default function BuyInfoCard({
           code: crypto.randomBytes(8).toString("hex"),
         };
         addGiftCodeMutation(code);
-        // addGiftCodeMutation.mutate(code);
         setBoughtGiftCodes([code.code]);
         setVoucherMode(VoucherMode.BuySuccess);
       }
@@ -167,16 +160,6 @@ export default function BuyInfoCard({
       ticket: { numbers: ticketsInfo[0].numbers },
     });
     useGiftCodeMutation(giftCode);
-
-    // sendTicketQueueMutation.mutate({
-    //   userAddress: networkStore.address || '',
-    //   giftCode: giftCode,
-    //   roundId: workerStore.lotteryRoundId,
-    //   ticket: { numbers: ticketsInfo[0].numbers },
-    // });
-    // useGiftCodeMutation.mutate({
-    //   giftCode: giftCode,
-    // });
     setVoucherMode(VoucherMode.Closed);
     clearTickets();
     notificationStore.create({
