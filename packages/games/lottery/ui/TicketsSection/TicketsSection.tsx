@@ -3,7 +3,7 @@ import TicketCard from "./ui/TicketCard";
 import BuyInfoCard from "./ui/BuyInfoCard";
 import { useContext, useEffect, useState } from "react";
 import OwnedTickets from "./OwnedTickets";
-import { useWorkerClientStore } from '../../workers/workerClientStore';
+import { useWorkerClientStore } from "../../workers/workerClientStore";
 import { AnimatePresence } from "framer-motion";
 import PreviousRounds from "./PreviousRounds";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
@@ -14,9 +14,8 @@ import UseGiftCodeForm from "./GiftCodes/UseGiftCodeForm";
 import ValidGiftCode from "./GiftCodes/ValidGiftCode";
 import NoUserGiftCodes from "./GiftCodes/NoUserGiftCodes";
 import BuyGiftCodesCounter from "./GiftCodes/BuyGiftCodesCounter";
-import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { VoucherMode } from "./lib/voucherMode";
-import GamesContext from "../../../../sdk/lib/contexts/GamesContext";
+import LotteryContext from "../../lib/contexts/LotteryContext";
 
 interface TicketInfo {
   amount: number;
@@ -28,8 +27,7 @@ export default function TicketsSection() {
   const lotteryStore = useWorkerClientStore();
   const roundsStore = useRoundsStore();
   const notificationStore = useNotificationStore();
-  const networkStore = useNetworkStore();
-  const { lotteryContext } = useContext(GamesContext);
+  const { userGiftCodes } = useContext(LotteryContext);
 
   const [tickets, setTickets] = useState<TicketInfo[]>([]);
   const [blankTicket, setBlankTicket] = useState<boolean>(true);
@@ -40,7 +38,6 @@ export default function TicketsSection() {
   const [giftCodeToBuyAmount, setGiftCodeToBuyAmount] = useState<number>(1);
   const [boughtGiftCodes, setBoughtGiftCodes] = useState<string[]>([]);
   const [hasOwnedTickets, setHasOwnedTickets] = useState<boolean>(false);
-  const userGiftCodes = lotteryContext.userGiftCodes;
 
   useEffect(() => {
     setTickets([]);

@@ -1,11 +1,11 @@
 "use client";
 
 import { ReactNode, useState, useEffect } from "react";
-import GamesContext from "../../../../packages/sdk/lib/contexts/GamesContext";
 import { useRoundsStore } from "../../../../packages/games/lottery/lib/roundsStore";
 import { api } from "../../trpc/react";
 import { ILotteryRound } from "../../../../packages/games/lottery/lib/types";
 import { useNetworkStore } from "../../../../packages/sdk/lib/stores/network";
+import LotteryContext from "../../../../packages/games/lottery/lib/contexts/LotteryContext";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const roundsStore = useRoundsStore();
@@ -37,7 +37,6 @@ export default function Layout({ children }: { children: ReactNode }) {
     setRoundInfo(getRoundQuery.data);
   }, [roundsStore.roundToShowId, getRoundQuery.data]);
 
-
   useEffect(() => {
     if (!getMinaEventsQuery.data) return undefined;
     setMinaEvents(getMinaEventsQuery.data);
@@ -55,19 +54,17 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, [getUserGiftCodesQuery.data]);
 
   return (
-    <GamesContext.Provider
+    <LotteryContext.Provider
       value={{
-        lotteryContext: {
-          roundInfo: roundInfo,
-          minaEvents: minaEvents,
-          userGiftCodes: userGiftCodes,
-          getRoundsInfosQuery: (roundsIds, params) =>
-            (getRoundsInfosQuery.useQuery({ roundIds: roundsIds }, params)
-              ?.data as ILotteryRound[]) || undefined,
-        },
+        roundInfo: roundInfo,
+        minaEvents: minaEvents,
+        userGiftCodes: userGiftCodes,
+        getRoundsInfosQuery: (roundsIds, params) =>
+          (getRoundsInfosQuery.useQuery({ roundIds: roundsIds }, params)
+            ?.data as ILotteryRound[]) || undefined,
       }}
     >
       {children}
-    </GamesContext.Provider>
+    </LotteryContext.Provider>
   );
 }

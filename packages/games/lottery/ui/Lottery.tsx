@@ -9,16 +9,18 @@ import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
 import { DateTime, Duration } from "luxon";
 import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
 import WrongNetworkModal from "./TicketsSection/ui/WrongNetworkModal";
-// import { api } from '@/trpc/react';
 import { fetchAccount } from "o1js";
 import { LOTTERY_ADDRESS } from "../constants/addresses";
 import { BLOCK_PER_ROUND } from "l1-lottery-contracts";
 import StateManager from "./StateManager";
 import ConnectWalletModal from "@zknoid/sdk/components/shared/ConnectWalletModal";
 import TicketsStorage from "./TicketsStorage";
-import GamesContext from "../../../sdk/lib/contexts/GamesContext";
-import { useRegisterWorkerClient, useWorkerClientStore } from "../workers/workerClientStore";
+import {
+  useRegisterWorkerClient,
+  useWorkerClientStore,
+} from "../workers/workerClientStore";
 import { useRoundsStore } from "../lib/roundsStore";
+import LotteryContext from "../lib/contexts/LotteryContext";
 
 export enum Pages {
   Main,
@@ -35,7 +37,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   const workerClientStore = useWorkerClientStore();
   const chainStore = useChainStore();
   // const events = api.lotteryBackend.getMinaEvents.useQuery({});
-  const { lotteryContext } = useContext(GamesContext);
+  const { minaEvents } = useContext(LotteryContext);
 
   useRegisterWorkerClient();
   const roundsStore = useRoundsStore();
@@ -44,7 +46,6 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   useEffect(() => {
     roundsStore.setRoundToShowId(lotteryStore.lotteryRoundId);
   }, [lotteryStore.lotteryRoundId]);
-
 
   useEffect(() => {
     if (!networkStore.minaNetwork?.networkID) return;
@@ -63,7 +64,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
         startBlock: account.account?.zkapp?.appState[4].toBigInt()!,
       };
 
-      console.log('Onchain state', onchainState);
+      console.log("Onchain state", onchainState);
 
       await workerClientStore.setOnchainState(onchainState);
 
@@ -79,20 +80,19 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   }, [networkStore.minaNetwork?.networkID, chainStore.block?.height]);
 
   useEffect(() => {
-    console.log('Lottery context', lotteryContext);
     console.log(
-      'Lottery hook context',
+      "Lottery hook context",
       workerClientStore.client,
       networkStore.minaNetwork?.networkID,
       chainStore.block?.slotSinceGenesis,
-      lotteryContext?.minaEvents?.events,
+      minaEvents?.events,
       !workerClientStore.lotteryGame,
     );
     if (
       workerClientStore.client &&
       networkStore.minaNetwork?.networkID &&
       chainStore.block?.slotSinceGenesis &&
-      lotteryContext?.minaEvents?.events &&
+      minaEvents?.events &&
       !workerClientStore.lotteryGame &&
       workerClientStore.onchainState
     ) {
@@ -100,15 +100,14 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       workerClientStore.startLottery(
         networkStore.minaNetwork?.networkID!,
         Number(chainStore.block?.slotSinceGenesis),
-        // @ts-ignore
-        lotteryContext?.minaEvents?.events as unknown as object[],
+        minaEvents?.events as unknown as object[],
       );
     }
   }, [
     workerClientStore.client,
     networkStore.minaNetwork?.networkID,
     chainStore.block?.slotSinceGenesis,
-    lotteryContext?.minaEvents,
+    minaEvents,
     workerClientStore.onchainState,
     workerClientStore.lotteryGame,
   ]);

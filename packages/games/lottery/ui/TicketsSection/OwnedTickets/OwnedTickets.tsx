@@ -1,4 +1,4 @@
-import { useWorkerClientStore } from '../../../workers/workerClientStore';
+import { useWorkerClientStore } from "../../../workers/workerClientStore";
 import MyTicket from "./ui/MyTicket";
 import { useContext, useEffect, useState } from "react";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
@@ -8,7 +8,7 @@ import { formatUnits } from "@zknoid/sdk/lib/unit";
 import { Currency } from "@zknoid/sdk/constants/currency";
 import { useRoundsStore } from "../../../lib/roundsStore";
 import { ILotteryTicket } from "../../../lib/types";
-import GamesContext from "../../../../../sdk/lib/contexts/GamesContext";
+import LotteryContext from "../../../lib/contexts/LotteryContext";
 
 interface ITicket extends ILotteryTicket {
   id: string;
@@ -24,7 +24,7 @@ export default function OwnedTickets({
   const roundsStore = useRoundsStore();
   const workerStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
-  const { lotteryContext } = useContext(GamesContext);
+  const { roundInfo } = useContext(LotteryContext);
 
   const [page, setPage] = useState<number>(1);
   const [tickets, setTickets] = useState<ITicket[]>([]);
@@ -39,7 +39,6 @@ export default function OwnedTickets({
     (page - 1) * TICKETS_PER_PAGE,
     page * TICKETS_PER_PAGE,
   );
-  const roundInfo = lotteryContext.roundInfo;
 
   useEffect(() => {
     if (!roundInfo?.tickets) return;
