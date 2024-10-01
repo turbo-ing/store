@@ -21,8 +21,6 @@
     "@proto-kit/protocol": "0.1.1-develop.833",
     "@proto-kit/sdk": "0.1.1-develop.833",
     "@proto-kit/sequencer": "0.1.1-develop.833",
-    "@sentry/nextjs": "^7.109.0",
-    "@tailwindcss/typography": "^0.5.12",
     "@tanstack/react-query": "^5.29.2",
     "@vercel/analytics": "^1.2.2",
     "@vercel/blob": "^0.23.3",
