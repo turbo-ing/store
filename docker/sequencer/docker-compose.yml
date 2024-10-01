@@ -78,7 +78,8 @@ services:
       - routing-net
       - chain-net
     command: ["./packages/chain/dist/on_startup_scripts/set-default-games.js"]
-    restart: unless-stopped
+    restart: on-failure
+
 
 networks:
   chain-net:
