@@ -68,20 +68,6 @@ export const GameView = (props: IGameViewProps) => {
               "m-px h-auto max-w-full border border-foreground/50 bg-[length:15px_15px] bg-center bg-no-repeat lg:!bg-[length:auto_auto]",
               "flex items-center justify-center",
               highlightCells && "hover:border-bg-dark/50",
-              displayBall(i, j) &&
-                (isCurrentRedBall
-                  ? `hover:!bg-[url('/ball_green.png')]`
-                  : "hover:!bg-[url('/ball_blue.png')]"),
-              props.gameInfo && +props.gameInfo.field.value[j][i] == 1
-                ? "bg-[url('/ball_green.png')]"
-                : "",
-              props.gameInfo && +props.gameInfo.field.value[j][i] == 2
-                ? "bg-[url('/ball_blue.png')]"
-                : "",
-              isLoadingBall(i, j) &&
-                (isCurrentRedBall
-                  ? "bg-opacity-50 bg-[url('/ball_green.png')]"
-                  : "bg-opacity-50 bg-[url('/ball_blue.png')]"),
               "group",
               "relative"
             )}
@@ -95,7 +81,7 @@ export const GameView = (props: IGameViewProps) => {
               (isCurrentRedBall ? (
                 <Image
                   src={ballGreen}
-                  alt="w-full h-full"
+                  alt=""
                   className="hidden group-hover:!inline-block absolute top-0 left-0 w-full h-full p-[0.2vw]"
                 ></Image>
               ) : (

@@ -4,6 +4,12 @@ import { IGameInfo } from "@zknoid/sdk/lib/stores/matchQueue";
 import { Bool, UInt32 } from "o1js";
 import { useEffect, useState } from "react";
 import { CheckersField } from "zknoid-chain-dev";
+import Image from "next/image";
+import ballGreen from "../assets/ball_green.png";
+import ballBlue from "../assets/ball_blue.png";
+import ballGreenAdv from "../assets/ball_green_adv.svg";
+import ballBlueAdv from "../assets/ball_blue_adv.png";
+import { cn } from "@zknoid/sdk/lib/helpers";
 
 interface IGameViewProps {
   gameInfo: IGameInfo<CheckersField> | undefined;
@@ -326,35 +332,15 @@ export const GameView = (props: IGameViewProps) => {
                   setMoveChoosing(true);
                 }
               }}
-              className={`
-              bg-bg-dark ${highlightCells ? "" : ""} h-14 w-14
-              bg-[length:40px_40px] bg-center bg-no-repeat p-5 
-              ${
+              className={cn(
+                "bg-bg-dark h-14 w-14",
+                "bg-[length:40px_40px] bg-center bg-no-repeat p-5",
+                "relative",
+
                 isCurrentRedBall
                   ? " hover:bg-bg-dark/50"
-                  : " hover:bg-bg-dark/50"
-              }
-              ${
-                props.gameInfo && +props.gameInfo.field.value[j][i] == 1
-                  ? "bg-[url('/ball_green.svg')]"
-                  : ""
-              }
-              ${
-                props.gameInfo && +props.gameInfo.field.value[j][i] == 2
-                  ? "bg-[url('/ball_blue.svg')]"
-                  : ""
-              }
-              ${
-                props.gameInfo && +props.gameInfo.field.value[j][i] == 3
-                  ? "bg-[url('/ball_green_adv.svg')]"
-                  : ""
-              }
-              ${
-                props.gameInfo && +props.gameInfo.field.value[j][i] == 4
-                  ? "bg-[url('/ball_blue_adv.svg')]"
-                  : ""
-              }
-              ${
+                  : " hover:bg-bg-dark/50",
+
                 ((possibleMoves.moves.includes(MOVE_TOP_RIGHT) &&
                   j == possibleMoves.fromCellX + 1 &&
                   i == possibleMoves.fromCellY + (isPlayer1 ? 1 : -1)) ||
@@ -379,13 +365,34 @@ export const GameView = (props: IGameViewProps) => {
                   (possibleMoves.moves.includes(CAPTURE_KING_BOTTOM_RIGHT) &&
                     j == possibleMoves.fromCellX + 2 &&
                     i == possibleMoves.fromCellY + (isPlayer1 ? -2 : 2))) &&
-                "bg-bg-dark/50"
-              }
-            `}
+                  "bg-bg-dark/50"
+              )}
               style={{ imageRendering: "pixelated" }}
               id={`${i}_${j}`}
               // onClick={() => props.onCellClicked(i, j)}
-            ></div>
+            >
+              {props.gameInfo && +props.gameInfo.field.value[j][i] == 1 && (
+                <Image
+                  src={ballGreen}
+                  alt=""
+                  className="absolute top-0 left-0 w-full h-full p-[0.2vw]"
+                ></Image>
+              )}
+              {props.gameInfo && +props.gameInfo.field.value[j][i] == 2 && (
+                <Image
+                  src={ballBlue}
+                  alt=""
+                  className="absolute top-0 left-0 w-full h-full p-[0.2vw]"
+                ></Image>
+              )}
+              {props.gameInfo && +props.gameInfo.field.value[j][i] == 3 && (
+                <Image
+                  src={ballGreenAdv}
+                  alt=""
+                  className="absolute top-0 left-0 w-full h-full p-[0.2vw]"
+                ></Image>
+              )}
+            </div>
           ))
         )}
     </div>
