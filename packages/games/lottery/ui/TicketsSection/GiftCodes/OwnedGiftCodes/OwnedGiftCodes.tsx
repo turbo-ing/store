@@ -1,19 +1,17 @@
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
-// import { api } from '@/trpc/react';
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
+import { useContext } from "react";
+import LotteryContext from "../../../../lib/contexts/LotteryContext";
 
 export default function OwnedGiftCodes({
   userGiftCodes,
 }: {
   userGiftCodes: { code: string; used: boolean; createdAt: string }[];
 }) {
-  // TODO: Add api for gift codes
-  // const removeUsedGiftCodesMutation =
-  //   api.giftCodes.removeUsedGiftCodes.useMutation();
-
   const notificationStore = useNotificationStore();
   const networkStore = useNetworkStore();
+  const { removeUsedGiftCodesMutation } = useContext(LotteryContext);
   const copyCodes = (giftCode: string | string[]) => {
     const codes = giftCode.toString().replaceAll(",", ", ");
     navigator.clipboard.writeText(codes);
@@ -100,9 +98,7 @@ export default function OwnedGiftCodes({
           }
           disabled={!userGiftCodes.find((item) => item.used)}
           onClick={() => {
-            // removeUsedGiftCodesMutation.mutate({
-            //   userAddress: networkStore.address || '',
-            // });
+            removeUsedGiftCodesMutation(networkStore.address || "");
             notificationStore.create({
               type: "success",
               message: "Successfully deleted used codes",

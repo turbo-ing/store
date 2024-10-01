@@ -1,19 +1,19 @@
-import { ReactNode } from 'react';
-import { cn, requestAccounts, sendTransaction } from '@zknoid/sdk/lib/helpers';
-import { useWorkerClientStore } from '../../../workers/workerClientStore';
-import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
-import { useChainStore } from '@zknoid/sdk/lib/stores/minaChain';
-import { TICKET_PRICE } from 'l1-lottery-contracts';
-import { formatUnits } from '@zknoid/sdk/lib/unit';
-import Loader from '@zknoid/sdk/components/shared/Loader';
-import { Currency } from '@zknoid/sdk/constants/currency';
-import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
-import { useMinaBalancesStore } from '@zknoid/sdk/lib/stores/minaBalances';
-import { VoucherMode } from '../../../ui/TicketsSection/lib/voucherMode';
+import { ReactNode, useContext } from "react";
+import { cn, requestAccounts, sendTransaction } from "@zknoid/sdk/lib/helpers";
+import { useWorkerClientStore } from "../../../workers/workerClientStore";
+import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
+import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
+import { TICKET_PRICE } from "l1-lottery-contracts";
+import { formatUnits } from "@zknoid/sdk/lib/unit";
+import Loader from "@zknoid/sdk/components/shared/Loader";
+import { Currency } from "@zknoid/sdk/constants/currency";
+import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
+import { useMinaBalancesStore } from "@zknoid/sdk/lib/stores/minaBalances";
+import { VoucherMode } from "../../../ui/TicketsSection/lib/voucherMode";
 // import { BRIDGE_ADDR } from '@zknoid/sdk/constants';
-// import { api } from '@/trpc/react';
-import * as crypto from 'crypto';
-import { PublicKey } from 'o1js';
+import * as crypto from "crypto";
+import { PublicKey } from "o1js";
+import LotteryContext from "../../../lib/contexts/LotteryContext";
 
 export default function BuyInfoCard({
   buttonActive,
@@ -45,6 +45,12 @@ export default function BuyInfoCard({
   const networkStore = useNetworkStore();
   const chain = useChainStore();
   const notificationStore = useNotificationStore();
+  const {
+    addGiftCodeMutation,
+    addGiftCodesMutation,
+    sendTicketQueueMutation,
+    useGiftCodeMutation,
+  } = useContext(LotteryContext);
 
   // const addGiftCodeMutation = api.giftCodes.addGiftCode.useMutation();
   // const addGiftCodesMutation = api.giftCodes.addGiftCodes.useMutation();
@@ -72,29 +78,29 @@ export default function BuyInfoCard({
       networkStore.address!,
       Number(chain.block?.slotSinceGenesis!),
       ticketsInfo[0].numbers,
-      numberOfTickets
+      numberOfTickets,
     );
-    console.log('txJson', txJson);
+    console.log("txJson", txJson);
     await sendTransaction(txJson)
       .then((transaction: string | undefined) => {
         if (transaction) {
           clearTickets();
           notificationStore.create({
-            type: 'success',
-            message: 'Transaction sent',
+            type: "success",
+            message: "Transaction sent",
           });
         } else {
           notificationStore.create({
-            type: 'error',
-            message: 'Transaction rejected by user',
+            type: "error",
+            message: "Transaction rejected by user",
           });
         }
       })
       .catch((error) => {
-        console.log('Error while sending transaction', error);
+        console.log("Error while sending transaction", error);
         notificationStore.create({
-          type: 'error',
-          message: 'Error while sending transaction',
+          type: "error",
+          message: "Error while sending transaction",
           dismissDelay: 10000,
         });
       });
@@ -115,10 +121,11 @@ export default function BuyInfoCard({
           const code = {
             userAddress: networkStore.address,
             transactionHash: tx.hash,
-            code: crypto.randomBytes(8).toString('hex'),
+            code: crypto.randomBytes(8).toString("hex"),
           };
           codes.push(code);
         }
+        addGiftCodesMutation(codes);
         // addGiftCodesMutation.mutate(codes);
         setBoughtGiftCodes(codes.map((item) => item.code));
         setGiftCodeToBuyAmount(1);
@@ -127,15 +134,16 @@ export default function BuyInfoCard({
         const code = {
           userAddress: networkStore.address,
           transactionHash: tx.hash,
-          code: crypto.randomBytes(8).toString('hex'),
+          code: crypto.randomBytes(8).toString("hex"),
         };
+        addGiftCodeMutation(code);
         // addGiftCodeMutation.mutate(code);
         setBoughtGiftCodes([code.code]);
         setVoucherMode(VoucherMode.BuySuccess);
       }
       notificationStore.create({
-        type: 'success',
-        message: 'Gift codes successfully bought',
+        type: "success",
+        message: "Gift codes successfully bought",
       });
     } catch (error: any) {
       if (error.code == 1001) {
@@ -145,13 +153,21 @@ export default function BuyInfoCard({
       }
       console.log(error);
       notificationStore.create({
-        type: 'error',
-        message: 'Error while buying gift code',
+        type: "error",
+        message: "Error while buying gift code",
       });
     }
   };
 
   const sendTicketQueue = () => {
+    sendTicketQueueMutation({
+      userAddress: networkStore.address || "",
+      giftCode: giftCode,
+      roundId: workerStore.lotteryRoundId,
+      ticket: { numbers: ticketsInfo[0].numbers },
+    });
+    useGiftCodeMutation(giftCode);
+
     // sendTicketQueueMutation.mutate({
     //   userAddress: networkStore.address || '',
     //   giftCode: giftCode,
@@ -164,8 +180,8 @@ export default function BuyInfoCard({
     setVoucherMode(VoucherMode.Closed);
     clearTickets();
     notificationStore.create({
-      type: 'success',
-      message: 'Transaction sent',
+      type: "success",
+      message: "Transaction sent",
     });
   };
   return (
@@ -174,7 +190,7 @@ export default function BuyInfoCard({
         <div className="text-nowrap">Number of tickets</div>
         <div className="mx-1 mb-[0.3vw] w-full border-spacing-6 border-b border-dotted border-[#F9F8F4] opacity-50"></div>
         <div className="">
-          {voucherMode == VoucherMode.UseValid ? '1' : numberOfTickets}
+          {voucherMode == VoucherMode.UseValid ? "1" : numberOfTickets}
         </div>
       </div>
       <div className="flex flex-row">
@@ -200,7 +216,7 @@ export default function BuyInfoCard({
         <div className="text-nowrap font-medium">TOTAL AMOUNT</div>
         <div className="mx-1 mb-[0.3vw] w-full border-spacing-6 border-b border-dotted border-[#F9F8F4] opacity-50"></div>
         <div className="">
-          {voucherMode == VoucherMode.UseValid ? '0' : formatUnits(totalPrice)}
+          {voucherMode == VoucherMode.UseValid ? "0" : formatUnits(totalPrice)}
           {Currency.MINA}
         </div>
       </div>
@@ -208,7 +224,7 @@ export default function BuyInfoCard({
         Number(balance) < Number(formatUnits(totalPrice)) && (
           <div
             className={
-              'mt-[1vw] flex w-full flex-row items-center gap-[0.26vw]'
+              "mt-[1vw] flex w-full flex-row items-center gap-[0.26vw]"
             }
           >
             <svg
@@ -217,7 +233,7 @@ export default function BuyInfoCard({
               viewBox="0 0 14 14"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className={'h-[0.729vw] w-[0.729vw]'}
+              className={"h-[0.729vw] w-[0.729vw]"}
             >
               <circle
                 cx="7"
@@ -232,19 +248,19 @@ export default function BuyInfoCard({
                 fill="#F9F8F4"
               />
             </svg>
-            <span className={'font-plexsans text-[0.625vw] text-[#FF0000]'}>
+            <span className={"font-plexsans text-[0.625vw] text-[#FF0000]"}>
               There are not enough funds in your wallet
             </span>
           </div>
         )}
       <button
         className={cn(
-          'mb-0 mt-auto flex h-[2.13vw] cursor-pointer items-center justify-center rounded-[0.33vw] border-bg-dark bg-right-accent px-[1vw] text-[1.07vw] text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:opacity-60',
+          "mb-0 mt-auto flex h-[2.13vw] cursor-pointer items-center justify-center rounded-[0.33vw] border-bg-dark bg-right-accent px-[1vw] text-[1.07vw] text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:opacity-60",
           {
-            'cursor-progress': loaderActive,
-            'mt-[0.25vw]': Number(balance) < Number(formatUnits(totalPrice)),
-            'mt-[1vw]': Number(balance) > Number(formatUnits(totalPrice)),
-          }
+            "cursor-progress": loaderActive,
+            "mt-[0.25vw]": Number(balance) < Number(formatUnits(totalPrice)),
+            "mt-[1vw]": Number(balance) > Number(formatUnits(totalPrice)),
+          },
         )}
         disabled={
           voucherMode != VoucherMode.UseValid
@@ -261,14 +277,14 @@ export default function BuyInfoCard({
               : await buyTicket();
         }}
       >
-        <div className={'flex flex-row items-center gap-[10%]'}>
-          {loaderActive && <Loader size={19} color={'#212121'} />}
+        <div className={"flex flex-row items-center gap-[10%]"}>
+          {loaderActive && <Loader size={19} color={"#212121"} />}
           <span>
             {voucherMode == VoucherMode.UseValid
-              ? 'Receive ticket'
+              ? "Receive ticket"
               : Number(balance) < Number(formatUnits(totalPrice))
-                ? 'Not enough funds'
-                : 'Pay'}
+                ? "Not enough funds"
+                : "Pay"}
           </span>
         </div>
       </button>
