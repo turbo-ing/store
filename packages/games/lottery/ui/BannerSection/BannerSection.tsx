@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { useContext } from "react";
-import { useWorkerClientStore } from '../../workers/workerClientStore';
+import { useWorkerClientStore } from "../../workers/workerClientStore";
 import Rules from "./ui/Rules";
 import BannerButton from "./ui/BannerButton";
 import CenterConsole from "../../ui/BannerSection/ui/CenterConsole";
@@ -9,7 +9,7 @@ import CurrentRoundInfo from "../../ui/BannerSection/ui/CurrentRoundInfo";
 import PrevRoundInfo from "../../ui/BannerSection/ui/PrevRoundInfo";
 import { Pages } from "../Lottery";
 import { useRoundsStore } from "../../lib/roundsStore";
-import GamesContext from "../../../../sdk/lib/contexts/GamesContext";
+import LotteryContext from "../../lib/contexts/LotteryContext";
 
 export default function BannerSection({
   roundEndsIn,
@@ -21,8 +21,7 @@ export default function BannerSection({
   const lotteryStore = useWorkerClientStore();
   const roundsStore = useRoundsStore();
 
-  const { lotteryContext } = useContext(GamesContext);
-  const roundInfo = lotteryContext.roundInfo;
+  const { roundInfo } = useContext(LotteryContext);
 
   const ticketsNum = roundInfo?.tickets
     .map((x) => x.amount)

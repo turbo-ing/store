@@ -1,11 +1,11 @@
 import PreviousRoundItem from "./ui/PreviousRoundItem";
 import { BLOCK_PER_ROUND } from "l1-lottery-contracts";
-import { useWorkerClientStore } from '../../../workers/workerClientStore';
+import { useWorkerClientStore } from "../../../workers/workerClientStore";
 import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
 import { useContext, useEffect, useState } from "react";
 import { ILotteryRound } from "../../../lib/types";
 import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
-import GamesContext from "../../../../../sdk/lib/contexts/GamesContext";
+import LotteryContext from "../../../lib/contexts/LotteryContext";
 
 export default function PreviousRounds() {
   const ROUNDS_PER_PAGE = 2;
@@ -13,7 +13,7 @@ export default function PreviousRounds() {
   const workerClientStore = useWorkerClientStore();
   const lotteryStore = useWorkerClientStore();
   const chainStore = useChainStore();
-  const { lotteryContext } = useContext(GamesContext);
+  const { getRoundsInfosQuery } = useContext(LotteryContext);
 
   const [page, setPage] = useState<number>(0);
   const [roundInfos, setRoundInfos] = useState<ILotteryRound[] | undefined>(
@@ -24,7 +24,7 @@ export default function PreviousRounds() {
     { length: ROUNDS_PER_PAGE },
     (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE,
   ).filter((x) => x >= 0);
-  const roundInfosData = lotteryContext.getRoundsInfosQuery(roundsToShow, {
+  const roundInfosData = getRoundsInfosQuery(roundsToShow, {
     refetchInterval: 5000,
   });
 

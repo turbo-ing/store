@@ -3,14 +3,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { AnimatePresence, useScroll } from "framer-motion";
 import CustomScrollbar from "@zknoid/sdk/components/shared/CustomScrollbar";
-import { useWorkerClientStore } from '../../workers/workerClientStore';
+import { useWorkerClientStore } from "../../workers/workerClientStore";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
 import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
 import { RoundsDropdown } from "./ui/RoundsDropdown";
 import { TicketItem } from "./ui/TicketItem";
 import { ILotteryRound } from "../../lib/types";
-import GamesContext from "../../../../sdk/lib/contexts/GamesContext";
+import LotteryContext from "../../lib/contexts/LotteryContext";
 
 const CheckboxButton = ({
   text,
@@ -64,7 +64,7 @@ export default function TicketsStorage({
   const lotteryStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
   const chainStore = useChainStore();
-  const { lotteryContext } = useContext(GamesContext);
+  const { getRoundsInfosQuery } = useContext(LotteryContext);
 
   const [onlyLoosing, setOnlyLoosing] = useState<boolean>(false);
   const [onlyClaimable, setOnlyClaimable] = useState<boolean>(false);
@@ -84,10 +84,10 @@ export default function TicketsStorage({
     currentRoundId !== undefined
       ? [currentRoundId]
       : [...Array(lotteryStore.lotteryRoundId)].map((_, i) => i);
-  const roundInfosData = lotteryContext.getRoundsInfosQuery(roundsToShow, {
+  const roundInfosData = getRoundsInfosQuery(roundsToShow, {
     refetchInterval: 5000,
   });
-  const roundIDSData = lotteryContext?.getRoundsInfosQuery(
+  const roundIDSData = getRoundsInfosQuery(
     [...Array(lotteryStore.lotteryRoundId)].map((_, i) => i),
     { refetchInterval: 5000 },
   );
