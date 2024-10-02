@@ -106,8 +106,8 @@ export default function BuyInfoCard({
 
     try {
       const tx = await (window as any).mina.sendPayment({
-        memo: `zknoid.io game bridging #${process.env.BRIDGE_ID ?? 100}`,
-        to: PublicKey.empty().toBase58(),
+        memo: `zknoid.io lottery gift code`,
+        to: process.env.NEXT_PUBLIC_GIFT_CODES_TREASURY || PublicKey.empty().toBase58(),
         amount: parseFloat(formatUnits(totalPrice)),
       });
       if (numberOfTickets > 1) {
