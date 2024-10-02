@@ -87,8 +87,7 @@ export const defaultGames: IGame[] = [
     releaseDate: new Date(2023, 11, 1),
     popularity: 60,
     author: 'ZkNoid Team',
-    rating: 0,
-    externalUrl: 'https://proto.zknoid.io/games/arkanoid/global',
+    rating: 0
   },
   {
     id: 'randzu',
@@ -104,8 +103,7 @@ export const defaultGames: IGame[] = [
     releaseDate: new Date(2024, 0, 1),
     popularity: 50,
     author: 'ZkNoid Team',
-    rating: 0,
-    externalUrl: 'https://proto.zknoid.io/games/randzu/global',
+    rating: 0
   },
   {
     id: 'thimblerig',
@@ -121,8 +119,7 @@ export const defaultGames: IGame[] = [
     releaseDate: new Date(2024, 2, 25),
     popularity: 0,
     author: 'ZkNoid Team',
-    rating: 0,
-    externalUrl: 'https://proto.zknoid.io/games/thimblerig/global',
+    rating: 0
   },
   {
     id: 'checkers',
@@ -138,7 +135,6 @@ export const defaultGames: IGame[] = [
     releaseDate: new Date(2024, 0, 1),
     popularity: 50,
     author: 'ZkNoid Team',
-    rating: 0,
-    externalUrl: 'https://proto.zknoid.io/games/checkers/global',
+    rating: 0
   },
 ];
