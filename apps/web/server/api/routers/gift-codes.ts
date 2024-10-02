@@ -4,7 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";
 
 const client = await clientPromise;
-const db = client?.db(process.env.MONGODB_DB);
+const db = client?.db(process.env.BACKEND_MONGODB_DB);
 
 export const giftCodesRouter = createTRPCRouter({
   getUserGiftCodes: publicProcedure
