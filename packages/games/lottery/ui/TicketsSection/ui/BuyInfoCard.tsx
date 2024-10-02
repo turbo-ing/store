@@ -12,7 +12,7 @@ import { useMinaBalancesStore } from "@zknoid/sdk/lib/stores/minaBalances";
 import { VoucherMode } from "../../../ui/TicketsSection/lib/voucherMode";
 // import { BRIDGE_ADDR } from '@zknoid/sdk/constants';
 import * as crypto from "crypto";
-import { PublicKey } from "o1js";
+import { Poseidon, PublicKey, CircuitString } from "o1js";
 import LotteryContext from "../../../lib/contexts/LotteryContext";
 
 export default function BuyInfoCard({
@@ -46,7 +46,6 @@ export default function BuyInfoCard({
   const chain = useChainStore();
   const notificationStore = useNotificationStore();
   const {
-    addGiftCodeMutation,
     addGiftCodesMutation,
     sendTicketQueueMutation,
     useGiftCodeMutation,
@@ -73,7 +72,7 @@ export default function BuyInfoCard({
       networkStore.address!,
       Number(chain.block?.slotSinceGenesis!),
       ticketsInfo[0].numbers,
-      numberOfTickets,
+      numberOfTickets
     );
     console.log("txJson", txJson);
     await sendTransaction(txJson)
@@ -105,35 +104,43 @@ export default function BuyInfoCard({
     if (!networkStore.address) return;
 
     try {
+      const codes = [];
+
+      for (let i = 0; i < numberOfTickets; i++) {
+        codes.push(crypto.randomBytes(8).toString("hex"));
+      }
+
+      const addedCodes = {
+        userAddress: networkStore.address,
+        transactionHash: '',
+        signature: '',
+        codes
+      };
+
+      const dataToSign = Poseidon.hashPacked(CircuitString, CircuitString.fromString(codes.map(x => x).join(', '))).toFields(); 
+
+      const response = await (window as any).mina.signFields({
+        message: dataToSign.map((field) => field.toString()),
+      });
+
+      addedCodes.signature = response.signature;
+
+      console.log('Added codes', addedCodes);
+
       const tx = await (window as any).mina.sendPayment({
         memo: `zknoid.io lottery gift code`,
-        to: process.env.NEXT_PUBLIC_GIFT_CODES_TREASURY || PublicKey.empty().toBase58(),
+        to:
+          process.env.NEXT_PUBLIC_GIFT_CODES_TREASURY ||
+          PublicKey.empty().toBase58(),
         amount: parseFloat(formatUnits(totalPrice)),
       });
-      if (numberOfTickets > 1) {
-        const codes = [];
-        for (let i = 0; i < numberOfTickets; i++) {
-          const code = {
-            userAddress: networkStore.address,
-            transactionHash: tx.hash,
-            code: crypto.randomBytes(8).toString("hex"),
-          };
-          codes.push(code);
-        }
-        addGiftCodesMutation(codes);
-        setBoughtGiftCodes(codes.map((item) => item.code));
-        setGiftCodeToBuyAmount(1);
-        setVoucherMode(VoucherMode.BuySuccess);
-      } else {
-        const code = {
-          userAddress: networkStore.address,
-          transactionHash: tx.hash,
-          code: crypto.randomBytes(8).toString("hex"),
-        };
-        addGiftCodeMutation(code);
-        setBoughtGiftCodes([code.code]);
-        setVoucherMode(VoucherMode.BuySuccess);
-      }
+
+      addedCodes.transactionHash = tx.hash;
+
+      addGiftCodesMutation(addedCodes);
+      setBoughtGiftCodes(codes);
+      setGiftCodeToBuyAmount(1);
+      setVoucherMode(VoucherMode.BuySuccess);
       notificationStore.create({
         type: "success",
         message: "Gift codes successfully bought",
@@ -243,7 +250,7 @@ export default function BuyInfoCard({
             "cursor-progress": loaderActive,
             "mt-[0.25vw]": Number(balance) < Number(formatUnits(totalPrice)),
             "mt-[1vw]": Number(balance) > Number(formatUnits(totalPrice)),
-          },
+          }
         )}
         disabled={
           voucherMode != VoucherMode.UseValid

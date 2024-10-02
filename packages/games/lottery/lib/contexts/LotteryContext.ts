@@ -1,9 +1,10 @@
 import { createContext } from "react";
 import { ILotteryRound } from "../../lib/types";
 
-interface IGiftCode {
+interface IAddedGiftCodes {
   userAddress: string;
-  code: string;
+  codes: string[];
+  signature: string;
   transactionHash: string;
 }
 
@@ -24,8 +25,7 @@ interface ILotteryContext {
     roundsIds: number[],
     params?: { refetchInterval?: number | false },
   ) => ILotteryRound[] | undefined;
-  addGiftCodeMutation: (giftCode: IGiftCode) => void;
-  addGiftCodesMutation: (giftCodes: IGiftCode[]) => void;
+  addGiftCodesMutation: (giftCodes: IAddedGiftCodes) => void;
   removeUsedGiftCodesMutation: (userAddress: string) => void;
   sendTicketQueueMutation: (ticketQueue: ITicketQueue) => void;
   useGiftCodeMutation: (giftCode: string) => void;
@@ -36,7 +36,6 @@ const LotteryContext = createContext<ILotteryContext>({
   minaEvents: undefined,
   userGiftCodes: [],
   getRoundsInfosQuery: () => undefined,
-  addGiftCodeMutation: () => {},
   addGiftCodesMutation: () => {},
   removeUsedGiftCodesMutation: () => {},
   sendTicketQueueMutation: () => {},

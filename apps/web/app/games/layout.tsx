@@ -33,7 +33,6 @@ export default function Layout({ children }: { children: ReactNode }) {
   const getRoundsInfosQuery = api.lotteryBackend.getRoundInfos;
   const removeUsedGiftCodesMutation =
     api.giftCodes.removeUsedGiftCodes.useMutation();
-  const addGiftCodeMutation = api.giftCodes.addGiftCode.useMutation();
   const addGiftCodesMutation = api.giftCodes.addGiftCodes.useMutation();
   const sendTicketQueueMutation = api.giftCodes.sendTicketQueue.useMutation();
   const useGiftCodeMutation = api.giftCodes.useGiftCode.useMutation();
@@ -68,12 +67,6 @@ export default function Layout({ children }: { children: ReactNode }) {
         getRoundsInfosQuery: (roundsIds, params) =>
           (getRoundsInfosQuery.useQuery({ roundIds: roundsIds }, params)
             ?.data as ILotteryRound[]) || undefined,
-        addGiftCodeMutation: (giftCode) =>
-          addGiftCodeMutation.mutate({
-            userAddress: giftCode.userAddress,
-            code: giftCode.code,
-            transactionHash: giftCode.transactionHash,
-          }),
         addGiftCodesMutation: (giftCodes) =>
           addGiftCodesMutation.mutate(giftCodes),
         removeUsedGiftCodesMutation: (userAddress) =>
