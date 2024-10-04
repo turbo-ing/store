@@ -67,6 +67,7 @@ export default function PreviousRounds() {
               {chainStore.block &&
                 lotteryStore.onchainStateInitialized &&
                 chainStore.block?.slotSinceGenesis &&
+                lotteryStore.onchainState?.startBlock &&
                 roundInfos.map((round, index) => (
                   <PreviousRoundItem
                     key={index}

@@ -117,7 +117,7 @@ export default function BuyInfoCard({
         codes
       };
 
-      const dataToSign = Poseidon.hashPacked(CircuitString, CircuitString.fromString(codes.map(x => x).join(', '))).toFields(); 
+      const dataToSign = codes.map(x => Poseidon.hashPacked(CircuitString, CircuitString.fromString(x))).flatMap(x => x.toFields()); 
 
       const response = await (window as any).mina.signFields({
         message: dataToSign.map((field) => field.toString()),
