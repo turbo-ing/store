@@ -66,7 +66,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         userGiftCodes: userGiftCodes,
         getRoundsInfosQuery: (roundsIds, params) =>
           (getRoundsInfosQuery.useQuery({ roundIds: roundsIds }, params)
-            ?.data as ILotteryRound[]) || undefined,
+            ?.data as Record<number, ILotteryRound>) || undefined,
         addGiftCodesMutation: (giftCodes) =>
           addGiftCodesMutation.mutate(giftCodes),
         removeUsedGiftCodesMutation: (userAddress) =>

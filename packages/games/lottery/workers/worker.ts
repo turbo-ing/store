@@ -35,10 +35,7 @@ import {
   Ticket,
   PLottery,
   TicketReduceProgram,
-  DistibutionProgram,
-  PStateManager,
-  NumberPacked,
-  getNullifierId,
+  DistributionProgram,
   DistributionProof,
   DistributionProofPublicInput,
   MerkleMap20Witness,
@@ -87,7 +84,7 @@ const functions = {
     console.log('[Worker] compiling distribution contracts');
     console.log('Cache info', LOTTERY_CACHE);
 
-    await DistibutionProgram.compile({
+    await DistributionProgram.compile({
       cache: WebFileSystem(state.lotteryCache!),
     });
 
@@ -140,8 +137,10 @@ const functions = {
     console.log(args.ticketNums, senderAccount, args.roundId);
     const ticket = Ticket.from(args.ticketNums, senderAccount, args.amount);
 
+    const plottery = new PLottery(PublicKey.fromFields([Field.from(args.roundId)]));
+
     let tx = await Mina.transaction(senderAccount, async () => {
-      await state.lotteryGame!.buyTicket(ticket, Field014.from(args.roundId));
+      await plottery!.buyTicket(ticket);
     });
 
     console.log('BUY TX', tx);
@@ -182,18 +181,13 @@ const functions = {
     console.log('Received rp', rp);
 
     const ticket = Ticket.from(args.ticketNums, senderAccount, args.amount);
-    
+    // ticket, ticketWitness, dp, nullifierWitness
     let tx = await Mina.transaction(senderAccount, async () => {
       await state.lotteryGame!.getReward(
         ticket,
-        MerkleMap20Witness.fromJSON(rp.roundWitness) as MerkleMap20Witness,
-        MerkleMap20Witness.fromJSON(rp.roundTicketWitness) as MerkleMap20Witness,
+        MerkleMap20Witness.fromJSON(rp.ticketWitness) as MerkleMap20Witness,
         //@ts-ignore
         await DistributionProof.fromJSON(rp.dp),
-        Field.fromJSON(rp.winningNumbers),
-        MerkleMap20Witness.fromJSON(rp.resultWitness) as MerkleMap20Witness,
-        Field.fromJSON(rp.bankValue),
-        MerkleMap20Witness.fromJSON(rp.bankWitness) as MerkleMap20Witness,
         MerkleMapWitness.fromJSON(rp.nullifierWitness) as MerkleMapWitness
       );
     });
@@ -224,15 +218,6 @@ const functions = {
     );
 
     return state.getRewardTransaction!.toJSON();
-  },
-  getLotteryState: async () => {
-    return {
-      ticketRoot: state.lotteryGame?.ticketRoot.get().toJSON(),
-      ticketNullifier: state.lotteryGame?.ticketNullifier.get().toJSON(),
-      bankRoot: state.lotteryGame?.startBlock.get().toJSON(),
-      roundResultRoot: state.lotteryGame?.roundResultRoot.get().toJSON(),
-      startBlock: state.lotteryGame?.startBlock.get()?.toBigint(),
-    };
   },
 };
 

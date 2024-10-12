@@ -24,7 +24,7 @@ interface ILotteryContext {
   getRoundsInfosQuery: (
     roundsIds: number[],
     params?: { refetchInterval?: number | false },
-  ) => ILotteryRound[] | undefined;
+  ) => Record<number, ILotteryRound> | undefined;
   addGiftCodesMutation: (giftCodes: IAddedGiftCodes) => void;
   removeUsedGiftCodesMutation: (userAddress: string) => void;
   sendTicketQueueMutation: (ticketQueue: ITicketQueue) => void;

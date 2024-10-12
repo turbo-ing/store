@@ -12,4 +12,6 @@ export interface ILotteryRound {
   bank: bigint;
   tickets: ILotteryTicket[];
   winningCombination: number[] | undefined;
+  plotteryAddress: string;
+  randomManagerAddress: string;
 }

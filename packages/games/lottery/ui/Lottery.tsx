@@ -10,7 +10,7 @@ import { DateTime, Duration } from "luxon";
 import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
 import WrongNetworkModal from "./TicketsSection/ui/WrongNetworkModal";
 import { fetchAccount } from "o1js";
-import { LOTTERY_ADDRESS } from "../constants/addresses";
+import { FACTORY_ADDRESS } from "../constants/addresses";
 import { BLOCK_PER_ROUND } from "l1-lottery-contracts";
 import StateManager from "./StateManager";
 import ConnectWalletModal from "@zknoid/sdk/components/shared/ConnectWalletModal";
@@ -50,18 +50,14 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   useEffect(() => {
     if (!networkStore.minaNetwork?.networkID) return;
 
-    const lotteryPublicKey58 =
-      LOTTERY_ADDRESS[networkStore.minaNetwork?.networkID!];
+    const factoryPublicKey58 =
+      FACTORY_ADDRESS[networkStore.minaNetwork?.networkID!];
 
     (async () => {
-      const account = await fetchAccount({ publicKey: lotteryPublicKey58 });
+      const account = await fetchAccount({ publicKey: factoryPublicKey58 });
 
       const onchainState = {
-        ticketRoot: account.account?.zkapp?.appState[0]!,
-        ticketNullifier: account.account?.zkapp?.appState[1]!,
-        bankRoot: account.account?.zkapp?.appState[2]!,
-        roundResultRoot: account.account?.zkapp?.appState[3]!,
-        startBlock: account.account?.zkapp?.appState[4].toBigInt()!,
+        startBlock: account.account?.zkapp?.appState[1].toBigInt()!,
       };
 
       console.log("Onchain state", onchainState);
@@ -80,44 +76,21 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   }, [networkStore.minaNetwork?.networkID, chainStore.block?.height]);
 
   useEffect(() => {
-    console.log(
-      "Lottery hook context",
-      workerClientStore.client,
-      networkStore.minaNetwork?.networkID,
-      chainStore.block?.slotSinceGenesis,
-      minaEvents?.events,
-      !workerClientStore.lotteryGame,
-    );
     if (
       workerClientStore.client &&
-      networkStore.minaNetwork?.networkID &&
-      chainStore.block?.slotSinceGenesis &&
-      minaEvents?.events &&
-      !workerClientStore.lotteryGame &&
-      workerClientStore.onchainState
+      !workerClientStore.lotteryCompilationStarted
     ) {
       console.log("Starting lottery");
-      workerClientStore.startLottery(
-        networkStore.minaNetwork?.networkID!,
-        Number(chainStore.block?.slotSinceGenesis),
-        minaEvents?.events as unknown as object[],
-      );
+      workerClientStore.compileLottery();
     }
   }, [
     workerClientStore.client,
-    networkStore.minaNetwork?.networkID,
-    chainStore.block?.slotSinceGenesis,
-    minaEvents,
-    workerClientStore.onchainState,
-    workerClientStore.lotteryGame,
   ]);
 
-  useEffect(() => {
-    // Initialy onchain state initialized in startlottery.
-    // Then we only update it with new blocks coming
-    if (workerClientStore.lotteryCompiled)
-      workerClientStore.updateOnchainState();
-  }, [chainStore.block?.height, workerClientStore.lotteryCompiled]);
+  // useEffect(() => {
+  //   if (workerClientStore.lotteryCompiled)
+  //     workerClientStore.updateOnchainState();
+  // }, [chainStore.block?.height, workerClientStore.lotteryCompiled]);
 
   // When onchain state is ready
   useEffect(() => {

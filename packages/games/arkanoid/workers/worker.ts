@@ -33,14 +33,6 @@ import {
 import {
   Ticket,
   PLottery,
-  TicketReduceProgram,
-  DistibutionProgram,
-  PStateManager,
-  NumberPacked,
-  getNullifierId,
-  DistributionProof,
-  DistributionProofPublicInput,
-  MerkleMap20Witness,
 } from 'l1-lottery-contracts';
 
 import {

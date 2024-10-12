@@ -1,6 +1,6 @@
 import { cn, formatAddress } from "@zknoid/sdk/lib/helpers";
 import { useRoundTimer } from "../../../features/useRoundTimer";
-import { useWorkerClientStore } from '../../../workers/workerClientStore';
+import { useWorkerClientStore } from "../../../workers/workerClientStore";
 import { DateTime } from "luxon";
 import BouncyLoader from "@zknoid/sdk/components/shared/BouncyLoader";
 import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
@@ -9,6 +9,8 @@ import { Currency } from "@zknoid/sdk/constants/currency";
 import { Pages } from "../../Lottery";
 // import { api } from '@zknoid/sdk/trpc/react';
 import { useEffect, useState } from "react";
+import { ILotteryRound } from "../../../lib/types";
+import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 
 export default function CenterConsole({
   roundToShow,
@@ -18,19 +20,7 @@ export default function CenterConsole({
 }: {
   roundToShow: number;
   roundEndsIn: DateTime;
-  roundInfo:
-    | {
-        id: number;
-        bank: bigint;
-        tickets: {
-          amount: bigint;
-          numbers: number[];
-          owner: string;
-          funds: bigint | undefined;
-        }[];
-        winningCombination: number[] | undefined;
-      }
-    | undefined;
+  roundInfo: ILotteryRound | undefined;
   setPage: (page: Pages) => void;
 }) {
   const roundTimer = useRoundTimer(roundEndsIn);
@@ -53,6 +43,18 @@ export default function CenterConsole({
   //     }
   //   }
   // }, [getAccountsQuery.data]);
+
+  const workerStore = useWorkerClientStore();
+  const networkStore = useNetworkStore();
+
+  useEffect(() => {
+    if (roundInfo?.id == lotteryStore.lotteryRoundId && networkStore.minaNetwork?.networkID) {
+      workerStore.initLotteryInstance(
+        roundInfo.plotteryAddress,
+        networkStore.minaNetwork?.networkID!
+      );
+    }
+  }, [roundInfo, networkStore.minaNetwork?.networkID]);
 
   const leaderboard = roundInfo?.tickets
     .filter((ticket) => !!ticket.funds)

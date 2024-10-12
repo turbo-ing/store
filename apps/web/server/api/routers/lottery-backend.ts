@@ -48,6 +48,8 @@ export const lotteryBackendRouter = createTRPCRouter({
         winningCombination: roundInfo?.winningCombination,
         proof: roundInfo?.dp as JsonProof,
         total: roundInfo?.total as number,
+        plotteryAddress: roundInfo?.plotteryAddress,
+        randomManagerAddress: roundInfo?.randomManagerAddress
       } as {
         id: number;
         bank: bigint;
@@ -60,6 +62,8 @@ export const lotteryBackendRouter = createTRPCRouter({
           hash: string;
         }[];
         winningCombination: number[] | undefined;
+        plotteryAddress: string;
+        randomManagerAddress: string;
       };
     }),
   getRoundInfos: publicProcedure
@@ -93,6 +97,8 @@ export const lotteryBackendRouter = createTRPCRouter({
             hash: string;
           }[];
           winningCombination: number[] | undefined;
+          plotteryAddress: string;
+          randomManagerAddress: string;
         }
       >;
 
@@ -109,6 +115,8 @@ export const lotteryBackendRouter = createTRPCRouter({
             ? roundInfo?.winningCombination
             : [],
           total: roundInfo?.total as number,
+          plotteryAddress: roundInfo?.plotteryAddress,
+          randomManagerAddress: roundInfo?.randomManagerAddress
         } as any;
       }
 

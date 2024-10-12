@@ -60,11 +60,6 @@ export default class ZknoidWorkerClient {
       amount,
     });
   }
-  
-  getLotteryState() {
-    return this._call('getLotteryState', {});
-  }
-
   worker: Worker;
 
   promises: {
