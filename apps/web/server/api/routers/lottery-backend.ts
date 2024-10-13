@@ -14,13 +14,6 @@ export interface Progress {
   UI_TESTS_WEB: boolean[];
 }
 
-type JsonProof = {
-  publicInput: string[];
-  publicOutput: string[];
-  maxProofsVerified: 0 | 1 | 2;
-  proof: string;
-};
-
 export const lotteryBackendRouter = createTRPCRouter({
   getRoundInfos: publicProcedure
     .input(
@@ -66,6 +59,7 @@ export const lotteryBackendRouter = createTRPCRouter({
           tickets: roundInfo?.tickets.map((ticket: any) => ({
             ...ticket,
             amount: BigInt(ticket.amount),
+            funds: roundInfo?.dp ? BigInt(ticket.funds) : 0n
           })),
           winningCombination: roundInfo?.dp
             ? roundInfo?.winningCombination
