@@ -45,7 +45,7 @@
     "mongodb": "^6.5.0",
     "next": "14.2.13",
     "node-telegram-bot-api": "^0.65.1",
-    "o1js": "npm:o1js@1.6.0",
+    "o1js": "npm:o1js@1.8.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-lottie": "^1.2.4",
