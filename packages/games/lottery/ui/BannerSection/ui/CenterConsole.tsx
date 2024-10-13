@@ -48,10 +48,12 @@ export default function CenterConsole({
   const networkStore = useNetworkStore();
 
   useEffect(() => {
+    console.log('Round lottery address', roundInfo?.plotteryAddress)
     if (
       workerStore.client &&
       roundInfo?.id == lotteryStore.lotteryRoundId &&
-      networkStore.minaNetwork?.networkID
+      networkStore.minaNetwork?.networkID &&
+      roundInfo?.plotteryAddress
     ) {
       workerStore.initLotteryInstance(
         roundInfo.plotteryAddress,
