@@ -17,9 +17,9 @@ export default function Layout({ children }: { children: ReactNode }) {
     { code: string; used: boolean; createdAt: string }[]
   >([]);
 
-  const getRoundQuery = api.lotteryBackend.getRoundInfo.useQuery(
+  const getRoundQuery = api.lotteryBackend.getRoundInfos.useQuery(
     {
-      roundId: roundsStore.roundToShowId,
+      roundIds: [roundsStore.roundToShowId],
     },
     {
       refetchInterval: 5000,
@@ -39,7 +39,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!getRoundQuery.data) return undefined;
-    setRoundInfo(getRoundQuery.data);
+    setRoundInfo(getRoundQuery.data[0]);
   }, [roundsStore.roundToShowId, getRoundQuery.data]);
 
   useEffect(() => {

@@ -22,50 +22,6 @@ type JsonProof = {
 };
 
 export const lotteryBackendRouter = createTRPCRouter({
-  getRoundInfo: publicProcedure
-    .input(
-      z.object({
-        roundId: z.number(),
-      }),
-    )
-    .query(async ({ input }) => {
-      if (!db) return;
-      const roundInfo = await db.collection("rounds").findOne({
-        roundId: input.roundId,
-      });
-
-      if (!roundInfo) return null;
-
-      return {
-        id: roundInfo?.roundId,
-        bank: BigInt(roundInfo?.roundId),
-        tickets: roundInfo?.tickets
-          .filter((x: any) => x.amount > 0)
-          .map((ticket: any) => ({
-            ...ticket,
-            amount: BigInt(ticket.amount),
-          })),
-        winningCombination: roundInfo?.winningCombination,
-        proof: roundInfo?.dp as JsonProof,
-        total: roundInfo?.total as number,
-        plotteryAddress: roundInfo?.plotteryAddress,
-        randomManagerAddress: roundInfo?.randomManagerAddress
-      } as {
-        id: number;
-        bank: bigint;
-        tickets: {
-          amount: bigint;
-          numbers: number[];
-          owner: string;
-          claimed: boolean;
-          funds: bigint;
-          hash: string;
-        }[];
-        winningCombination: number[] | undefined;
-        plotteryAddress: string;
-        randomManagerAddress: string;
-      };
-    }),
   getRoundInfos: publicProcedure
     .input(
       z.object({
