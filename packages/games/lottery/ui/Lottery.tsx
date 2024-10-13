@@ -54,6 +54,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       FACTORY_ADDRESS[networkStore.minaNetwork?.networkID!];
 
     (async () => {
+      // TODO: wrap with trpc
       const account = await fetchAccount({ publicKey: factoryPublicKey58 });
 
       const onchainState = {

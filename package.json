@@ -11,7 +11,8 @@
     "prisma:generate": "turbo run prisma:generate",
     "env:development": "dotenv -e ./packages/chain/src/environments/development/.env -- pnpm",
     "env:inmemory": "dotenv -e ./packages/chain/src/environments/inmemory/.env -- pnpm",
-    "env:sovereign": "dotenv -e ./packages/chain/src/environments/sovereign/.env -- pnpm"
+    "env:sovereign": "dotenv -e ./packages/chain/src/environments/sovereign/.env -- pnpm",
+    "prepare": "cd node_modules/.pnpm/mina-fungible-token@https+++codeload.github.com+MinaFoundation+mina-fungible-token+tar.gz+971_dtvejel2ukruqlvizvbpnwcajy/node_modules/mina-fungible-token && pnpm build || true"
   },
   "devDependencies": {
     "dotenv-cli": "^7.4.2",
