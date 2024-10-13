@@ -28,6 +28,10 @@ export default class ZknoidWorkerClient {
   initLotteryInstance(lotteryPublicKey58: string, networkId: string) {
     return this._call('initLotteryInstance', { lotteryPublicKey58, networkId });
   }
+  logState() {
+    return this._call('logState', { });
+  }
+
   buyTicket(
     senderAccount: string,
     startBlock: number,

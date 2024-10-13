@@ -48,13 +48,22 @@ export default function CenterConsole({
   const networkStore = useNetworkStore();
 
   useEffect(() => {
-    if (roundInfo?.id == lotteryStore.lotteryRoundId && networkStore.minaNetwork?.networkID) {
+    if (
+      workerStore.client &&
+      roundInfo?.id == lotteryStore.lotteryRoundId &&
+      networkStore.minaNetwork?.networkID
+    ) {
       workerStore.initLotteryInstance(
         roundInfo.plotteryAddress,
         networkStore.minaNetwork?.networkID!
       );
     }
-  }, [roundInfo, networkStore.minaNetwork?.networkID]);
+  }, [
+    roundInfo,
+    lotteryStore.lotteryRoundId,
+    networkStore.minaNetwork?.networkID,
+    workerStore.client
+  ]);
 
   const leaderboard = roundInfo?.tickets
     .filter((ticket) => !!ticket.funds)

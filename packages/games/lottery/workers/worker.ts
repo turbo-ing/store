@@ -1,8 +1,8 @@
-import 'reflect-metadata';
+import "reflect-metadata";
 
-import { LOTTERY_CACHE } from '../constants/cache';
-import { FetchedCache, WebFileSystem, fetchCache } from '@zknoid/sdk/lib/cache';
-import { mockProof } from '@zknoid/sdk/lib/utils';
+import { LOTTERY_CACHE } from "../constants/cache";
+import { FetchedCache, WebFileSystem, fetchCache } from "@zknoid/sdk/lib/cache";
+import { mockProof } from "@zknoid/sdk/lib/utils";
 
 import {
   Field as Field014,
@@ -16,7 +16,7 @@ import {
   fetchAccount,
   NetworkId,
   type JsonProof,
-} from 'o1js';
+} from "o1js";
 import {
   checkMapGeneration,
   checkGameRecord,
@@ -30,7 +30,7 @@ import {
   GameRecordProof,
   client,
   Tick,
-} from 'zknoid-chain-dev';
+} from "zknoid-chain-dev";
 import {
   Ticket,
   PLottery,
@@ -39,15 +39,15 @@ import {
   DistributionProof,
   DistributionProofPublicInput,
   MerkleMap20Witness,
-} from 'l1-lottery-contracts';
+} from "l1-lottery-contracts";
 
 import {
   BuyTicketEvent,
   GetRewardEvent,
   ProduceResultEvent,
-} from 'l1-lottery-contracts';
-import { NETWORKS } from '@zknoid/sdk/constants/networks';
-import { number } from 'zod';
+} from "l1-lottery-contracts";
+import { NETWORKS } from "@zknoid/sdk/constants/networks";
+import { number } from "zod";
 // import { lotteryBackendRouter } from '@zknoid/sdk/server/api/routers/lottery-backend';
 // import { api } from '@/trpc/vanilla';
 // import { DummyBridge } from 'zknoidcontractsl1';
@@ -56,7 +56,6 @@ import { number } from 'zod';
 type Transaction = Awaited<ReturnType<typeof Mina.transaction>>;
 
 const state = {
-  Lottery: null as null | typeof PLottery,
   lotteryGame: null as null | PLottery,
   lotteryCache: null as null | FetchedCache,
   buyTicketTransaction: null as null | Transaction,
@@ -71,32 +70,39 @@ const functions = {
   },
   compileContracts: async (args: {}) => {},
   compileReduceProof: async (args: {}) => {
-    console.log('[Worker] compiling reduce proof contracts');
-    console.log('Cache info', LOTTERY_CACHE);
+    console.log("[Worker] compiling reduce proof contracts");
+    console.log("Cache info", LOTTERY_CACHE);
 
     await TicketReduceProgram.compile({
       cache: WebFileSystem(state.lotteryCache!),
     });
 
-    console.log('[Worker] compiling reduce contracts ended');
+    console.log("[Worker] compiling reduce contracts ended");
+  },
+  logState: async (args: {}) => {
+    console.log('State', state)
+    console.log('Provers', PLottery._provers)
+
   },
   compileDistributionProof: async (args: {}) => {
-    console.log('[Worker] compiling distribution contracts');
-    console.log('Cache info', LOTTERY_CACHE);
+    console.log("[Worker] compiling distribution contracts");
+    console.log("Cache info", LOTTERY_CACHE);
 
     await DistributionProgram.compile({
       cache: WebFileSystem(state.lotteryCache!),
     });
 
-    console.log('[Worker] compiling distr contracts ended');
+    console.log("[Worker] compiling distr contracts ended");
   },
   compileLotteryContracts: async (args: {}) => {
-    console.log('[Worker] compiling lottery contracts');
+    console.log("[Worker] compiling lottery contracts");
 
     await PLottery.compile({
       cache: WebFileSystem(state.lotteryCache!),
     });
-    console.log('[Worker] compiling contracts ended');
+    console.log("Lottery provers", PLottery._provers);
+
+    console.log("[Worker] compiling contracts ended");
   },
   initLotteryInstance: async (args: {
     lotteryPublicKey58: string;
@@ -104,15 +110,16 @@ const functions = {
   }) => {
     const publicKey = PublicKey.fromBase58(args.lotteryPublicKey58);
     state.lotteryGame = new PLottery(publicKey);
-    console.log('[Worker] lottery instance init');
+
+    console.log("[Worker] lottery instance init");
     const Network = Mina.Network({
       mina: NETWORKS[args.networkId.toString()].graphql,
       archive: NETWORKS[args.networkId.toString()].archive,
     });
-    console.log('Devnet network instance configured.');
+    console.log("Devnet network instance configured.");
     Mina.setActiveInstance(Network);
 
-    console.log('Fetching account');
+    console.log("Fetching account");
 
     await functions.fetchOnchainState();
   },
@@ -121,7 +128,7 @@ const functions = {
       publicKey: state.lotteryGame!.address,
     });
     console.log(
-      'Fetched account',
+      "Fetched account",
       account.account?.zkapp?.appState.map((x) => x.toString())
     );
   },
@@ -137,13 +144,11 @@ const functions = {
     console.log(args.ticketNums, senderAccount, args.roundId);
     const ticket = Ticket.from(args.ticketNums, senderAccount, args.amount);
 
-    const plottery = new PLottery(PublicKey.fromFields([Field.from(args.roundId)]));
-
     let tx = await Mina.transaction(senderAccount, async () => {
-      await plottery!.buyTicket(ticket);
+      await state.lotteryGame!.buyTicket!(ticket);
     });
 
-    console.log('BUY TX', tx);
+    console.log("BUY TX", tx);
 
     state.buyTicketTransaction = tx;
   },
@@ -158,11 +163,11 @@ const functions = {
     const senderAccount = PublicKey.fromBase58(args.senderAccount);
 
     const claimData = await fetch(
-      'https://api2.zknoid.io/claim-api/get-claim-data',
+      "https://api2.zknoid.io/claim-api/get-claim-data",
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           roundId: args.roundId,
@@ -174,11 +179,11 @@ const functions = {
       }
     );
 
-    console.log('Got claim data', claimData);
+    console.log("Got claim data", claimData);
 
     const { rp } = await claimData.json();
 
-    console.log('Received rp', rp);
+    console.log("Received rp", rp);
 
     const ticket = Ticket.from(args.ticketNums, senderAccount, args.amount);
     // ticket, ticketWitness, dp, nullifierWitness
@@ -192,7 +197,7 @@ const functions = {
       );
     });
 
-    console.log('GET REWARD TX', tx);
+    console.log("GET REWARD TX", tx);
 
     state.getRewardTransaction = tx;
   },
@@ -201,7 +206,7 @@ const functions = {
     await state.buyTicketTransaction!.prove();
     const provingEnd = Date.now() / 1000;
 
-    console.log('Buy proving time', (provingEnd - provingStartTime).toFixed(2));
+    console.log("Buy proving time", (provingEnd - provingStartTime).toFixed(2));
 
     return state.buyTicketTransaction!.toJSON();
   },
@@ -213,7 +218,7 @@ const functions = {
     const provingEnd = Date.now() / 1000;
 
     console.log(
-      'Claim proving time',
+      "Claim proving time",
       (provingEnd - provingStartTime).toFixed(2)
     );
 
@@ -236,9 +241,9 @@ export type ZknoidWorkerReponse = {
   data: any;
 };
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   addEventListener(
-    'message',
+    "message",
     async (event: MessageEvent<ZknoidWorkerRequest>) => {
       const returnData = await functions[event.data.fn](event.data.args);
 
@@ -251,7 +256,7 @@ if (typeof window !== 'undefined') {
   );
 }
 
-console.log('Web Worker Successfully Initialized.');
+console.log("Web Worker Successfully Initialized.");
 
 const message: ZknoidWorkerReponse = {
   id: 0,

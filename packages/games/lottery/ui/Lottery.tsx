@@ -48,7 +48,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   }, [lotteryStore.lotteryRoundId]);
 
   useEffect(() => {
-    if (!networkStore.minaNetwork?.networkID) return;
+    if (!networkStore.minaNetwork?.networkID || !chainStore.block?.slotSinceGenesis) return;
 
     const factoryPublicKey58 =
       FACTORY_ADDRESS[networkStore.minaNetwork?.networkID!];
@@ -64,7 +64,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
 
       await workerClientStore.setOnchainState(onchainState);
 
-      if (chainStore.block?.height) {
+      if (chainStore.block?.slotSinceGenesis) {
         const roundId = Math.floor(
           Number(chainStore.block!.slotSinceGenesis - onchainState.startBlock) /
             BLOCK_PER_ROUND,
@@ -73,7 +73,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
         workerClientStore.setRoundId(roundId);
       }
     })();
-  }, [networkStore.minaNetwork?.networkID, chainStore.block?.height]);
+  }, [networkStore.minaNetwork?.networkID, chainStore.block]);
 
   useEffect(() => {
     if (

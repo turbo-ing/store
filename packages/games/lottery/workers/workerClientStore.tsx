@@ -32,7 +32,10 @@ export interface ClientState {
 
   compileLottery: () => Promise<ZknoidWorkerClient>;
   updateOnchainState: () => Promise<void>;
-  initLotteryInstance: (lotteryPublicKey58: string, networkId: string) => Promise<void>;
+  initLotteryInstance: (
+    lotteryPublicKey58: string,
+    networkId: string
+  ) => Promise<void>;
   setOnchainState: (onchainState: { startBlock: bigint }) => Promise<void>;
   setRoundId: (roundId: number) => Promise<void>;
   buyTicket: (
@@ -80,7 +83,8 @@ export const useWorkerClientStore = create<
       const zkappWorkerClient = new ZknoidWorkerClient();
 
       await zkappWorkerClient.waitFor();
-
+      console.log("Loading worker");
+      (window as any).lworker! = zkappWorkerClient;
       set((state) => {
         state.client = zkappWorkerClient;
       });
@@ -189,9 +193,7 @@ export const useWorkerClientStore = create<
       // set((state) => {
       //   state.status = "Onchain state update";
       // });
-
       // this.client?.fetchOnchainState();
-
       // set((state) => {
       //   state.onchainStateInitialized = true;
       //   state.status = "Onchain state fetched";
@@ -273,10 +275,16 @@ export const useWorkerClientStore = create<
   }))
 );
 
+let loaded = false;
+
 export const useRegisterWorkerClient = () => {
   const workerClientStore = useWorkerClientStore();
-
   useEffect(() => {
-    if (workerClientStore.status == "Not loaded") workerClientStore.start();
+    if (workerClientStore.status == "Not loaded") {
+      if (!loaded) {
+        loaded = true;
+        workerClientStore.start();
+      }
+    }
   }, []);
 };
