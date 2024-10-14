@@ -80,9 +80,8 @@ const functions = {
     console.log("[Worker] compiling reduce contracts ended");
   },
   logState: async (args: {}) => {
-    console.log('State', state)
-    console.log('Provers', PLottery._provers)
-
+    console.log("State", state);
+    console.log("Provers", PLottery._provers);
   },
   compileDistributionProof: async (args: {}) => {
     console.log("[Worker] compiling distribution contracts");
@@ -105,10 +104,10 @@ const functions = {
     console.log("[Worker] compiling contracts ended");
   },
   initLotteryInstance: async (args: {
-    lotteryPublicKey58: string;
+    plotteryAddress: string;
     networkId: NetworkId;
   }) => {
-    const publicKey = PublicKey.fromBase58(args.lotteryPublicKey58);
+    const publicKey = PublicKey.fromBase58(args.plotteryAddress);
     state.lotteryGame = new PLottery(publicKey);
 
     console.log("[Worker] lottery instance init");
@@ -133,15 +132,14 @@ const functions = {
     );
   },
   buyTicket: async (args: {
+    plotteryAddress: string;
     senderAccount: string;
-    startBlock: number;
-    roundId: number;
     ticketNums: number[];
     amount: number;
   }) => {
     const senderAccount = PublicKey.fromBase58(args.senderAccount);
 
-    console.log(args.ticketNums, senderAccount, args.roundId);
+    console.log("BT args", args);
     const ticket = Ticket.from(args.ticketNums, senderAccount, args.amount);
 
     let tx = await Mina.transaction(senderAccount, async () => {
@@ -153,17 +151,26 @@ const functions = {
     state.buyTicketTransaction = tx;
   },
   getReward: async (args: {
+    plotteryAddress: string;
     networkId: string;
     senderAccount: string;
-    startBlock: number;
     roundId: number;
     ticketNums: number[];
     amount: number;
   }) => {
     const senderAccount = PublicKey.fromBase58(args.senderAccount);
 
+    console.log("getReward args", args);
+    console.log("getReward body", {
+      roundId: args.roundId,
+      networkID: args.networkId,
+      ticketNums: args.ticketNums,
+      senderAccount,
+      amount: args.amount,
+    });
+
     const claimData = await fetch(
-      "https://api2.zknoid.io/claim-api/get-claim-data",
+      "http://localhost:3040/claim-api/get-claim-data",
       {
         method: "POST",
         headers: {
@@ -185,15 +192,28 @@ const functions = {
 
     console.log("Received rp", rp);
 
+    console.log("Plottery address", args.plotteryAddress);
+    const nullifierWitness = MerkleMap20Witness.fromJSON(
+      rp.nullifierWitness
+    ) as MerkleMap20Witness;
+    console.log(
+      "Ticket nullifier ",
+      nullifierWitness.computeRootAndKeyV2(Field(0)).toString()
+    );
+
+    const lotteryGame = new PLottery(
+      PublicKey.fromBase58(args.plotteryAddress)
+    );
+
     const ticket = Ticket.from(args.ticketNums, senderAccount, args.amount);
     // ticket, ticketWitness, dp, nullifierWitness
     let tx = await Mina.transaction(senderAccount, async () => {
-      await state.lotteryGame!.getReward(
+      await lotteryGame!.getReward(
         ticket,
         MerkleMap20Witness.fromJSON(rp.ticketWitness) as MerkleMap20Witness,
         //@ts-ignore
         await DistributionProof.fromJSON(rp.dp),
-        MerkleMapWitness.fromJSON(rp.nullifierWitness) as MerkleMapWitness
+        MerkleMap20Witness.fromJSON(rp.nullifierWitness) as MerkleMap20Witness
       );
     });
 

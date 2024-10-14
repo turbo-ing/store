@@ -291,6 +291,7 @@ export default function TicketsStorage({
                     key={ticketIndex}
                     roundId={round.id}
                     winCombination={round.winningCombination || []}
+                    plotteryAddress={round.plotteryAddress}
                     ticketNumbers={ticket.numbers.map(
                       (number, numberIndex) => ({
                         number: number,

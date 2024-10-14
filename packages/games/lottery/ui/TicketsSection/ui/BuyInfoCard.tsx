@@ -49,6 +49,7 @@ export default function BuyInfoCard({
     addGiftCodesMutation,
     sendTicketQueueMutation,
     useGiftCodeMutation,
+    roundInfo
   } = useContext(LotteryContext);
 
   const numberOfTickets =
@@ -69,8 +70,8 @@ export default function BuyInfoCard({
 
   const buyTicket = async () => {
     const txJson = await workerStore.buyTicket(
+      roundInfo!.plotteryAddress,
       networkStore.address!,
-      Number(chain.block?.slotSinceGenesis!),
       ticketsInfo[0].numbers,
       numberOfTickets
     );

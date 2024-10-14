@@ -30,7 +30,7 @@ export enum Pages {
 export default function Lottery({}: { params: { competitionId: string } }) {
   const networkStore = useNetworkStore();
   const [roundEndsIn, setRoundEndsIn] = useState<DateTime>(
-    DateTime.fromMillis(0),
+    DateTime.fromMillis(0)
   );
   const [page, setPage] = useState<Pages>(Pages.Main);
 
@@ -48,7 +48,11 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   }, [lotteryStore.lotteryRoundId]);
 
   useEffect(() => {
-    if (!networkStore.minaNetwork?.networkID || !chainStore.block?.slotSinceGenesis) return;
+    if (
+      !networkStore.minaNetwork?.networkID ||
+      !chainStore.block?.slotSinceGenesis
+    )
+      return;
 
     const factoryPublicKey58 =
       FACTORY_ADDRESS[networkStore.minaNetwork?.networkID!];
@@ -68,7 +72,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       if (chainStore.block?.slotSinceGenesis) {
         const roundId = Math.floor(
           Number(chainStore.block!.slotSinceGenesis - onchainState.startBlock) /
-            BLOCK_PER_ROUND,
+            BLOCK_PER_ROUND
         );
 
         workerClientStore.setRoundId(roundId);
@@ -84,9 +88,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       console.log("Starting lottery");
       workerClientStore.compileLottery();
     }
-  }, [
-    workerClientStore.client,
-  ]);
+  }, [workerClientStore.client]);
 
   // useEffect(() => {
   //   if (workerClientStore.lotteryCompiled)
@@ -112,8 +114,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
                   (Number(blockNum - startBlock) % BLOCK_PER_ROUND)) *
                 3 *
                 60,
-            }),
-          ),
+            })
+          )
         )
       : 0;
   }, [workerClientStore.onchainState, workerClientStore.lotteryRoundId]);

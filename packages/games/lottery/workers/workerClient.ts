@@ -1,64 +1,64 @@
-import { fetchAccount, Field, Bool, UInt64 } from 'o1js';
+import { fetchAccount, Field, Bool, UInt64 } from "o1js";
 
 import type {
   ZknoidWorkerRequest,
   ZknoidWorkerReponse,
   WorkerFunctions,
-} from './worker';
+} from "./worker";
 
 export default class ZknoidWorkerClient {
   compileContracts() {
-    return this._call('compileContracts', {});
+    return this._call("compileContracts", {});
   }
   downloadLotteryCache() {
-    return this._call('downloadLotteryCache', {});
+    return this._call("downloadLotteryCache", {});
   }
   compileLotteryContracts() {
-    return this._call('compileLotteryContracts', {});
+    return this._call("compileLotteryContracts", {});
   }
   compileReduceProof() {
-    return this._call('compileReduceProof', {});
+    return this._call("compileReduceProof", {});
   }
   compileDistributionProof() {
-    return this._call('compileDistributionProof', {});
+    return this._call("compileDistributionProof", {});
   }
   fetchOnchainState() {
-    return this._call('fetchOnchainState', {});
+    return this._call("fetchOnchainState", {});
   }
-  initLotteryInstance(lotteryPublicKey58: string, networkId: string) {
-    return this._call('initLotteryInstance', { lotteryPublicKey58, networkId });
+  initLotteryInstance(plotteryAddress: string, networkId: string) {
+    return this._call("initLotteryInstance", { plotteryAddress, networkId });
   }
   logState() {
-    return this._call('logState', { });
+    return this._call("logState", {});
   }
 
   buyTicket(
+    plotteryAddress: string,
     senderAccount: string,
     startBlock: number,
-    roundId: number,
     ticketNums: number[],
     amount: number
   ) {
-    return this._call('buyTicket', {
+    return this._call("buyTicket", {
       senderAccount,
       startBlock,
-      roundId,
       ticketNums,
       amount,
+      plotteryAddress,
     });
   }
   getReward(
+    plotteryAddress: string,
     networkId: string,
     senderAccount: string,
-    startBlock: number,
     roundId: number,
     ticketNums: number[],
     amount: number
   ) {
-    return this._call('getReward', {
+    return this._call("getReward", {
+      plotteryAddress,
       networkId,
       senderAccount,
-      startBlock,
       roundId,
       ticketNums,
       amount,
@@ -77,7 +77,7 @@ export default class ZknoidWorkerClient {
   constructor() {
     this.promises = {};
 
-    this.worker = new Worker(new URL('./worker.ts', import.meta.url));
+    this.worker = new Worker(new URL("./worker.ts", import.meta.url));
     (window as any).workerNoid = this.worker;
     this.readyPromise = new Promise((resolve, reject) => {
       this.promises[0] = { resolve, reject };

@@ -4,6 +4,7 @@ import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification
 import { cn, sendTransaction } from '@zknoid/sdk/lib/helpers';
 
 export const TicketItem = ({
+  plotteryAddress,
   roundId,
   winCombination,
   ticketNumbers,
@@ -14,6 +15,7 @@ export const TicketItem = ({
   claimed,
   hash,
 }: {
+  plotteryAddress: string,
   roundId: number;
   winCombination: number[];
   ticketNumbers: { number: number; win: boolean }[];
@@ -30,6 +32,7 @@ export const TicketItem = ({
 
   const claimTicket = async (numbers: number[], amount: number) => {
     let txJson = await workerStore.getReward(
+      plotteryAddress,
       networkStore.address!,
       networkStore.minaNetwork!.networkID,
       roundId,

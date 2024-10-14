@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     },
     {
       refetchInterval: 5000,
-    },
+    }
   );
 
   const getMinaEventsQuery = api.lotteryBackend.getMinaEvents.useQuery({});
@@ -39,7 +39,8 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!getRoundQuery.data) return undefined;
-    setRoundInfo(getRoundQuery.data[0]);
+
+    setRoundInfo(Object.values(getRoundQuery.data)[0]);
   }, [roundsStore.roundToShowId, getRoundQuery.data]);
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         code: item.code,
         used: item.used,
         createdAt: item.createdAt,
-      })),
+      }))
     );
   }, [getUserGiftCodesQuery.data]);
 

@@ -212,6 +212,7 @@ export default function PreviousRoundItem({
                 {userTickets.map((item, index) => (
                   <TicketItem
                     key={index}
+                    plotteryAddress={round.plotteryAddress}
                     roundId={round.id}
                     noCombination={!round.winningCombination}
                     numbers={parseNumbers(item.numbers)}

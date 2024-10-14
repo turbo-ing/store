@@ -39,12 +39,13 @@ export interface ClientState {
   setOnchainState: (onchainState: { startBlock: bigint }) => Promise<void>;
   setRoundId: (roundId: number) => Promise<void>;
   buyTicket: (
+    plotteryAddress: string,
     senderAccount: string,
-    currBlock: number,
     ticketNums: number[],
     amount: number
   ) => Promise<any>;
   getReward: (
+    plotteryAddress: string,
     senderAccount: string,
     networkId: string,
     roundId: number,
@@ -199,12 +200,12 @@ export const useWorkerClientStore = create<
       //   state.status = "Onchain state fetched";
       // });
     },
-    async initLotteryInstance(lotteryPublicKey58: string, networkId: string) {
-      await this.client?.initLotteryInstance(lotteryPublicKey58, networkId);
+    async initLotteryInstance(plotteryAddress: string, networkId: string) {
+      await this.client?.initLotteryInstance(plotteryAddress, networkId);
     },
     async buyTicket(
+      plotteryAddress: string,
       senderAccount: string,
-      currBlock: number,
       ticketNums: number[],
       amount: number
     ) {
@@ -213,14 +214,9 @@ export const useWorkerClientStore = create<
         state.isActiveTx = true;
       });
 
-      const roundId = Math.floor(
-        (currBlock - Number(this.onchainState?.startBlock!)) / BLOCK_PER_ROUND
-      );
-
       await this.client?._call("buyTicket", {
         senderAccount,
         startBlock: this.onchainState?.startBlock,
-        roundId,
         ticketNums,
         amount,
       });
@@ -239,6 +235,7 @@ export const useWorkerClientStore = create<
       return txJson;
     },
     async getReward(
+      plotteryAddress: string,
       senderAccount: string,
       networkId: string,
       roundId: number,
@@ -251,6 +248,7 @@ export const useWorkerClientStore = create<
       });
 
       await this.client?._call("getReward", {
+        plotteryAddress,
         networkId,
         senderAccount,
         startBlock: this.onchainState?.startBlock,

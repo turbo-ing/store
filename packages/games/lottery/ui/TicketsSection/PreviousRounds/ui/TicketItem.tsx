@@ -13,6 +13,7 @@ type Number = {
 };
 
 export function TicketItem({
+  plotteryAddress,
   roundId,
   numbers,
   funds,
@@ -21,6 +22,7 @@ export function TicketItem({
   claimed,
   hash,
 }: {
+  plotteryAddress: string,
   roundId: number;
   numbers: Number[];
   funds: number | undefined;
@@ -87,6 +89,7 @@ export function TicketItem({
           disabled={!workerClient.lotteryCompiled || workerClient.isActiveTx}
           onClick={async () => {
             let txJson = await workerClient.getReward(
+              plotteryAddress,
               networkStore.address!,
               networkStore.minaNetwork!.networkID,
               roundId,

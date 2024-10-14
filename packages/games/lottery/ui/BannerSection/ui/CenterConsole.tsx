@@ -48,7 +48,8 @@ export default function CenterConsole({
   const networkStore = useNetworkStore();
 
   useEffect(() => {
-    console.log('Round lottery address', roundInfo?.plotteryAddress)
+    console.log("Round lottery address", roundInfo?.plotteryAddress);
+    
     if (
       workerStore.client &&
       roundInfo?.id == lotteryStore.lotteryRoundId &&
@@ -64,7 +65,7 @@ export default function CenterConsole({
     roundInfo,
     lotteryStore.lotteryRoundId,
     networkStore.minaNetwork?.networkID,
-    workerStore.client
+    workerStore.client,
   ]);
 
   const leaderboard = roundInfo?.tickets
