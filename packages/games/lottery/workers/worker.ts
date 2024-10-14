@@ -170,7 +170,7 @@ const functions = {
     });
 
     const claimData = await fetch(
-      "http://localhost:3040/claim-api/get-claim-data",
+      "https://api2.zknoid.io/claim-api/get-claim-data",
       {
         method: "POST",
         headers: {
