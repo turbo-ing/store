@@ -185,6 +185,7 @@ const ClosedTicket = ({
 };
 
 export default function MyTicket({
+  plotteryAddress,
   combination,
   amount,
   index,
@@ -196,6 +197,7 @@ export default function MyTicket({
   roundId,
   hash = '5JvDnBiYQ4m3j8mLSJEYtpPJQ75V9wGqo93M1Bjnu2ooNrtrKSGQ',
 }: {
+  plotteryAddress: string;
   isOpen: boolean;
   combination: number[];
   amount: number;
@@ -222,9 +224,11 @@ export default function MyTicket({
   // useEffect(() => {
   //   getPendingState();
   // }, []);
+  
 
   const claimTicket = async (numbers: number[], amount: number) => {
     let txJson = await workerStore.getReward(
+      plotteryAddress,
       networkStore.address!,
       networkStore.minaNetwork!.networkID,
       roundId,

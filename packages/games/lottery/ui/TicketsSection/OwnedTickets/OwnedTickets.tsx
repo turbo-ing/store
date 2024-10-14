@@ -148,6 +148,7 @@ export default function OwnedTickets({
         {renderTickets.map((item, index) => (
           <MyTicket
             key={index}
+            plotteryAddress={roundInfo!.plotteryAddress}
             isOpen={
               roundsStore.roundToShowId != workerStore.lotteryRoundId ||
               item.id == currentTicket?.id ||
