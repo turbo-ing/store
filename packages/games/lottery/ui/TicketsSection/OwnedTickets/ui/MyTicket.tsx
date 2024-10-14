@@ -213,7 +213,7 @@ export default function MyTicket({
   const workerStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
   const notificationStore = useNotificationStore();
-  const [isPending, setIsPending] = useState<boolean>(true);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   // console.log('PENDING::::', isPending);
 
