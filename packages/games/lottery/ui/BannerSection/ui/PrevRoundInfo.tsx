@@ -111,7 +111,7 @@ export default function PrevRoundInfo({
                   'font-museo text-[0.833vw] font-bold text-foreground'
                 }
               >
-                {ticketsNum || 0}
+                {Number(ticketsNum || 0)}
               </span>
             </Skeleton>
           </div>
