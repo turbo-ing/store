@@ -8,7 +8,6 @@ import ZkNoidGameContext from "@zknoid/sdk/lib/contexts/ZkNoidGameContext";
 import SetupStoreContext from "../../../packages/sdk/lib/contexts/SetupStoreContext";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { api } from "../trpc/react";
-import { useEffect, useState } from "react";
 
 export default function Home() {
   const networkStore = useNetworkStore();
@@ -17,18 +16,6 @@ export default function Home() {
   }).data;
   const nameMutator = api.accounts.setName.useMutation();
   const avatarIdMutator = api.accounts.setAvatar.useMutation();
-
-  const [name, setName] = useState<string | undefined>(undefined);
-  const [avatarId, setAvatarId] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    if (accountData?.account?.name) {
-      setName(accountData.account.name);
-    }
-    if (accountData?.account?.avatarId) {
-      setAvatarId(accountData.account.avatarId);
-    }
-  }, [accountData]);
 
   return (
     <ZkNoidGameContext.Provider
@@ -41,8 +28,8 @@ export default function Home() {
       <SetupStoreContext.Provider
         value={{
           account: {
-            name: name,
-            avatarId: avatarId,
+            name: accountData?.account?.name,
+            avatarId: accountData?.account?.avatarId,
             nameMutator: (name) =>
               nameMutator.mutate({
                 userAddress: networkStore.address || "",

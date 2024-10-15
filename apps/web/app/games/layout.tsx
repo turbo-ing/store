@@ -6,6 +6,7 @@ import { api } from "../../trpc/react";
 import { ILotteryRound } from "../../../../packages/games/lottery/lib/types";
 import { useNetworkStore } from "../../../../packages/sdk/lib/stores/network";
 import LotteryContext from "../../../../packages/games/lottery/lib/contexts/LotteryContext";
+import SetupStoreContext from "../../../../packages/sdk/lib/contexts/SetupStoreContext";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const roundsStore = useRoundsStore();
@@ -37,6 +38,12 @@ export default function Layout({ children }: { children: ReactNode }) {
   const sendTicketQueueMutation = api.giftCodes.sendTicketQueue.useMutation();
   const useGiftCodeMutation = api.giftCodes.useGiftCode.useMutation();
 
+  const accountData = api.accounts.getAccount.useQuery({
+    userAddress: networkStore.address || "",
+  }).data;
+  const nameMutator = api.accounts.setName.useMutation();
+  const avatarIdMutator = api.accounts.setAvatar.useMutation();
+
   useEffect(() => {
     if (!getRoundQuery.data) return undefined;
 
@@ -60,30 +67,49 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, [getUserGiftCodesQuery.data]);
 
   return (
-    <LotteryContext.Provider
+    <SetupStoreContext.Provider
       value={{
-        roundInfo: roundInfo,
-        minaEvents: minaEvents,
-        userGiftCodes: userGiftCodes,
-        getRoundsInfosQuery: (roundsIds, params) =>
-          (getRoundsInfosQuery.useQuery({ roundIds: roundsIds }, params)
-            ?.data as Record<number, ILotteryRound>) || undefined,
-        addGiftCodesMutation: (giftCodes) =>
-          addGiftCodesMutation.mutate(giftCodes),
-        removeUsedGiftCodesMutation: (userAddress) =>
-          removeUsedGiftCodesMutation.mutate({ userAddress: userAddress }),
-        sendTicketQueueMutation: (ticketQueue) =>
-          sendTicketQueueMutation.mutate({
-            userAddress: ticketQueue.userAddress,
-            giftCode: ticketQueue.giftCode,
-            roundId: ticketQueue.roundId,
-            ticket: ticketQueue.ticket,
-          }),
-        useGiftCodeMutation: (giftCode) =>
-          useGiftCodeMutation.mutate({ giftCode: giftCode }),
+        account: {
+          name: accountData?.account?.name,
+          avatarId: accountData?.account?.avatarId,
+          nameMutator: (name) =>
+            nameMutator.mutate({
+              userAddress: networkStore.address || "",
+              name: name,
+            }),
+          avatarIdMutator: (avatarId) =>
+            avatarIdMutator.mutate({
+              userAddress: networkStore.address || "",
+              avatarId: avatarId,
+            }),
+        },
       }}
     >
-      {children}
-    </LotteryContext.Provider>
+      <LotteryContext.Provider
+        value={{
+          roundInfo: roundInfo,
+          minaEvents: minaEvents,
+          userGiftCodes: userGiftCodes,
+          getRoundsInfosQuery: (roundsIds, params) =>
+            (getRoundsInfosQuery.useQuery({ roundIds: roundsIds }, params)
+              ?.data as Record<number, ILotteryRound>) || undefined,
+          addGiftCodesMutation: (giftCodes) =>
+            addGiftCodesMutation.mutate(giftCodes),
+          removeUsedGiftCodesMutation: (userAddress) =>
+            removeUsedGiftCodesMutation.mutate({ userAddress: userAddress }),
+          sendTicketQueueMutation: (ticketQueue) =>
+            sendTicketQueueMutation.mutate({
+              userAddress: ticketQueue.userAddress,
+              giftCode: ticketQueue.giftCode,
+              roundId: ticketQueue.roundId,
+              ticket: ticketQueue.ticket,
+            }),
+          useGiftCodeMutation: (giftCode) =>
+            useGiftCodeMutation.mutate({ giftCode: giftCode }),
+        }}
+      >
+        {children}
+      </LotteryContext.Provider>
+    </SetupStoreContext.Provider>
   );
 }
