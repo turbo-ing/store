@@ -65,7 +65,7 @@ export const lotteryBackendRouter = createTRPCRouter({
           })),
           winningCombination: roundInfo?.dp
             ? roundInfo?.winningCombination
-            : [],
+            : undefined,
           total: roundInfo?.total as number,
           plotteryAddress: roundInfo?.plotteryAddress,
           randomManagerAddress: roundInfo?.randomManagerAddress,
