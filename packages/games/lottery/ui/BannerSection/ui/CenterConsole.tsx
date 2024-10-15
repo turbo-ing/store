@@ -90,7 +90,7 @@ export default function CenterConsole({
           "items-center justify-center":
             roundToShow == lotteryStore.lotteryRoundId ||
             (roundToShow != lotteryStore.lotteryRoundId &&
-              !roundInfo?.winningCombination),
+              !roundInfo?.winningCombination?.length),
         })}
       >
         <div
@@ -107,9 +107,9 @@ export default function CenterConsole({
             "mt-[0.938vw]":
               roundToShow == lotteryStore.lotteryRoundId ||
               (roundToShow != lotteryStore.lotteryRoundId &&
-                !roundInfo?.winningCombination),
+                !roundInfo?.winningCombination?.length),
             "w-full":
-              roundInfo?.winningCombination &&
+              roundInfo?.winningCombination?.length &&
               roundToShow != lotteryStore.lotteryRoundId,
           })}
         >
@@ -152,7 +152,7 @@ export default function CenterConsole({
                 </span>
               </div>
             </>
-          ) : roundInfo?.winningCombination ? (
+          ) : roundInfo?.winningCombination?.length ? (
             <div
               className={cn("flex w-full flex-col items-center gap-[0.26vw]", {
                 "justify-start": roundInfo.tickets.length != 0,
@@ -351,15 +351,15 @@ export default function CenterConsole({
               "bg-left-accent": roundToShow != lotteryStore.lotteryRoundId,
               "mt-[1.6vw]":
                 roundToShow != lotteryStore.lotteryRoundId &&
-                !roundInfo?.winningCombination,
+                !roundInfo?.winningCombination?.length,
               "mt-[0.4vw]":
                 roundToShow != lotteryStore.lotteryRoundId &&
-                roundInfo?.winningCombination,
+                roundInfo?.winningCombination?.length,
             }
           )}
           disabled={
             roundToShow != lotteryStore.lotteryRoundId &&
-            !roundInfo?.winningCombination
+            !roundInfo?.winningCombination?.length
           }
           // onClick={() => {
           //   const element = document.getElementById(
