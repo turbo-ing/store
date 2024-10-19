@@ -12,24 +12,31 @@ export async function fetchCache(
 ): Promise<FetchedCache> {
   const fetchedCacheObject = await Promise.all(
     cacheInfo.files
-      .filter((file) => !file.endsWith('.header'))
+      .filter((file) => !file.endsWith(".header"))
       .map((file, i) => {
         // console.log(
         //   'Fetching', i, cacheInfo.files.indexOf(`${file}.header`),
         //   cacheInfo.urls[cacheInfo.files.indexOf(`${file}.header`)]
         // )
         console.log(
-          'Fetching',
+          "Fetching",
           i,
           cacheInfo.urls[cacheInfo.files.indexOf(`${file}`)]
         );
 
         return Promise.all([
-          fetch(cacheInfo.urls[cacheInfo.files.indexOf(`${file}.header`)]!).then(
-            (res) => res.text()
-          ),
+          fetch(
+            cacheInfo.urls[cacheInfo.files.indexOf(`${file}.header`)]!
+          ).then((res) => res.text()),
           fetch(cacheInfo.urls[cacheInfo.files.indexOf(`${file}`)]!).then(
-            (res) => res.text()
+            (res) => {
+              console.log(
+                "Fetched",
+                i,
+                cacheInfo.urls[cacheInfo.files.indexOf(`${file}`)]
+              );
+              return res.text();
+            }
           ),
         ]).then(([header, data]) => ({ file, header, data }));
       })
@@ -50,7 +57,7 @@ export const WebFileSystem = (fetchedCache: FetchedCache): any => ({
   read({ persistentId, uniqueId, dataType }: any) {
     // read current uniqueId, return data if it matches
     if (!fetchedCache.fetchedCacheInfo.get(persistentId)) {
-      console.log('read');
+      console.log("read");
       console.log({ persistentId, uniqueId, dataType });
 
       return undefined;
@@ -60,7 +67,7 @@ export const WebFileSystem = (fetchedCache: FetchedCache): any => ({
 
     if (currentId !== uniqueId) {
       console.log(
-        'current id did not match persistent id',
+        "current id did not match persistent id",
         persistentId,
         currentId,
         uniqueId
@@ -69,8 +76,8 @@ export const WebFileSystem = (fetchedCache: FetchedCache): any => ({
       return undefined;
     }
 
-    if (dataType === 'string') {
-      console.log('found in cache', { persistentId, uniqueId, dataType });
+    if (dataType === "string") {
+      console.log("found in cache", { persistentId, uniqueId, dataType });
 
       return new TextEncoder().encode(
         fetchedCache.fetchedCacheInfo.get(persistentId)!.data
@@ -80,7 +87,7 @@ export const WebFileSystem = (fetchedCache: FetchedCache): any => ({
     return undefined;
   },
   write({ persistentId, uniqueId, dataType }: any, data: any) {
-    console.log('write');
+    console.log("write");
     console.log({ persistentId, uniqueId, dataType });
   },
   canWrite: true,
