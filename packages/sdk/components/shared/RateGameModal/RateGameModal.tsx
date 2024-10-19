@@ -1,35 +1,35 @@
-import { useState } from "react";
+"use client";
+
+import { useContext, useState } from "react";
 import { useNetworkStore } from "../../../lib/stores/network";
 import BaseModal from "../../../components/shared/Modal/BaseModal";
-import Image from "next/image";
 import { clsx } from "clsx";
-// import { api } from "../../../trpc/react";
 import { useRateGameStore } from "../../../lib/stores/rateGameStore";
 import { useNotificationStore } from "../../../components/shared/Notification/lib/notificationStore";
+import SetupStoreContext from "../../../lib/contexts/SetupStoreContext";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export default function RateGameModal({
-  gameId,
-  gameImage,
-}: {
-  gameId: string;
-  gameImage: any;
-}) {
+export default function RateGameModal({ gameId }: { gameId: string }) {
   const networkStore = useNetworkStore();
   const rateGameStore = useRateGameStore();
   const notificationStore = useNotificationStore();
-  // const feedbackMutation = api.ratings.setGameFeedback.useMutation();
+  const { ratings } = useContext(SetupStoreContext);
+  const searchParams = useSearchParams();
+  const ratingParam = searchParams.get("rating");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [stars, setStars] = useState<number>(0);
   const [feedback, setFeedback] = useState<string>("");
 
   const sendFeedback = () => {
-    // feedbackMutation.mutate({
-    //   userAddress: networkStore.address!,
-    //   gameId,
-    //   feedback,
-    //   rating: stars,
-    // });
+    ratings.gameFeedbackMutator?.({
+      userAddress: networkStore.address!,
+      gameId: gameId,
+      feedbackText: feedback,
+      rating: stars,
+    });
 
     rateGameStore.addRatedGame(gameId);
     notificationStore.create({
@@ -39,13 +39,15 @@ export default function RateGameModal({
   };
 
   return (
-    <BaseModal isOpen={isOpen} setIsOpen={setIsOpen} isDismissible={true}>
+    <BaseModal
+      isOpen={isOpen}
+      setIsOpen={() => {
+        setIsOpen(false);
+        ratingParam === "forceModal" && router.push(pathname);
+      }}
+      isDismissible={true}
+    >
       <div className={"flex max-w-[25vw] flex-col"}>
-        <Image
-          src={gameImage}
-          alt={"gameImage"}
-          className={"mx-auto h-[15vw] w-auto object-contain object-center"}
-        />
         <span
           className={
             "my-[1vw] text-center font-museo text-[1.4vw] font-semibold"
@@ -102,6 +104,7 @@ export default function RateGameModal({
             onClick={() => {
               sendFeedback();
               setIsOpen(false);
+              ratingParam === "forceModal" && router.push(pathname);
             }}
           >
             Send feedback

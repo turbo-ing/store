@@ -5,7 +5,10 @@ import { GameView, ITick } from "./components/GameView";
 import { Bricks } from "zknoid-chain-dev";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { useSwitchWidgetStorage } from "@zknoid/sdk/lib/stores/switchWidgetStorage";
-import { useRegisterWorkerClient, useWorkerClientStore } from "./workers/workerClientStore";
+import {
+  useRegisterWorkerClient,
+  useWorkerClientStore,
+} from "./workers/workerClientStore";
 import {
   useArkanoidLeaderboardStore,
   useObserveArkanoidLeaderboard,
@@ -20,7 +23,6 @@ import GameWidget from "@zknoid/sdk/components/framework/GameWidget";
 import { Leaderboard } from "@zknoid/sdk/components/framework/GameWidget/ui/Leaderboard";
 import { Competition } from "@zknoid/sdk/components/framework/GameWidget/ui/Competition";
 import { ConnectWallet } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/ConnectWallet";
-import { RateGame } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/RateGame";
 import { Lost } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/Lost";
 import { Win } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/Win";
 import { InstallWallet } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/InstallWallet";
@@ -31,9 +33,10 @@ import { FullscreenWrap } from "@zknoid/sdk/components/framework/GameWidget/ui/F
 import { PreRegModal } from "./ui/PreRegModal";
 import Button from "@zknoid/sdk/components/shared/Button";
 import ArkanoidCoverSVG from "./assets/game-cover.svg";
-import ArkanoidMobileCoverSVG from "./assets/game-cover-mobile.svg";
 import { GameState } from "./lib/gameState";
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
 
 export default function Arkanoid({
   params,
@@ -56,6 +59,10 @@ export default function Arkanoid({
   const switchStore = useSwitchWidgetStorage();
   const workerClientStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
+  const rateGameStore = useRateGameStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   useObserveArkanoidLeaderboard(params.competitionId, shouldUpdateLeaderboard);
 
   const startGame = useStartGame(setGameState, gameId, setGameId, competition);
@@ -98,6 +105,20 @@ export default function Arkanoid({
   }, [competition]);
 
   useRegisterWorkerClient();
+
+  useEffect(() => {
+    if (
+      !rateGameStore.ratedGames.find(
+        (game) => game.gameId === arkanoidConfig.id,
+      )
+    ) {
+      if (
+        (gameState == GameState.Won || gameState == GameState.Lost) &&
+        searchParams.get("rating") !== "forceModal"
+      )
+        router.push(pathname + "?rating=forceModal");
+    }
+  }, [gameState]);
 
   return (
     <GamePage gameConfig={arkanoidConfig} gameTitleImage={ArkanoidCoverSVG}>
@@ -174,12 +195,6 @@ export default function Arkanoid({
                   )}
                   {gameState == GameState.Lost && (
                     <Lost startGame={startGame} />
-                  )}
-                  {gameState == GameState.RateGame && (
-                    <RateGame
-                      gameId={arkanoidConfig.id}
-                      onClick={() => setGameState(GameState.NotStarted)}
-                    />
                   )}
                   {gameState === GameState.NotStarted && (
                     <div

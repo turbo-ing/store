@@ -23,10 +23,8 @@ import {
 import CheckersCoverSVG from "./assets/game-cover.svg";
 import CheckersCoverMobileSVG from "./assets/game-cover-mobile.svg";
 import { getRandomEmoji } from "@zknoid/sdk/lib/emoji";
-import toast from "@zknoid/sdk/components/shared/Toast";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
 import { Currency } from "@zknoid/sdk/constants/currency";
-import { useToasterStore } from "@zknoid/sdk/lib/stores/toasterStore";
 import { GameState } from "./lib/gameState";
 import { useStartGame } from "./features/useStartGame";
 import { useOnMoveChosen } from "./features/useOnMoveChosen";
@@ -35,6 +33,9 @@ import {
   useObserveLobbiesStore,
 } from "@zknoid/sdk/lib/stores/lobbiesStore";
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
+import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
 
 export default function RandzuPage({
   params,
@@ -55,7 +56,11 @@ export default function RandzuPage({
 
   const networkStore = useNetworkStore();
   const matchQueue = useCheckersMatchQueueStore();
-  const toasterStore = useToasterStore();
+  const notificationStore = useNotificationStore();
+  const rateGameStore = useRateGameStore();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   useObserveCheckersMatchQueue();
   const protokitChain = useProtokitChainStore();
   const sessionPrivateKey = useStore(useSessionKeyStore, (state) =>
@@ -235,12 +240,27 @@ export default function RandzuPage({
   } as Record<GameState, string>;
 
   useEffect(() => {
-    if (gameState == GameState.Won)
-      toast.success(
-        toasterStore,
-        `You are won! Winnings: ${formatUnits(matchQueue.pendingBalance)} ${Currency.ZNAKES}`,
-        true,
-      );
+    if (gameState == GameState.Won) {
+      notificationStore.create({
+        type: "success",
+        message: `You are won! Winnings: ${formatUnits(matchQueue.pendingBalance)} ${Currency.ZNAKES}`,
+      });
+    }
+
+    if (
+      !rateGameStore.ratedGames.find(
+        (game) => game.gameId === checkersConfig.id,
+      )
+    ) {
+      if (
+        (gameState == GameState.Lost || gameState == GameState.Won) &&
+        searchParams.get("rating") !== "forceModal"
+      ) {
+        setTimeout(() => {
+          router.push(pathname + "?rating=forceModal");
+        }, 10000);
+      }
+    }
   }, [gameState]);
 
   return (

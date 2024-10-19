@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     },
     {
       refetchInterval: 5000,
-    }
+    },
   );
 
   const getMinaEventsQuery = api.lotteryBackend.getMinaEvents.useQuery({});
@@ -44,6 +44,8 @@ export default function Layout({ children }: { children: ReactNode }) {
   const nameMutator = api.accounts.setName.useMutation();
   const avatarIdMutator = api.accounts.setAvatar.useMutation();
 
+  const gameFeedbackMutator = api.ratings.setGameFeedback.useMutation();
+
   useEffect(() => {
     if (!getRoundQuery.data) return undefined;
 
@@ -62,7 +64,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         code: item.code,
         used: item.used,
         createdAt: item.createdAt,
-      }))
+      })),
     );
   }, [getUserGiftCodesQuery.data]);
 
@@ -81,6 +83,15 @@ export default function Layout({ children }: { children: ReactNode }) {
             avatarIdMutator.mutate({
               userAddress: networkStore.address || "",
               avatarId: avatarId,
+            }),
+        },
+        ratings: {
+          gameFeedbackMutator: (feedback) =>
+            gameFeedbackMutator.mutate({
+              userAddress: feedback.userAddress,
+              gameId: feedback.gameId,
+              feedback: feedback.feedbackText,
+              rating: feedback.rating,
             }),
         },
       }}

@@ -16,6 +16,7 @@ export default function Home() {
   }).data;
   const nameMutator = api.accounts.setName.useMutation();
   const avatarIdMutator = api.accounts.setAvatar.useMutation();
+  const gameFeedbackMutator = api.ratings.setGameFeedback.useMutation();
 
   return (
     <ZkNoidGameContext.Provider
@@ -39,6 +40,15 @@ export default function Home() {
               avatarIdMutator.mutate({
                 userAddress: networkStore.address || "",
                 avatarId: avatarId,
+              }),
+          },
+          ratings: {
+            gameFeedbackMutator: (feedback) =>
+              gameFeedbackMutator.mutate({
+                userAddress: feedback.userAddress,
+                gameId: feedback.gameId,
+                feedback: feedback.feedbackText,
+                rating: feedback.rating,
               }),
           },
         }}

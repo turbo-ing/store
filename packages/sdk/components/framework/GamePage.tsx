@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode } from "react";
 import Image from "next/image";
 import gameTitleTemplate from "../../public/image/game-page/game-title-template.svg";
@@ -9,6 +11,8 @@ import { usePollMinaBlockHeight } from "../../lib/stores/minaChain";
 import { usePollProtokitBlockHeight } from "../../lib/stores/protokitChain";
 import { useObserveMinaBalance } from "../../lib/stores/minaBalances";
 import type { RuntimeModulesRecord } from "@proto-kit/module";
+import { useRateGameStore } from "../../lib/stores/rateGameStore";
+import RateGameModal from "../shared/RateGameModal";
 
 export function TabsSwitch({
   gameName,
@@ -353,6 +357,23 @@ export default function GamePage<RuntimeModules extends RuntimeModulesRecord>({
   tabs?: { name: string; tab: string; icon?: ReactNode }[];
   useLayout?: boolean;
 }) {
+  const rateGameStore = useRateGameStore();
+  const searchParams = useSearchParams();
+  const ratingParam = searchParams.get("rating");
+  const ratedGame = rateGameStore.ratedGames.find(
+    (game) => game.gameId === gameConfig.id,
+  );
+
+  const isMonthPassed = (dateString: string) => {
+    const inputDate = new Date(dateString);
+    const currentDate = new Date();
+
+    const nextMonthDate = new Date(inputDate);
+    nextMonthDate.setMonth(inputDate.getMonth() + 1);
+
+    return currentDate >= nextMonthDate;
+  };
+
   return (
     <div className={"px-[2.604vw]"}>
       {useTitle &&
@@ -397,6 +418,23 @@ export default function GamePage<RuntimeModules extends RuntimeModulesRecord>({
       <Updater
         updateProtokit={Object.keys(gameConfig.runtimeModules).length > 0}
       />
+      {(!ratedGame
+        ? ratingParam === "forceModal"
+        : isMonthPassed(ratedGame.updatedAt) ||
+          ratingParam === "forceModal") && (
+        <RateGameModal gameId={gameConfig.id} />
+      )}
+      {/*{(!rateGameStore.ratedGames.find((game) => game.gameId === gameConfig.id)*/}
+      {/*  ? mode === "forceRating"*/}
+      {/*  : rateGameStore.ratedGames.find(*/}
+      {/*      (game) =>*/}
+      {/*        game.gameId == gameConfig.id && isMonthPassed(game.updatedAt),*/}
+      {/*    )) && <RateGameModal gameId={gameConfig.id} />}*/}
+      {/*{(!rateGameStore.ratedGames.find(*/}
+      {/*  (game) =>*/}
+      {/*    game.gameId == gameConfig.id && !isMonthPassed(game.updatedAt),*/}
+      {/*) ||*/}
+      {/*  mode === "forceRating") && <RateGameModal gameId={gameConfig.id} />}*/}
     </div>
   );
 }
