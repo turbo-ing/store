@@ -17,10 +17,11 @@ export async function requestAccounts() {
 
 export async function sendTransaction(txJson: any) {
   if ((window as any).mina?.isPallad) {
+    console.log('Signing', txJson)
     const signResp = await (window as any).mina.request({
       method: 'mina_signTransaction',
       params: {
-        transaction: txJson,
+        transaction: JSON.parse(txJson),
       },
     });
 
