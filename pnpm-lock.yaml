@@ -36,22 +36,22 @@ importers:
         version: 14.2.10
       '@proto-kit/common':
         specifier: 0.1.1-develop.833
-        version: 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0)
+        version: 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0)
       '@proto-kit/library':
         specifier: 0.1.1-develop.833
-        version: 0.1.1-develop.833(patch_hash=l4nw35jyuqbcpqce4frw6uerfu)(cn4ipsirhixgqyrijvc5jzd5im)
+        version: 0.1.1-develop.833(patch_hash=l4nw35jyuqbcpqce4frw6uerfu)(cygiw4mwsxan5d55twgdlbrejq)
       '@proto-kit/module':
         specifier: 0.1.1-develop.833
-        version: 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(o1js@1.8.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.8.0)(tsyringe@4.8.0)
+        version: 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)
       '@proto-kit/protocol':
         specifier: 0.1.1-develop.833
-        version: 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(o1js@1.8.0)(ts-pattern@4.3.0)(tsyringe@4.8.0)
+        version: 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0)
       '@proto-kit/sdk':
         specifier: 0.1.1-develop.833
-        version: 0.1.1-develop.833(su3yfekoawr7sn7quwgeiony7i)
+        version: 0.1.1-develop.833(dt425lmr4dchkjnkqaykfgasfi)
       '@proto-kit/sequencer':
         specifier: 0.1.1-develop.833
-        version: 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(@proto-kit/module@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(o1js@1.8.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.8.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(o1js@1.8.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.8.0)(tsyringe@4.8.0)
+        version: 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/module@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)
       '@sentry/nextjs':
         specifier: ^7.109.0
         version: 7.119.0(next@14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(webpack@5.94.0(@swc/core@1.7.26(@swc/helpers@0.5.13)))
@@ -124,6 +124,9 @@ importers:
       immer:
         specifier: ^10.0.4
         version: 10.1.1
+      l1-lottery-contracts:
+        specifier: 0.7.45
+        version: 0.7.45(o1js@1.6.0)
       ldrs:
         specifier: ^1.0.2
         version: 1.0.2
@@ -143,8 +146,8 @@ importers:
         specifier: ^0.65.1
         version: 0.65.1(request@2.88.2)
       o1js:
-        specifier: npm:o1js@1.8.0
-        version: 1.8.0
+        specifier: npm:o1js@1.6.0
+        version: 1.6.0
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -669,8 +672,8 @@ importers:
         specifier: ^10.0.4
         version: 10.1.1
       l1-lottery-contracts:
-        specifier: 0.7.38
-        version: 0.7.38(o1js@1.8.0)
+        specifier: 0.7.45
+        version: 0.7.45(o1js@1.8.0)
       ldrs:
         specifier: ^1.0.2
         version: 1.0.2
@@ -1146,34 +1149,16 @@ packages:
     resolution: {integrity: sha512-IPjmgSc4KpQRlO4qbEDnBEixvtb06WDmjKfi/7fkZaryh5HuOmTtixe1EupQI5XfXO8joc3d27uUZ0QdC++euA==}
     engines: {node: '>=18.0.0'}
 
-  '@esbuild/aix-ppc64@0.21.5':
-    resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
-    engines: {node: '>=12'}
-    cpu: [ppc64]
-    os: [aix]
-
   '@esbuild/aix-ppc64@0.23.1':
     resolution: {integrity: sha512-6VhYk1diRqrhBAqpJEdjASR/+WVRtfjpqKuNw11cLiaWpAT/Uu+nokB+UJnevzy/P9C/ty6AOe0dwueMrGh/iQ==}
     engines: {node: '>=18'}
     cpu: [ppc64]
     os: [aix]
 
-  '@esbuild/android-arm64@0.21.5':
-    resolution: {integrity: sha512-c0uX9VAUBQ7dTDCjq+wdyGLowMdtR/GoC2U5IYk/7D1H1JYC0qseD7+11iMP2mRLN9RcCMRcjC4YMclCzGwS/A==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [android]
-
   '@esbuild/android-arm64@0.23.1':
     resolution: {integrity: sha512-xw50ipykXcLstLeWH7WRdQuysJqejuAGPd30vd1i5zSyKK3WE+ijzHmLKxdiCMtH1pHz78rOg0BKSYOSB/2Khw==}
     engines: {node: '>=18'}
     cpu: [arm64]
-    os: [android]
-
-  '@esbuild/android-arm@0.21.5':
-    resolution: {integrity: sha512-vCPvzSjpPHEi1siZdlvAlsPxXl7WbOVUBBAowWug4rJHb68Ox8KualB+1ocNvT5fjv6wpkX6o/iEpbDrf68zcg==}
-    engines: {node: '>=12'}
-    cpu: [arm]
     os: [android]
 
   '@esbuild/android-arm@0.23.1':
@@ -1182,34 +1167,16 @@ packages:
     cpu: [arm]
     os: [android]
 
-  '@esbuild/android-x64@0.21.5':
-    resolution: {integrity: sha512-D7aPRUUNHRBwHxzxRvp856rjUHRFW1SdQATKXH2hqA0kAZb1hKmi02OpYRacl0TxIGz/ZmXWlbZgjwWYaCakTA==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [android]
-
   '@esbuild/android-x64@0.23.1':
     resolution: {integrity: sha512-nlN9B69St9BwUoB+jkyU090bru8L0NA3yFvAd7k8dNsVH8bi9a8cUAUSEcEEgTp2z3dbEDGJGfP6VUnkQnlReg==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [android]
 
-  '@esbuild/darwin-arm64@0.21.5':
-    resolution: {integrity: sha512-DwqXqZyuk5AiWWf3UfLiRDJ5EDd49zg6O9wclZ7kUMv2WRFr4HKjXp/5t8JZ11QbQfUS6/cRCKGwYhtNAY88kQ==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [darwin]
-
   '@esbuild/darwin-arm64@0.23.1':
     resolution: {integrity: sha512-YsS2e3Wtgnw7Wq53XXBLcV6JhRsEq8hkfg91ESVadIrzr9wO6jJDMZnCQbHm1Guc5t/CdDiFSSfWP58FNuvT3Q==}
     engines: {node: '>=18'}
     cpu: [arm64]
-    os: [darwin]
-
-  '@esbuild/darwin-x64@0.21.5':
-    resolution: {integrity: sha512-se/JjF8NlmKVG4kNIuyWMV/22ZaerB+qaSi5MdrXtd6R08kvs2qCN4C09miupktDitvh8jRFflwGFBQcxZRjbw==}
-    engines: {node: '>=12'}
-    cpu: [x64]
     os: [darwin]
 
   '@esbuild/darwin-x64@0.23.1':
@@ -1218,22 +1185,10 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@esbuild/freebsd-arm64@0.21.5':
-    resolution: {integrity: sha512-5JcRxxRDUJLX8JXp/wcBCy3pENnCgBR9bN6JsY4OmhfUtIHe3ZW0mawA7+RDAcMLrMIZaf03NlQiX9DGyB8h4g==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [freebsd]
-
   '@esbuild/freebsd-arm64@0.23.1':
     resolution: {integrity: sha512-h1k6yS8/pN/NHlMl5+v4XPfikhJulk4G+tKGFIOwURBSFzE8bixw1ebjluLOjfwtLqY0kewfjLSrO6tN2MgIhA==}
     engines: {node: '>=18'}
     cpu: [arm64]
-    os: [freebsd]
-
-  '@esbuild/freebsd-x64@0.21.5':
-    resolution: {integrity: sha512-J95kNBj1zkbMXtHVH29bBriQygMXqoVQOQYA+ISs0/2l3T9/kj42ow2mpqerRBxDJnmkUDCaQT/dfNXWX/ZZCQ==}
-    engines: {node: '>=12'}
-    cpu: [x64]
     os: [freebsd]
 
   '@esbuild/freebsd-x64@0.23.1':
@@ -1242,22 +1197,10 @@ packages:
     cpu: [x64]
     os: [freebsd]
 
-  '@esbuild/linux-arm64@0.21.5':
-    resolution: {integrity: sha512-ibKvmyYzKsBeX8d8I7MH/TMfWDXBF3db4qM6sy+7re0YXya+K1cem3on9XgdT2EQGMu4hQyZhan7TeQ8XkGp4Q==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [linux]
-
   '@esbuild/linux-arm64@0.23.1':
     resolution: {integrity: sha512-/93bf2yxencYDnItMYV/v116zff6UyTjo4EtEQjUBeGiVpMmffDNUyD9UN2zV+V3LRV3/on4xdZ26NKzn6754g==}
     engines: {node: '>=18'}
     cpu: [arm64]
-    os: [linux]
-
-  '@esbuild/linux-arm@0.21.5':
-    resolution: {integrity: sha512-bPb5AHZtbeNGjCKVZ9UGqGwo8EUu4cLq68E95A53KlxAPRmUyYv2D6F0uUI65XisGOL1hBP5mTronbgo+0bFcA==}
-    engines: {node: '>=12'}
-    cpu: [arm]
     os: [linux]
 
   '@esbuild/linux-arm@0.23.1':
@@ -1266,22 +1209,10 @@ packages:
     cpu: [arm]
     os: [linux]
 
-  '@esbuild/linux-ia32@0.21.5':
-    resolution: {integrity: sha512-YvjXDqLRqPDl2dvRODYmmhz4rPeVKYvppfGYKSNGdyZkA01046pLWyRKKI3ax8fbJoK5QbxblURkwK/MWY18Tg==}
-    engines: {node: '>=12'}
-    cpu: [ia32]
-    os: [linux]
-
   '@esbuild/linux-ia32@0.23.1':
     resolution: {integrity: sha512-VTN4EuOHwXEkXzX5nTvVY4s7E/Krz7COC8xkftbbKRYAl96vPiUssGkeMELQMOnLOJ8k3BY1+ZY52tttZnHcXQ==}
     engines: {node: '>=18'}
     cpu: [ia32]
-    os: [linux]
-
-  '@esbuild/linux-loong64@0.21.5':
-    resolution: {integrity: sha512-uHf1BmMG8qEvzdrzAqg2SIG/02+4/DHB6a9Kbya0XDvwDEKCoC8ZRWI5JJvNdUjtciBGFQ5PuBlpEOXQj+JQSg==}
-    engines: {node: '>=12'}
-    cpu: [loong64]
     os: [linux]
 
   '@esbuild/linux-loong64@0.23.1':
@@ -1290,22 +1221,10 @@ packages:
     cpu: [loong64]
     os: [linux]
 
-  '@esbuild/linux-mips64el@0.21.5':
-    resolution: {integrity: sha512-IajOmO+KJK23bj52dFSNCMsz1QP1DqM6cwLUv3W1QwyxkyIWecfafnI555fvSGqEKwjMXVLokcV5ygHW5b3Jbg==}
-    engines: {node: '>=12'}
-    cpu: [mips64el]
-    os: [linux]
-
   '@esbuild/linux-mips64el@0.23.1':
     resolution: {integrity: sha512-nrFzzMQ7W4WRLNUOU5dlWAqa6yVeI0P78WKGUo7lg2HShq/yx+UYkeNSE0SSfSure0SqgnsxPvmAUu/vu0E+3Q==}
     engines: {node: '>=18'}
     cpu: [mips64el]
-    os: [linux]
-
-  '@esbuild/linux-ppc64@0.21.5':
-    resolution: {integrity: sha512-1hHV/Z4OEfMwpLO8rp7CvlhBDnjsC3CttJXIhBi+5Aj5r+MBvy4egg7wCbe//hSsT+RvDAG7s81tAvpL2XAE4w==}
-    engines: {node: '>=12'}
-    cpu: [ppc64]
     os: [linux]
 
   '@esbuild/linux-ppc64@0.23.1':
@@ -1314,22 +1233,10 @@ packages:
     cpu: [ppc64]
     os: [linux]
 
-  '@esbuild/linux-riscv64@0.21.5':
-    resolution: {integrity: sha512-2HdXDMd9GMgTGrPWnJzP2ALSokE/0O5HhTUvWIbD3YdjME8JwvSCnNGBnTThKGEB91OZhzrJ4qIIxk/SBmyDDA==}
-    engines: {node: '>=12'}
-    cpu: [riscv64]
-    os: [linux]
-
   '@esbuild/linux-riscv64@0.23.1':
     resolution: {integrity: sha512-5AV4Pzp80fhHL83JM6LoA6pTQVWgB1HovMBsLQ9OZWLDqVY8MVobBXNSmAJi//Csh6tcY7e7Lny2Hg1tElMjIA==}
     engines: {node: '>=18'}
     cpu: [riscv64]
-    os: [linux]
-
-  '@esbuild/linux-s390x@0.21.5':
-    resolution: {integrity: sha512-zus5sxzqBJD3eXxwvjN1yQkRepANgxE9lgOW2qLnmr8ikMTphkjgXu1HR01K4FJg8h1kEEDAqDcZQtbrRnB41A==}
-    engines: {node: '>=12'}
-    cpu: [s390x]
     os: [linux]
 
   '@esbuild/linux-s390x@0.23.1':
@@ -1338,23 +1245,11 @@ packages:
     cpu: [s390x]
     os: [linux]
 
-  '@esbuild/linux-x64@0.21.5':
-    resolution: {integrity: sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [linux]
-
   '@esbuild/linux-x64@0.23.1':
     resolution: {integrity: sha512-EV6+ovTsEXCPAp58g2dD68LxoP/wK5pRvgy0J/HxPGB009omFPv3Yet0HiaqvrIrgPTBuC6wCH1LTOY91EO5hQ==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
-
-  '@esbuild/netbsd-x64@0.21.5':
-    resolution: {integrity: sha512-Woi2MXzXjMULccIwMnLciyZH4nCIMpWQAs049KEeMvOcNADVxo0UBIQPfSmxB3CWKedngg7sWZdLvLczpe0tLg==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [netbsd]
 
   '@esbuild/netbsd-x64@0.23.1':
     resolution: {integrity: sha512-aevEkCNu7KlPRpYLjwmdcuNz6bDFiE7Z8XC4CPqExjTvrHugh28QzUXVOZtiYghciKUacNktqxdpymplil1beA==}
@@ -1368,23 +1263,11 @@ packages:
     cpu: [arm64]
     os: [openbsd]
 
-  '@esbuild/openbsd-x64@0.21.5':
-    resolution: {integrity: sha512-HLNNw99xsvx12lFBUwoT8EVCsSvRNDVxNpjZ7bPn947b8gJPzeHWyNVhFsaerc0n3TsbOINvRP2byTZ5LKezow==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [openbsd]
-
   '@esbuild/openbsd-x64@0.23.1':
     resolution: {integrity: sha512-aY2gMmKmPhxfU+0EdnN+XNtGbjfQgwZj43k8G3fyrDM/UdZww6xrWxmDkuz2eCZchqVeABjV5BpildOrUbBTqA==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [openbsd]
-
-  '@esbuild/sunos-x64@0.21.5':
-    resolution: {integrity: sha512-6+gjmFpfy0BHU5Tpptkuh8+uw3mnrvgs+dSPQXQOv3ekbordwnzTVEb4qnIvQcYXq6gzkyTnoZ9dZG+D4garKg==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [sunos]
 
   '@esbuild/sunos-x64@0.23.1':
     resolution: {integrity: sha512-RBRT2gqEl0IKQABT4XTj78tpk9v7ehp+mazn2HbUeZl1YMdaGAQqhapjGTCe7uw7y0frDi4gS0uHzhvpFuI1sA==}
@@ -1392,34 +1275,16 @@ packages:
     cpu: [x64]
     os: [sunos]
 
-  '@esbuild/win32-arm64@0.21.5':
-    resolution: {integrity: sha512-Z0gOTd75VvXqyq7nsl93zwahcTROgqvuAcYDUr+vOv8uHhNSKROyU961kgtCD1e95IqPKSQKH7tBTslnS3tA8A==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [win32]
-
   '@esbuild/win32-arm64@0.23.1':
     resolution: {integrity: sha512-4O+gPR5rEBe2FpKOVyiJ7wNDPA8nGzDuJ6gN4okSA1gEOYZ67N8JPk58tkWtdtPeLz7lBnY6I5L3jdsr3S+A6A==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [win32]
 
-  '@esbuild/win32-ia32@0.21.5':
-    resolution: {integrity: sha512-SWXFF1CL2RVNMaVs+BBClwtfZSvDgtL//G/smwAc5oVK/UPu2Gu9tIaRgFmYFFKrmg3SyAjSrElf0TiJ1v8fYA==}
-    engines: {node: '>=12'}
-    cpu: [ia32]
-    os: [win32]
-
   '@esbuild/win32-ia32@0.23.1':
     resolution: {integrity: sha512-BcaL0Vn6QwCwre3Y717nVHZbAa4UBEigzFm6VdsVdT/MbZ38xoj1X9HPkZhbmaBGUD1W8vxAfffbDe8bA6AKnQ==}
     engines: {node: '>=18'}
     cpu: [ia32]
-    os: [win32]
-
-  '@esbuild/win32-x64@0.21.5':
-    resolution: {integrity: sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw==}
-    engines: {node: '>=12'}
-    cpu: [x64]
     os: [win32]
 
   '@esbuild/win32-x64@0.23.1':
@@ -3737,11 +3602,6 @@ packages:
     resolution: {integrity: sha512-QCOllgZJtaUo9miYBcLChTUaHNjJF3PYs1VidD7AwiEj1kYxKeQTctLAezAOH5ZKRH0g2IgPn6KwB4IT8iRpvA==}
     engines: {node: '>= 0.4'}
 
-  esbuild@0.21.5:
-    resolution: {integrity: sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==}
-    engines: {node: '>=12'}
-    hasBin: true
-
   esbuild@0.23.1:
     resolution: {integrity: sha512-VVNz/9Sa0bs5SELtn3f7qhJCDPCF5oMEl5cO9/SSinpE9hbPVvxbd572HH5AKiP7WD8INO53GgfDDhRjkylHEg==}
     engines: {node: '>=18'}
@@ -5083,11 +4943,11 @@ packages:
     resolution: {integrity: sha512-j/8tY9j5t+GVMLeioLaxweJiKUayFhlGqNTzf2ZGwL0ZCQijd2RLHK0SLW5Tsko8YyyqCZC2cojIb0/s62qTAg==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
-  l1-lottery-contracts@0.7.38:
-    resolution: {integrity: sha512-43/ZbRcDhXRPNGm1DdfezJYgzn7ZDDICvYFo8TnhSVDFvZmpuyT2B5P/VvY8lR/aayNlONTX5uo+0HM9592l0Q==}
+  l1-lottery-contracts@0.7.45:
+    resolution: {integrity: sha512-VIHm5sgewxmQ4ArYbiuj0aadB0R3BwIHlRUWW/PRKTaLDC6m3jPYCDY7Wd9R+RIfkyuHvPl/eKSrK0c1RqHJZg==}
     engines: {node: '>=18.14.0'}
     peerDependencies:
-      o1js: ^1.6.0
+      o1js: 1.8.0
 
   language-subtag-registry@0.3.23:
     resolution: {integrity: sha512-0K65Lea881pHotoGEa5gDlMxt3pctLi2RplBb7Ezh4rRdLEOtgi7n4EwK9lamnUCkKBqaeKRVebTq6BAxSkpXQ==}
@@ -5511,6 +5371,11 @@ packages:
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
+
+  o1js@1.6.0:
+    resolution: {integrity: sha512-5pHCM0qIHG+MhLlcRJZRK8YFC7MOCjlxwSYbmrLDKER267eUip7JRDtWATytIRxtCPqOBvqKeJb0hR/mvjWxqg==}
+    engines: {node: '>=18.14.0'}
+    hasBin: true
 
   o1js@1.8.0:
     resolution: {integrity: sha512-mN0aM4HW3kyl/Gx0irqKQSQ2JftbmsK2t5nSZpTuNgTOVl0wQ6KZumXXps6E5hGkCjRfk+FjlL7CBsmqKqzYzg==}
@@ -7189,8 +7054,8 @@ packages:
     engines: {node: '>=18.14.0'}
     hasBin: true
 
-  zkonmina@https://codeload.github.com/ZKON-Network/zkapp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f:
-    resolution: {tarball: https://codeload.github.com/ZKON-Network/zkapp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f}
+  zkonmina@https://codeload.github.com/ZKON-Network/zkTLS-Mina-zkApp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f:
+    resolution: {tarball: https://codeload.github.com/ZKON-Network/zkTLS-Mina-zkApp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f}
     version: 0.1.0
     peerDependencies:
       o1js: ^1.2.0
@@ -7510,109 +7375,55 @@ snapshots:
     dependencies:
       tslib: 2.7.0
 
-  '@esbuild/aix-ppc64@0.21.5':
-    optional: true
-
   '@esbuild/aix-ppc64@0.23.1':
-    optional: true
-
-  '@esbuild/android-arm64@0.21.5':
     optional: true
 
   '@esbuild/android-arm64@0.23.1':
     optional: true
 
-  '@esbuild/android-arm@0.21.5':
-    optional: true
-
   '@esbuild/android-arm@0.23.1':
-    optional: true
-
-  '@esbuild/android-x64@0.21.5':
     optional: true
 
   '@esbuild/android-x64@0.23.1':
     optional: true
 
-  '@esbuild/darwin-arm64@0.21.5':
-    optional: true
-
   '@esbuild/darwin-arm64@0.23.1':
-    optional: true
-
-  '@esbuild/darwin-x64@0.21.5':
     optional: true
 
   '@esbuild/darwin-x64@0.23.1':
     optional: true
 
-  '@esbuild/freebsd-arm64@0.21.5':
-    optional: true
-
   '@esbuild/freebsd-arm64@0.23.1':
-    optional: true
-
-  '@esbuild/freebsd-x64@0.21.5':
     optional: true
 
   '@esbuild/freebsd-x64@0.23.1':
     optional: true
 
-  '@esbuild/linux-arm64@0.21.5':
-    optional: true
-
   '@esbuild/linux-arm64@0.23.1':
-    optional: true
-
-  '@esbuild/linux-arm@0.21.5':
     optional: true
 
   '@esbuild/linux-arm@0.23.1':
     optional: true
 
-  '@esbuild/linux-ia32@0.21.5':
-    optional: true
-
   '@esbuild/linux-ia32@0.23.1':
-    optional: true
-
-  '@esbuild/linux-loong64@0.21.5':
     optional: true
 
   '@esbuild/linux-loong64@0.23.1':
     optional: true
 
-  '@esbuild/linux-mips64el@0.21.5':
-    optional: true
-
   '@esbuild/linux-mips64el@0.23.1':
-    optional: true
-
-  '@esbuild/linux-ppc64@0.21.5':
     optional: true
 
   '@esbuild/linux-ppc64@0.23.1':
     optional: true
 
-  '@esbuild/linux-riscv64@0.21.5':
-    optional: true
-
   '@esbuild/linux-riscv64@0.23.1':
-    optional: true
-
-  '@esbuild/linux-s390x@0.21.5':
     optional: true
 
   '@esbuild/linux-s390x@0.23.1':
     optional: true
 
-  '@esbuild/linux-x64@0.21.5':
-    optional: true
-
   '@esbuild/linux-x64@0.23.1':
-    optional: true
-
-  '@esbuild/netbsd-x64@0.21.5':
     optional: true
 
   '@esbuild/netbsd-x64@0.23.1':
@@ -7621,31 +7432,16 @@ snapshots:
   '@esbuild/openbsd-arm64@0.23.1':
     optional: true
 
-  '@esbuild/openbsd-x64@0.21.5':
-    optional: true
-
   '@esbuild/openbsd-x64@0.23.1':
-    optional: true
-
-  '@esbuild/sunos-x64@0.21.5':
     optional: true
 
   '@esbuild/sunos-x64@0.23.1':
     optional: true
 
-  '@esbuild/win32-arm64@0.21.5':
-    optional: true
-
   '@esbuild/win32-arm64@0.23.1':
     optional: true
 
-  '@esbuild/win32-ia32@0.21.5':
-    optional: true
-
   '@esbuild/win32-ia32@0.23.1':
-    optional: true
-
-  '@esbuild/win32-x64@0.21.5':
     optional: true
 
   '@esbuild/win32-x64@0.23.1':
@@ -8285,6 +8081,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0)':
+    dependencies:
+      lodash: 4.17.21
+      loglevel: 1.9.2
+      o1js: 1.6.0
+      reflect-metadata: 0.1.14
+      tsyringe: 4.8.0
+      typescript-memoize: 1.1.1
+
   '@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0)':
     dependencies:
       lodash: 4.17.21
@@ -8321,6 +8126,29 @@ snapshots:
       reflect-metadata: 0.1.14
       tsyringe: 4.8.0
 
+  '@proto-kit/library@0.1.1-develop.833(patch_hash=l4nw35jyuqbcpqce4frw6uerfu)(cygiw4mwsxan5d55twgdlbrejq)':
+    dependencies:
+      '@proto-kit/common': 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0)
+      '@proto-kit/module': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)
+      '@proto-kit/protocol': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0)
+      '@proto-kit/sequencer': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/module@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)
+      bigint-isqrt: 0.3.2
+      lodash: 4.17.21
+      loglevel: 1.9.2
+      o1js: 1.6.0
+      reflect-metadata: 0.1.14
+      tsyringe: 4.8.0
+
+  '@proto-kit/module@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)':
+    dependencies:
+      '@proto-kit/common': 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0)
+      '@proto-kit/protocol': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0)
+      lodash: 4.17.21
+      loglevel: 1.9.2
+      o1js: 1.6.0
+      reflect-metadata: 0.1.14
+      tsyringe: 4.8.0
+
   '@proto-kit/module@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(o1js@1.8.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.8.0)(tsyringe@4.8.0)':
     dependencies:
       '@proto-kit/common': 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0)
@@ -8345,6 +8173,17 @@ snapshots:
       reflect-metadata: 0.1.14
       tsyringe: 4.8.0
 
+  '@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0)':
+    dependencies:
+      '@proto-kit/common': 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0)
+      lodash: 4.17.21
+      loglevel: 1.9.2
+      o1js: 1.6.0
+      reflect-metadata: 0.1.14
+      ts-mixer: 6.0.4
+      ts-pattern: 4.3.0
+      tsyringe: 4.8.0
+
   '@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(o1js@1.8.0)(ts-pattern@4.3.0)(tsyringe@4.8.0)':
     dependencies:
       '@proto-kit/common': 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0)
@@ -8355,6 +8194,23 @@ snapshots:
       ts-mixer: 6.0.4
       ts-pattern: 4.3.0
       tsyringe: 4.8.0
+
+  '@proto-kit/sdk@0.1.1-develop.833(dt425lmr4dchkjnkqaykfgasfi)':
+    dependencies:
+      '@proto-kit/common': 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0)
+      '@proto-kit/library': 0.1.1-develop.833(patch_hash=l4nw35jyuqbcpqce4frw6uerfu)(cygiw4mwsxan5d55twgdlbrejq)
+      '@proto-kit/module': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)
+      '@proto-kit/protocol': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0)
+      '@proto-kit/sequencer': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/module@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)
+      '@urql/core': 4.3.0(graphql@16.6.0)
+      comlink: 4.4.1
+      lodash: 4.17.21
+      loglevel: 1.9.2
+      o1js: 1.6.0
+      reflect-metadata: 0.1.14
+      tsyringe: 4.8.0
+    transitivePeerDependencies:
+      - graphql
 
   '@proto-kit/sdk@0.1.1-develop.833(su3yfekoawr7sn7quwgeiony7i)':
     dependencies:
@@ -8372,6 +8228,18 @@ snapshots:
       tsyringe: 4.8.0
     transitivePeerDependencies:
       - graphql
+
+  '@proto-kit/sequencer@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/module@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)':
+    dependencies:
+      '@proto-kit/common': 0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0)
+      '@proto-kit/module': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.6.0)(tsyringe@4.8.0)
+      '@proto-kit/protocol': 0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.6.0)(tsyringe@4.8.0))(o1js@1.6.0)(ts-pattern@4.3.0)(tsyringe@4.8.0)
+      compute-gcd: 1.2.1
+      lodash: 4.17.21
+      o1js: 1.6.0
+      reflect-metadata: 0.1.14
+      ts-pattern: 4.3.0
+      tsyringe: 4.8.0
 
   '@proto-kit/sequencer@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(@proto-kit/module@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(o1js@1.8.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.8.0)(tsyringe@4.8.0))(@proto-kit/protocol@0.1.1-develop.833(@proto-kit/common@0.1.1-develop.833(patch_hash=rc2l7mvaoflbito5bztsbulv2y)(o1js@1.8.0)(tsyringe@4.8.0))(o1js@1.8.0)(ts-pattern@4.3.0)(tsyringe@4.8.0))(o1js@1.8.0)(tsyringe@4.8.0)':
     dependencies:
@@ -10491,32 +10359,6 @@ snapshots:
       is-date-object: 1.0.5
       is-symbol: 1.0.4
 
-  esbuild@0.21.5:
-    optionalDependencies:
-      '@esbuild/aix-ppc64': 0.21.5
-      '@esbuild/android-arm': 0.21.5
-      '@esbuild/android-arm64': 0.21.5
-      '@esbuild/android-x64': 0.21.5
-      '@esbuild/darwin-arm64': 0.21.5
-      '@esbuild/darwin-x64': 0.21.5
-      '@esbuild/freebsd-arm64': 0.21.5
-      '@esbuild/freebsd-x64': 0.21.5
-      '@esbuild/linux-arm': 0.21.5
-      '@esbuild/linux-arm64': 0.21.5
-      '@esbuild/linux-ia32': 0.21.5
-      '@esbuild/linux-loong64': 0.21.5
-      '@esbuild/linux-mips64el': 0.21.5
-      '@esbuild/linux-ppc64': 0.21.5
-      '@esbuild/linux-riscv64': 0.21.5
-      '@esbuild/linux-s390x': 0.21.5
-      '@esbuild/linux-x64': 0.21.5
-      '@esbuild/netbsd-x64': 0.21.5
-      '@esbuild/openbsd-x64': 0.21.5
-      '@esbuild/sunos-x64': 0.21.5
-      '@esbuild/win32-arm64': 0.21.5
-      '@esbuild/win32-ia32': 0.21.5
-      '@esbuild/win32-x64': 0.21.5
-
   esbuild@0.23.1:
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.23.1
@@ -12293,17 +12135,31 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  l1-lottery-contracts@0.7.38(o1js@1.8.0):
+  l1-lottery-contracts@0.7.45(o1js@1.6.0):
     dependencies:
       '@types/node': 20.16.5
       axios: 1.7.7
       dotenv: 16.4.5
-      esbuild: 0.21.5
+      minimist: 1.2.8
+      o1js: 1.6.0
+      pinata: 0.3.4
+      zkapp-cli: 0.21.5
+      zkon-zkapp: zkonmina@https://codeload.github.com/ZKON-Network/zkTLS-Mina-zkApp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f(o1js@1.6.0)
+    transitivePeerDependencies:
+      - debug
+      - encoding
+      - supports-color
+
+  l1-lottery-contracts@0.7.45(o1js@1.8.0):
+    dependencies:
+      '@types/node': 20.16.5
+      axios: 1.7.7
+      dotenv: 16.4.5
       minimist: 1.2.8
       o1js: 1.8.0
       pinata: 0.3.4
       zkapp-cli: 0.21.5
-      zkon-zkapp: zkonmina@https://codeload.github.com/ZKON-Network/zkapp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f(o1js@1.8.0)
+      zkon-zkapp: zkonmina@https://codeload.github.com/ZKON-Network/zkTLS-Mina-zkApp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f(o1js@1.8.0)
     transitivePeerDependencies:
       - debug
       - encoding
@@ -12473,6 +12329,10 @@ snapshots:
   mimic-response@1.0.1: {}
 
   min-indent@1.0.1: {}
+
+  mina-fungible-token@https://codeload.github.com/MinaFoundation/mina-fungible-token/tar.gz/971bf58962d47870d5bcf5a220dc3a80ca5321a0(o1js@1.6.0):
+    dependencies:
+      o1js: 1.6.0
 
   mina-fungible-token@https://codeload.github.com/MinaFoundation/mina-fungible-token/tar.gz/971bf58962d47870d5bcf5a220dc3a80ca5321a0(o1js@1.8.0):
     dependencies:
@@ -12712,6 +12572,17 @@ snapshots:
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
+
+  o1js@1.6.0:
+    dependencies:
+      blakejs: 1.2.1
+      cachedir: 2.4.0
+      isomorphic-fetch: 3.0.0
+      js-sha256: 0.9.0
+      reflect-metadata: 0.1.14
+      tslib: 2.7.0
+    transitivePeerDependencies:
+      - encoding
 
   o1js@1.8.0:
     dependencies:
@@ -14471,7 +14342,20 @@ snapshots:
       - encoding
       - supports-color
 
-  zkonmina@https://codeload.github.com/ZKON-Network/zkapp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f(o1js@1.8.0):
+  zkonmina@https://codeload.github.com/ZKON-Network/zkTLS-Mina-zkApp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f(o1js@1.6.0):
+    dependencies:
+      '@noble/curves': 1.6.0
+      dotenv: 16.4.5
+      mina-fungible-token: https://codeload.github.com/MinaFoundation/mina-fungible-token/tar.gz/971bf58962d47870d5bcf5a220dc3a80ca5321a0(o1js@1.6.0)
+      mina-signer: 3.0.7
+      node-fetch: 3.3.2
+      o1js: 1.6.0
+      zkapp-cli: 0.21.5
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  zkonmina@https://codeload.github.com/ZKON-Network/zkTLS-Mina-zkApp/tar.gz/fa772df63e10f29155ef1ea60fe6fae23485c80f(o1js@1.8.0):
     dependencies:
       '@noble/curves': 1.6.0
       dotenv: 16.4.5
