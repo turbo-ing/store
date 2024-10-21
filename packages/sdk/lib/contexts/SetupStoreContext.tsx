@@ -18,6 +18,21 @@ interface ISetupStoreContext {
           rating: number;
         }) => void)
       | undefined;
+    getGameRatingQuery:
+      | ((gameId: string) => Record<number, number>)
+      | undefined;
+  };
+  favorites: {
+    setFavoriteGameStatus:
+      | ((userAddress: string, gameId: string, status: boolean) => void)
+      | undefined;
+    userFavoriteGames:
+      | {
+          userAddress: string;
+          gameId: string;
+          status: boolean;
+        }[]
+      | undefined;
   };
 }
 
@@ -30,6 +45,11 @@ const SetupStoreContext = createContext<ISetupStoreContext>({
   },
   ratings: {
     gameFeedbackMutator: undefined,
+    getGameRatingQuery: undefined,
+  },
+  favorites: {
+    setFavoriteGameStatus: undefined,
+    userFavoriteGames: undefined,
   },
 });
 

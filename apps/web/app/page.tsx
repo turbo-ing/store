@@ -17,7 +17,12 @@ export default function Home() {
   const nameMutator = api.accounts.setName.useMutation();
   const avatarIdMutator = api.accounts.setAvatar.useMutation();
   const gameFeedbackMutator = api.ratings.setGameFeedback.useMutation();
-
+  const getGameIdQuery = api.ratings.getGameRating;
+  const setFavoriteGameStatusMutation =
+    api.favorites.setFavoriteGameStatus.useMutation();
+  const getFavoriteGamesQuery = api.favorites.getFavoriteGames.useQuery({
+    userAddress: networkStore.address || "",
+  });
   return (
     <ZkNoidGameContext.Provider
       value={{
@@ -50,6 +55,18 @@ export default function Home() {
                 feedback: feedback.feedbackText,
                 rating: feedback.rating,
               }),
+            getGameRatingQuery: (gameId) =>
+              (getGameIdQuery.useQuery({ gameId: gameId })?.data
+                ?.rating as Record<number, number>) || undefined,
+          },
+          favorites: {
+            setFavoriteGameStatus: (userAddress, gameId, status) =>
+              setFavoriteGameStatusMutation.mutate({
+                userAddress: userAddress,
+                gameId: gameId,
+                status: status,
+              }),
+            userFavoriteGames: getFavoriteGamesQuery.data?.favorites as [],
           },
         }}
       >

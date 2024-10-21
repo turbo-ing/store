@@ -1,8 +1,7 @@
-import clientPromise from '../../../app/lib/mongodb'
-import { z } from 'zod';
+import clientPromise from "../../../app/lib/mongodb";
+import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from '../../../server/api/trpc';
-
+import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";
 
 const client = await clientPromise;
 const db = client?.db(process.env.MONGODB_DB);
@@ -10,12 +9,12 @@ const db = client?.db(process.env.MONGODB_DB);
 export const favoritesRouter = createTRPCRouter({
   getFavoriteGames: publicProcedure
     .input(z.object({ userAddress: z.string() }))
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       if (!db) return;
 
       return {
         favorites: await db
-          .collection('favorites')
+          .collection("favorites")
           .find({
             userAddress: input.userAddress,
           })
@@ -29,12 +28,12 @@ export const favoritesRouter = createTRPCRouter({
         userAddress: z.string(),
         gameId: z.string(),
         status: z.boolean(),
-      })
+      }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       if (!db) return;
 
-      await db.collection('favorites').updateOne(
+      await db.collection("favorites").updateOne(
         { gameId: input.gameId, userAddress: input.userAddress },
         {
           $set: {
@@ -43,7 +42,7 @@ export const favoritesRouter = createTRPCRouter({
         },
         {
           upsert: true,
-        }
+        },
       );
       return {
         gameId: input.gameId,
