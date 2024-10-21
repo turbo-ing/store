@@ -1,55 +1,51 @@
 import {
   ALL_GAME_TAGS,
   ZkNoidGameGenre,
-} from '@zknoid/sdk/lib/platform/game_tags';
-import { cn } from '@zknoid/sdk/lib/helpers';
-import { useState } from 'react';
-import { SortByFilter } from './ui/SortByFilter';
+} from "@zknoid/sdk/lib/platform/game_tags";
+import { cn } from "@zknoid/sdk/lib/helpers";
+import { useContext, useState } from "react";
+import { SortByFilter } from "./ui/SortByFilter";
 import {
   GAME_STORE_SORT_METHODS,
   GameComparisonType,
   compare,
-} from '@zknoid/sdk/lib/comparators/gameComparator';
-import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
-// import { api } from '@zknoid/sdk/trpc/react';
-import { IGame } from '@/app/constants/games';
-import { GameCard } from '../../../../entities/GameCard';
-import Lottie from 'react-lottie';
-import SnakeNoEvents from './assets/ZKNoid_Snake_Intro_03_05.json';
+} from "@zknoid/sdk/lib/comparators/gameComparator";
+import { IGame } from "@/app/constants/games";
+import { GameCard } from "../../../../entities/GameCard";
+import Lottie from "react-lottie";
+import SnakeNoEvents from "./assets/ZKNoid_Snake_Intro_03_05.json";
+import SetupStoreContext from "../../../../../../../../../packages/sdk/lib/contexts/SetupStoreContext";
 
 export default function Favorites({ games }: { games: IGame[] }) {
   const PAGINATION_LIMIT = 8;
 
-  const networkStore = useNetworkStore();
-  // const getFavoritesQuery = api.favorites.getFavoriteGames.useQuery({
-  //   userAddress: networkStore.address ?? '',
-  // });
+  const { favorites } = useContext(SetupStoreContext);
 
   const [genresSelected, setGenresSelected] = useState<ZkNoidGameGenre[]>([]);
   const [sortBy, setSortBy] = useState<GameComparisonType>(
-    GameComparisonType.RatingLow
+    GameComparisonType.RatingLow,
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const filteredGames = games.filter(
     (x) =>
-      (genresSelected.includes(x.genre) || genresSelected.length == 0) && true
-      // getFavoritesQuery.data &&
-      // getFavoritesQuery.data.favorites.some((y) => y.gameId == x.id && y.status)
+      (genresSelected.includes(x.genre) || genresSelected.length == 0) &&
+      favorites.userFavoriteGames &&
+      favorites.userFavoriteGames.some((y) => y.gameId == x.id && y.status),
   );
 
   const renderGames = filteredGames.slice(
     (currentPage - 1) * PAGINATION_LIMIT,
-    currentPage * PAGINATION_LIMIT
+    currentPage * PAGINATION_LIMIT,
   );
   return (
-    <div className={'flex w-full flex-col'}>
-      <span className={'font-museo text-[1.667vw] font-bold text-foreground'}>
+    <div className={"flex w-full flex-col"}>
+      <span className={"font-museo text-[1.667vw] font-bold text-foreground"}>
         Favorite games
       </span>
       <span
         className={
-          'mt-[0.781vw] w-1/2 font-plexsans text-[0.833vw] text-foreground'
+          "mt-[0.781vw] w-1/2 font-plexsans text-[0.833vw] text-foreground"
         }
       >
         If you have any questions or notice any issues with the operation of our
@@ -57,16 +53,16 @@ export default function Favorites({ games }: { games: IGame[] }) {
         happy to answer any questions you may have and try our best to solve any
         problems as soon as possible.
       </span>
-      <div className={'flex w-full flex-row items-center justify-between'}>
-        <div className={'mt-[0.781vw] flex flex-row gap-[0.781vw]'}>
+      <div className={"flex w-full flex-row items-center justify-between"}>
+        <div className={"mt-[0.781vw] flex flex-row gap-[0.781vw]"}>
           {ALL_GAME_TAGS.map((tag, index) => (
             <button
               key={index}
               className={cn(
-                'cursor-pointer rounded-[0.26vw] border border-foreground px-[0.521vw] py-[0.26vw] text-center font-plexsans text-[0.833vw] text-foreground',
+                "cursor-pointer rounded-[0.26vw] border border-foreground px-[0.521vw] py-[0.26vw] text-center font-plexsans text-[0.833vw] text-foreground",
                 genresSelected == tag.genres
-                  ? 'border-left-accent bg-left-accent text-bg-dark'
-                  : 'hover:border-left-accent hover:text-left-accent'
+                  ? "border-left-accent bg-left-accent text-bg-dark"
+                  : "hover:border-left-accent hover:text-left-accent",
               )}
               onClick={() => {
                 genresSelected == tag.genres
@@ -84,7 +80,7 @@ export default function Favorites({ games }: { games: IGame[] }) {
           setSortBy={setSortBy}
         />
       </div>
-      <div className={'mt-[0.781vw] grid w-full grid-cols-4 gap-[0.781vw]'}>
+      <div className={"mt-[0.781vw] grid w-full grid-cols-4 gap-[0.781vw]"}>
         {renderGames
           .sort((a, b) => compare(a, b, sortBy))
           .map((game) => (
@@ -106,7 +102,7 @@ export default function Favorites({ games }: { games: IGame[] }) {
               options={{
                 animationData: SnakeNoEvents,
                 rendererSettings: {
-                  className: 'z-0 h-full',
+                  className: "z-0 h-full",
                 },
               }}
             ></Lottie>

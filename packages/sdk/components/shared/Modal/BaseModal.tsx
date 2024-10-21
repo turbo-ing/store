@@ -35,8 +35,8 @@ export default function BaseModal({
         >
           <div
             className={cn(
-              "relative flex flex-col rounded-[5px] border border-right-accent bg-bg-dark p-4",
-              border
+              "relative flex flex-col rounded-[0.26vw] border border-right-accent bg-bg-dark p-[0.833vw]",
+              border,
             )}
             onClick={(e) => e.stopPropagation()}
           >

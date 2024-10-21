@@ -21,8 +21,6 @@ import ZkNoidGameContext from "@zknoid/sdk/lib/contexts/ZkNoidGameContext";
 import { useProtokitChainStore } from "@zknoid/sdk/lib/stores/protokitChain";
 import { MainButtonState } from "@zknoid/sdk/components/framework/GamePage/PvPGameView";
 import RandzuCoverSVG from "./assets/game-cover.svg";
-// import { api } from "@zknoid/sdk/trpc/react";
-import { getEnvContext } from "@zknoid/sdk/lib/envContext";
 import { MOVE_TIMEOUT_IN_BLOCKS } from "zknoid-chain-dev";
 import RandzuCoverMobileSVG from "./assets/game-cover-mobile.svg";
 import GameWidget from "@zknoid/sdk/components/framework/GameWidget";
@@ -41,18 +39,15 @@ import { walletInstalled } from "@zknoid/sdk/lib/helpers";
 import { ConnectWallet } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/ConnectWallet";
 import { InstallWallet } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/InstallWallet";
 import { GameWrap } from "@zknoid/sdk/components/framework/GamePage/GameWrap";
-import { RateGame } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/RateGame";
-import toast from "@zknoid/sdk/components/shared/Toast";
-import { useToasterStore } from "@zknoid/sdk/lib/stores/toasterStore";
-import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
 import { GameState } from "./lib/gameState";
 import { useStartGame } from "./features/startGame";
 import {
   useLobbiesStore,
   useObserveLobbiesStore,
 } from "@zknoid/sdk/lib/stores/lobbiesStore";
-// import { type PendingTransaction } from "@proto-kit/sequencer";
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
 
 const competition = {
   id: "global",
@@ -67,7 +62,6 @@ export default function Randzu({
   params: { competitionId: string };
 }) {
   const [gameState, setGameState] = useState(GameState.NotStarted);
-  const [isRateGame, setIsRateGame] = useState<boolean>(true);
   const [loading, setLoading] = useState(true);
   const [loadingElement, setLoadingElement] = useState<
     { x: number; y: number } | undefined
@@ -80,15 +74,17 @@ export default function Randzu({
 
   const networkStore = useNetworkStore();
   const matchQueue = useRandzuMatchQueueStore();
-  const toasterStore = useToasterStore();
   const rateGameStore = useRateGameStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const protokitChain = useProtokitChainStore();
   useObserveRandzuMatchQueue();
   const sessionPrivateKey = useStore(useSessionKeyStore, (state) =>
     state.getSessionKey(),
   );
-  // const progress = api.progress.setSolvedQuests.useMutation();
   const startGame = useStartGame(competition.id, setGameState);
+  // TODO: Add API
   // const getRatingQuery = api.ratings.getGameRating.useQuery({
   //   gameId: "randzu",
   // });
@@ -293,12 +289,18 @@ export default function Randzu({
   } as Record<GameState, string>;
 
   useEffect(() => {
-    if (gameState == GameState.Won)
-      toast.success(
-        toasterStore,
-        `You are won! Winnings: ${formatUnits(matchQueue.pendingBalance)} ${Currency.ZNAKES}`,
-        true,
-      );
+    if (
+      !rateGameStore.ratedGames.find((game) => game.gameId === randzuConfig.id)
+    ) {
+      if (
+        (gameState == GameState.Lost || gameState == GameState.Won) &&
+        searchParams.get("rating") !== "forceModal"
+      ) {
+        setTimeout(() => {
+          router.push(pathname + "?rating=forceModal");
+        }, 10000);
+      }
+    }
   }, [gameState]);
 
   return (
@@ -409,26 +411,15 @@ export default function Randzu({
                 </GameWrap>
               ) : (
                 <>
-                  {gameState == GameState.Won &&
-                    (isRateGame &&
-                    !rateGameStore.ratedGames.find(
-                      (game) => game.gameId == randzuConfig.id,
-                    ) ? (
-                      <GameWrap>
-                        <RateGame
-                          gameId={randzuConfig.id}
-                          onClick={() => setIsRateGame(false)}
-                        />
-                      </GameWrap>
-                    ) : (
-                      <GameWrap>
-                        <Win
-                          onBtnClick={restart}
-                          title={"You won! Congratulations!"}
-                          btnText={"Find new game"}
-                        />
-                      </GameWrap>
-                    ))}
+                  {gameState == GameState.Won && (
+                    <GameWrap>
+                      <Win
+                        onBtnClick={restart}
+                        title={"You won! Congratulations!"}
+                        btnText={"Find new game"}
+                      />
+                    </GameWrap>
+                  )}
                   {gameState == GameState.Lost && (
                     <GameWrap>
                       <Lost startGame={restart} />

@@ -31,8 +31,6 @@ import ThimblerigCoverMobileSVG from "@zknoid/sdk/public/image/game-page/game-ti
 import Image from "next/image";
 import Lottie from "react-lottie";
 import { MainButtonState } from "@zknoid/sdk/components/framework/GamePage/PvPGameView";
-// import { api } from "@zknoid/sdk/trpc/react";
-import { getEnvContext } from "@zknoid/sdk/lib/envContext";
 import { getRandomEmoji } from "@zknoid/sdk/lib/emoji";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import AnimatedThimble from "./components/AnimatedThimble";
@@ -48,25 +46,22 @@ import { Currency } from "@zknoid/sdk/constants/currency";
 import { motion, useAnimationControls } from "framer-motion";
 import { ICompetitionPVP } from "@zknoid/sdk/lib/types";
 import { GameWrap } from "@zknoid/sdk/components/framework/GamePage/GameWrap";
-import { RateGame } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/RateGame";
 import { SadSmileSVG } from "@zknoid/sdk/components/shared/misc/svg";
 import toast from "@zknoid/sdk/components/shared/Toast";
 import { useToasterStore } from "@zknoid/sdk/lib/stores/toasterStore";
-import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
 import { formatPubkey } from "@zknoid/sdk/lib/utils";
-import StatefulModal from "@zknoid/sdk/components/shared/Modal/StatefulModal";
 import { GameState } from "./lib/gameState";
 import { useStartGame } from "./features/startGame";
 import {
   useLobbiesStore,
   useObserveLobbiesStore,
 } from "@zknoid/sdk/lib/stores/lobbiesStore";
-// import { PendingTransaction } from "@proto-kit/sequencer";
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
 
 export default function Thimblerig({}: { params: { competitionId: string } }) {
   const [gameState, setGameState] = useState(GameState.NotStarted);
-  const [isRateGame, setIsRateGame] = useState<boolean>(false);
   const [revealedValue, setRevealedValue] = useState<
     undefined | { choice: 1 | 2 | 3; value: 1 | 2 | 3 }
   >(undefined);
@@ -89,11 +84,13 @@ export default function Thimblerig({}: { params: { competitionId: string } }) {
 
   const networkStore = useNetworkStore();
   const toasterStore = useToasterStore();
-  const rateGameStore = useRateGameStore();
-  // const progress = api.progress.setSolvedQuests.useMutation();
   const matchQueue = useThimblerigMatchQueueStore();
   const commitmentStore = useCommitmentStore();
   const protokitChain = useProtokitChainStore();
+  const rateGameStore = useRateGameStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   useObserveThimblerigMatchQueue();
   const startGame = useStartGame(setGameState);
 
@@ -461,10 +458,19 @@ export default function Thimblerig({}: { params: { competitionId: string } }) {
   const draggableBallControls = useAnimationControls();
 
   useEffect(() => {
-    if (gameState == GameState.Lost || gameState == GameState.Won) {
-      setTimeout(() => {
-        setIsRateGame(true);
-      }, 10000);
+    if (
+      !rateGameStore.ratedGames.find(
+        (game) => game.gameId === thimblerigConfig.id,
+      )
+    ) {
+      if (
+        (gameState == GameState.Lost || gameState == GameState.Won) &&
+        searchParams.get("rating") !== "forceModal"
+      ) {
+        setTimeout(() => {
+          router.push(pathname + "?rating=forceModal");
+        }, 10000);
+      }
     }
   }, [gameState]);
 
@@ -592,18 +598,6 @@ export default function Thimblerig({}: { params: { competitionId: string } }) {
                 </GameWrap>
               ) : (
                 <>
-                  {isRateGame &&
-                    !rateGameStore.ratedGames.find(
-                      (game) => game.gameId == thimblerigConfig.id,
-                    ) && (
-                      <StatefulModal isOpen={true} isDismissible={false}>
-                        <RateGame
-                          gameId={thimblerigConfig.id}
-                          onClick={() => setIsRateGame(false)}
-                          isModal={true}
-                        />
-                      </StatefulModal>
-                    )}
                   {gameState === GameState.NotStarted && (
                     <GameWrap>
                       <Button

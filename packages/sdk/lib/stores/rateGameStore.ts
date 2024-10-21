@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface RateGameStore {
   ratedGames: {
@@ -12,7 +12,7 @@ export interface RateGameStore {
 
 export const useRateGameStore = create<
   RateGameStore,
-  [['zustand/persist', never]]
+  [["zustand/persist", never]]
 >(
   persist(
     (set) => ({
@@ -20,8 +20,11 @@ export const useRateGameStore = create<
       addRatedGame: (gameId) => {
         set((state) => ({
           ratedGames: [
-            ...state.ratedGames,
-            { gameId: gameId, updatedAt: new Date().toISOString() },
+            ...state.ratedGames.filter((game) => game.gameId !== gameId),
+            {
+              gameId: gameId,
+              updatedAt: new Date().toISOString(),
+            },
           ],
         }));
       },
@@ -32,7 +35,7 @@ export const useRateGameStore = create<
       },
     }),
     {
-      name: 'rateGameStorage',
-    }
-  )
+      name: "rateGameStorage",
+    },
+  ),
 );

@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     },
     {
       refetchInterval: 5000,
-    }
+    },
   );
 
   const getMinaEventsQuery = api.lotteryBackend.getMinaEvents.useQuery({});
@@ -44,6 +44,15 @@ export default function Layout({ children }: { children: ReactNode }) {
   const nameMutator = api.accounts.setName.useMutation();
   const avatarIdMutator = api.accounts.setAvatar.useMutation();
 
+  const gameFeedbackMutator = api.ratings.setGameFeedback.useMutation();
+  const getGameIdQuery = api.ratings.getGameRating;
+
+  const setFavoriteGameStatusMutation =
+    api.favorites.setFavoriteGameStatus.useMutation();
+  const getFavoriteGamesQuery = api.favorites.getFavoriteGames.useQuery({
+    userAddress: networkStore.address || "",
+  });
+
   useEffect(() => {
     if (!getRoundQuery.data) return undefined;
 
@@ -62,7 +71,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         code: item.code,
         used: item.used,
         createdAt: item.createdAt,
-      }))
+      })),
     );
   }, [getUserGiftCodesQuery.data]);
 
@@ -82,6 +91,27 @@ export default function Layout({ children }: { children: ReactNode }) {
               userAddress: networkStore.address || "",
               avatarId: avatarId,
             }),
+        },
+        ratings: {
+          gameFeedbackMutator: (feedback) =>
+            gameFeedbackMutator.mutate({
+              userAddress: feedback.userAddress,
+              gameId: feedback.gameId,
+              feedback: feedback.feedbackText,
+              rating: feedback.rating,
+            }),
+          getGameRatingQuery: (gameId) =>
+            (getGameIdQuery.useQuery({ gameId: gameId })?.data
+              ?.rating as Record<number, number>) || undefined,
+        },
+        favorites: {
+          setFavoriteGameStatus: (userAddress, gameId, status) =>
+            setFavoriteGameStatusMutation.mutate({
+              userAddress: userAddress,
+              gameId: gameId,
+              status: status,
+            }),
+          userFavoriteGames: getFavoriteGamesQuery.data?.favorites as [],
         },
       }}
     >
