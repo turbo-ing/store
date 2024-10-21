@@ -35,9 +35,6 @@ import {
   Ticket,
   PLottery,
   TicketReduceProgram,
-  DistributionProgram,
-  DistributionProof,
-  DistributionProofPublicInput,
   MerkleMap20Witness,
 } from "l1-lottery-contracts";
 
@@ -82,16 +79,6 @@ const functions = {
   logState: async (args: {}) => {
     console.log("State", state);
     console.log("Provers", PLottery._provers);
-  },
-  compileDistributionProof: async (args: {}) => {
-    console.log("[Worker] compiling distribution contracts");
-    console.log("Cache info", LOTTERY_CACHE);
-
-    await DistributionProgram.compile({
-      cache: WebFileSystem(state.lotteryCache!),
-    });
-
-    console.log("[Worker] compiling distr contracts ended");
   },
   compileLotteryContracts: async (args: {}) => {
     console.log("[Worker] compiling lottery contracts");
@@ -211,8 +198,6 @@ const functions = {
       await lotteryGame!.getReward(
         ticket,
         MerkleMap20Witness.fromJSON(rp.ticketWitness) as MerkleMap20Witness,
-        //@ts-ignore
-        await DistributionProof.fromJSON(rp.dp),
         MerkleMap20Witness.fromJSON(rp.nullifierWitness) as MerkleMap20Witness
       );
     });

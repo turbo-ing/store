@@ -19,9 +19,6 @@ export default class ZknoidWorkerClient {
   compileReduceProof() {
     return this._call("compileReduceProof", {});
   }
-  compileDistributionProof() {
-    return this._call("compileDistributionProof", {});
-  }
   fetchOnchainState() {
     return this._call("fetchOnchainState", {});
   }
