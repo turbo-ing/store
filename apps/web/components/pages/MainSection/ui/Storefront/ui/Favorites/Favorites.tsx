@@ -39,7 +39,7 @@ export default function Favorites({ games }: { games: IGame[] }) {
     currentPage * PAGINATION_LIMIT,
   );
   return (
-    <div className={"flex w-full flex-col"}>
+    <div id={"favorites"} className={"flex w-full flex-col"}>
       <span className={"font-museo text-[1.667vw] font-bold text-foreground"}>
         Favorite games
       </span>

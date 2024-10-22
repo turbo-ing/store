@@ -2,19 +2,19 @@ import {
   GAME_STORE_SORT_METHODS,
   GameComparisonType,
   compare,
-} from '@zknoid/sdk/lib/comparators/gameComparator';
+} from "@zknoid/sdk/lib/comparators/gameComparator";
 import {
   ALL_GAME_TAGS,
   ZkNoidGameFeature,
   ZkNoidGameGenre,
-} from '@zknoid/sdk/lib/platform/game_tags';
-import { ZkNoidEventType } from '@zknoid/sdk/lib/platform/game_events';
-import { useEffect, useState } from 'react';
-import { announcedGames, defaultGames, IGame } from '@/app/constants/games';
-import { SortByFilter } from '@/components/pages/MainSection/ui/Storefront/ui/Favorites/ui/SortByFilter';
-import { cn } from '@zknoid/sdk/lib/helpers';
-import { GameCard } from '../../../../entities/GameCard';
-import GameStoreFilters from './ui/GameStoreFilters';
+} from "@zknoid/sdk/lib/platform/game_tags";
+import { ZkNoidEventType } from "@zknoid/sdk/lib/platform/game_events";
+import { useEffect, useState } from "react";
+import { announcedGames, defaultGames, IGame } from "@/app/constants/games";
+import { SortByFilter } from "@/components/pages/MainSection/ui/Storefront/ui/Favorites/ui/SortByFilter";
+import { cn } from "@zknoid/sdk/lib/helpers";
+import { GameCard } from "../../../../entities/GameCard";
+import GameStoreFilters from "./ui/GameStoreFilters";
 
 export default function GameStore({
   games,
@@ -49,11 +49,14 @@ export default function GameStore({
 
   const renderGames = filteredGames.slice(
     (currentPage - 1) * PAGINATION_LIMIT,
-    currentPage * PAGINATION_LIMIT
+    currentPage * PAGINATION_LIMIT,
   );
 
   return (
-    <div className={'mt-[3.646vw] flex h-full w-full flex-row gap-[0.625vw]'}>
+    <div
+      id={"games"}
+      className={"mt-[3.646vw] flex h-full w-full flex-row gap-[0.625vw]"}
+    >
       <GameStoreFilters
         genresSelected={genresSelected}
         setGenresSelected={setGenresSelected}
@@ -62,10 +65,10 @@ export default function GameStore({
         eventTypesSelected={eventTypesSelected}
         setEventTypesSelected={setEventTypesSelected}
       />
-      <div className={'flex w-full flex-col'}>
-        <div className={'flex w-full flex-row items-center justify-between'}>
+      <div className={"flex w-full flex-col"}>
+        <div className={"flex w-full flex-row items-center justify-between"}>
           <span
-            className={'font-museo text-[1.667vw] font-bold text-foreground'}
+            className={"font-museo text-[1.667vw] font-bold text-foreground"}
           >
             Games
           </span>
@@ -73,18 +76,18 @@ export default function GameStore({
             sortMethods={GAME_STORE_SORT_METHODS}
             sortBy={sortBy}
             setSortBy={setSortBy}
-            className={'hidden lg:block'}
+            className={"hidden lg:block"}
           />
         </div>
-        <div className={'mt-[0.417vw] flex w-full flex-row gap-[0.781vw]'}>
+        <div className={"mt-[0.417vw] flex w-full flex-row gap-[0.781vw]"}>
           {ALL_GAME_TAGS.map((tag, index) => (
             <button
               key={index}
               className={cn(
-                'cursor-pointer rounded-[0.26vw] border border-foreground px-[0.521vw] py-[0.26vw] text-center font-plexsans text-[0.833vw] text-foreground',
+                "cursor-pointer rounded-[0.26vw] border border-foreground px-[0.521vw] py-[0.26vw] text-center font-plexsans text-[0.833vw] text-foreground",
                 genresSelected == tag.genres && featuresSelected == tag.features
-                  ? 'border-left-accent bg-left-accent text-bg-dark'
-                  : 'hover:border-left-accent hover:text-left-accent'
+                  ? "border-left-accent bg-left-accent text-bg-dark"
+                  : "hover:border-left-accent hover:text-left-accent",
               )}
               onClick={() => {
                 if (
@@ -103,7 +106,7 @@ export default function GameStore({
             </button>
           ))}
         </div>
-        <div className={'mt-[1.302vw] grid w-full grid-cols-3 gap-[0.781vw]'}>
+        <div className={"mt-[1.302vw] grid w-full grid-cols-3 gap-[0.781vw]"}>
           {renderGames
             .sort((a, b) => compare(a, b, sortBy))
             .map((game) => (

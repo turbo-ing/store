@@ -7,8 +7,6 @@ import { useEffect, useState } from "react";
 import { formatAddress, walletInstalled } from "../../../../lib/helpers";
 import { useNetworkStore } from "../../../../lib/stores/network";
 import HeaderCard from "../entities/HeaderCard/HeaderCard";
-// import { api } from "../../../../trpc/react";
-import { getEnvContext } from "../../../../lib/envContext";
 import AccountCard from "./ui/AccountCard";
 import AccountPopup from "./AccountPopup";
 import {
@@ -33,7 +31,7 @@ const NetworkPicker = dynamic(
   () => import("../nonSSR/NetworkPicker/NetworkPicker"),
   {
     ssr: false,
-  }
+  },
 );
 
 export default function DesktopNavbar({
@@ -121,7 +119,7 @@ export default function DesktopNavbar({
         >
           <Tab
             title={"Games"}
-            link={"/"}
+            link={"/#games"}
             items={[
               {
                 icon: (
@@ -192,10 +190,10 @@ export default function DesktopNavbar({
             ]}
           />
           <Tab title={"Events"} link={"/#events"} />
-          <Tab title={"FAQ & Support"} link={"/?widget=faq"} />
+          <Tab title={"FAQ & Support"} link={"/?widget=faq#faq"} />
           <Tab
             title={"Media"}
-            link={"/?widget=faq"}
+            link={"/?widget=faq#faq"}
             items={Array.from(
               SOCIALS.map((item) => ({
                 icon: (
@@ -207,7 +205,7 @@ export default function DesktopNavbar({
                 ),
                 link: item.link,
                 text: item.name,
-              }))
+              })),
             )}
           />
         </div>
