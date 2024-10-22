@@ -1,6 +1,6 @@
 import { cn } from "../../../../../lib/helpers";
 import { AnimatePresence, motion } from "framer-motion";
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNetworkStore } from "../../../../../lib/stores/network";
 import { useBridgeStore } from "../../../../../lib/stores/bridgeStore";
 import * as Yup from "yup";
@@ -62,7 +62,7 @@ const AccountPopupBalance = dynamic(
   () => import("./nonSSR/AccountPopupBalance"),
   {
     ssr: false,
-  }
+  },
 );
 
 export default function AccountPopup({
@@ -73,35 +73,23 @@ export default function AccountPopup({
   const networkStore = useNetworkStore();
   const bridgeStore = useBridgeStore();
   const notificationStore = useNotificationStore();
-  const {account} = useContext(SetupStoreContext)
+  const { account } = useContext(SetupStoreContext);
 
   const [linkCopied, setLinkCopied] = useState<boolean>(false);
-  // const [name, setName] = useState<string | undefined>(undefined);
+  const [name, setName] = useState<string | undefined>(undefined);
   const [testName, setTestName] = useState<string>("");
   const [changeNameMode, setChangeNameMode] = useState<boolean>(false);
-  // const [avatarId, setAvatarId] = useState<number | undefined>(undefined);
+  const [avatarId, setAvatarId] = useState<number | undefined>(undefined);
   const [avatarMode, setAvatarMode] = useState<boolean>(false);
 
-  // const getAccountQuery = api.accounts.getAccount.useQuery({
-  //   userAddress: networkStore.address || "",
-  // });
   // const getNameCheckQuery = api.accounts.checkNameUnique.useQuery({
   //   name: testName,
   // });
 
-  // const setNameMutation = api.accounts.setName.useMutation();
-  // const setAvatarMutation = api.accounts.setAvatar.useMutation();
-
-  // useEffect(() => {
-  //   if (getAccountQuery.data) {
-  //     if (getAccountQuery.data.account) {
-  //       if (getAccountQuery.data.account.name)
-  //         setName(getAccountQuery.data.account.name);
-  //       if (getAccountQuery.data.account.avatarId)
-  //         setAvatarId(getAccountQuery.data.account.avatarId);
-  //     }
-  //   }
-  // }, [getAccountQuery.data]);
+  useEffect(() => {
+    if (account.name != name) setName(account.name);
+    if (account.avatarId != avatarId) setAvatarId(account.avatarId);
+  }, [account.name, account.avatarId]);
 
   useEffect(() => {
     if (bridgeStore.open) setIsAccountOpen(false);
@@ -118,10 +106,10 @@ export default function AccountPopup({
   const validateSchema = Yup.object().shape({
     name: Yup.string()
       .matches(/^(?![\d+_@.-]+$)[a-zA-Z0-9+_@.-]*$/, "Invalid name")
-      .required("This field required")
-      // .test("Check name unique", "This name already exists", (userName) =>
-      //   true
-      // ),
+      .required("This field required"),
+    // .test("Check name unique", "This name already exists", (userName) =>
+    //   true
+    // ),
   });
 
   const disconnectWallet = () => {
@@ -138,19 +126,16 @@ export default function AccountPopup({
 
   const submitForm = (userName: string) => {
     if (!networkStore.address) return;
-    if (account.name !== undefined && userName == account.name) {
+    if (name !== undefined && userName == name) {
       setChangeNameMode(false);
       return;
     }
     account.nameMutator?.(userName);
-    // setNameMutation.mutate({
-    //   userAddress: networkStore.address,
-    //   name: userName,
-    // });
+    setName(userName);
     setChangeNameMode(false);
     notificationStore.create({
       type: "message",
-      message: `Hi ${account.name ? "again" : ""} ${userName}!`,
+      message: `Hi ${name ? "again" : ""} ${userName}!`,
       customIcon: handEmojiImg,
     });
   };
@@ -259,20 +244,17 @@ export default function AccountPopup({
                   <div
                     key={index}
                     className={cn("relative cursor-pointer", {
-                      "cursor-not-allowed": index == account.avatarId,
-                      "hover:opacity-80": index != account.avatarId,
+                      "cursor-not-allowed": index == avatarId,
+                      "hover:opacity-80": index != avatarId,
                     })}
                     onClick={() => {
                       if (!networkStore.address) return;
-                      if (index == account.avatarId) {
+                      if (index == avatarId) {
                         setAvatarMode(false);
                         return;
                       }
-                      account.avatarIdMutator?.(index)
-                      // setAvatarMutation.mutate({
-                      //   userAddress: networkStore.address,
-                      //   avatarId: index,
-                      // });
+                      setAvatarId(index);
+                      account.avatarIdMutator?.(index);
                       setAvatarMode(false);
                       notificationStore.create({
                         type: "success",
@@ -284,10 +266,10 @@ export default function AccountPopup({
                       src={item}
                       alt={"Avatar"}
                       className={cn("h-[3.125vw] w-[3.125vw]", {
-                        "opacity-20": index == account.avatarId,
+                        "opacity-20": index == avatarId,
                       })}
                     />
-                    {index == account.avatarId && (
+                    {index == avatarId && (
                       <div
                         className={
                           "absolute bottom-[10%] w-full text-center font-plexsans text-[0.781vw] font-extrabold text-bg-dark"
@@ -297,7 +279,7 @@ export default function AccountPopup({
                       </div>
                     )}
                   </div>
-                )
+                ),
             )}
           </div>
         </div>
@@ -305,14 +287,14 @@ export default function AccountPopup({
         <div className={"mt-8 flex w-full flex-col gap-4"}>
           <div className={"flex flex-row gap-[0.521vw]"}>
             <Image
-              src={account.avatarId !== undefined ? avatars[account.avatarId] : avatars[0]}
+              src={avatarId !== undefined ? avatars[avatarId] : avatars[0]}
               alt={"User Avatar"}
               className={"h-[5vw] w-[5vw] cursor-pointer hover:opacity-80"}
               onClick={() => (avatarMode ? undefined : setAvatarMode(true))}
             />
             <div className={"flex w-full flex-col gap-4"}>
               <Formik
-                initialValues={{ name: account.name || "" }}
+                initialValues={{ name: name || "" }}
                 validationSchema={validateSchema}
                 onSubmit={(values) => submitForm(values.name)}
               >
@@ -323,14 +305,14 @@ export default function AccountPopup({
                       setTestName(e.target.value);
                     }}
                   >
-                    {account.name && !changeNameMode ? (
+                    {name && !changeNameMode ? (
                       <div
                         className={
                           "w-full cursor-pointer font-museo text-headline-1 font-medium text-bg-dark hover:opacity-80"
                         }
                         onClick={() => setChangeNameMode(true)}
                       >
-                        {account.name}
+                        {name}
                       </div>
                     ) : (
                       <div className={"flex flex-col gap-2"}>
@@ -343,7 +325,7 @@ export default function AccountPopup({
                               "w-full rounded-[5px] border border-bg-dark bg-right-accent px-2 py-1 text-center font-plexsans text-main font-normal text-bg-dark placeholder:text-[#252525] placeholder:opacity-60"
                             }
                           />
-                          {values.name.length == 0 && account.name ? (
+                          {values.name.length == 0 && name ? (
                             <button
                               className={
                                 "group flex cursor-pointer flex-col items-center justify-center rounded-[5px] border border-bg-dark bg-bg-dark p-1 hover:bg-right-accent hover:opacity-80"
@@ -457,7 +439,7 @@ export default function AccountPopup({
                     "w-full rounded-[5px] border border-bg-dark px-2 py-1 text-center text-bg-dark",
                     {
                       "opacity-60": linkCopied,
-                    }
+                    },
                   )}
                 >
                   {networkStore.address &&
