@@ -427,20 +427,20 @@ export default function Randzu({
                   )}
                   {gameState === GameState.NotStarted && (
                     <GameWrap>
-                      <Button
-                        label={`START FOR ${formatUnits(
-                          competition.enteringPrice,
-                        )}`}
+                      <button
                         onClick={startGame}
-                        className={"max-w-[40%]"}
-                        endContent={
-                          <Image
-                            src={znakesImg}
-                            alt={"Znakes token"}
-                            className={"h-[24px] w-[24px] pb-0.5"}
-                          />
+                        className={
+                          "bg-left-accent group hover:bg-bg-grey border border-left-accent w-[40%] rounded-[0.26vw] py-[0.26vw] flex flex-row justify-center items-center"
                         }
-                      />
+                      >
+                        <span
+                          className={
+                            "text-bg-dark group-hover:text-left-accent font-medium font-museo text-[1.042vw]"
+                          }
+                        >
+                          Start game
+                        </span>
+                      </button>
                     </GameWrap>
                   )}
                   {gameState === GameState.OpponentTimeout && (
