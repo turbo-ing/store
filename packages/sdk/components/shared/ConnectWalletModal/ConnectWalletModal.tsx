@@ -11,7 +11,7 @@ export default function ConnectWalletModal() {
   const networkStore = useNetworkStore();
   return (
     <BaseModal isOpen={isOpen} setIsOpen={setIsOpen} isDismissible={false}>
-      <div className={"flex max-w-[20vw] flex-col"}>
+      <div className={"flex max-w-[26.042vw] flex-col"}>
         <Image
           src={cubes}
           alt={"cubes"}
