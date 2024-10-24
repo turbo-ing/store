@@ -47,25 +47,25 @@ export default function RateGameModal({ gameId }: { gameId: string }) {
       }}
       isDismissible={true}
     >
-      <div className={"flex max-w-[25vw] flex-col"}>
+      <div className={"flex w-[18.229vw] flex-col"}>
         <span
           className={
-            "my-[1vw] text-center font-museo text-[1.4vw] font-semibold"
+            "mb-[0.26vw] text-center font-museo text-[1.042vw] font-semibold leading-[1.1]"
           }
         >
-          Please rate this game!
+          Please rate the game!
         </span>
         <span
-          className={"my-[1vw] text-justify font-museo text-[1vw] font-medium"}
+          className={"text-center font-plexsans text-[0.729vw] leading-[1.1]"}
         >
           We hope you enjoyed playing! Please let us know your opinion about the
           game. Your feedback will help the developers to understand whether you
           enjoyed it or not and what changes should be made in the future.
         </span>
-        <div className={"flex flex-col gap-[1vw]"}>
+        <div className={"flex flex-col gap-[1.042vw] mt-[1.042vw]"}>
           <div
             className={
-              "flex flex-row-reverse items-center justify-center gap-[2.604vw]"
+              "flex flex-row-reverse items-center gap-[1.302vw] mx-[1.302vw] w-[15.625vw]"
             }
           >
             {[5, 4, 3, 2, 1].map((i) => (
@@ -77,7 +77,7 @@ export default function RateGameModal({ gameId }: { gameId: string }) {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className={clsx(
-                  "hover:fill-left-accent [&:hover~*]:fill-left-accent",
+                  "hover:fill-left-accent [&:hover~*]:fill-left-accent w-[2.083vw] h-[2.083vw]",
                   { "fill-left-accent": stars > 0 && stars >= i },
                 )}
                 onClick={() => setStars(i)}
@@ -89,26 +89,32 @@ export default function RateGameModal({ gameId }: { gameId: string }) {
               </svg>
             ))}
           </div>
-          <textarea
-            placeholder={"Write your feedback..."}
-            onChange={(event) => setFeedback(event.target.value)}
+          <div
             className={
-              "h-full min-h-[5.208vw] w-full appearance-none rounded-[0.26vw] border border-foreground bg-bg-dark p-[0.521vw] font-museo text-[0.833vw] font-medium text-foreground outline-0 focus:border-right-accent"
+              "rounded-[0.26vw] p-[0.26vw] border flex flex-col gap-[1.042vw] border-foreground"
             }
-          />
-          <button
-            className={
-              "w-full rounded-[0.26vw] bg-left-accent p-[0.5vw] text-center font-museo text-[0.833vw] font-medium text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
-            }
-            disabled={feedback.length === 0 || stars == 0}
-            onClick={() => {
-              sendFeedback();
-              setIsOpen(false);
-              ratingParam === "forceModal" && router.push(pathname);
-            }}
           >
-            Send feedback
-          </button>
+            <textarea
+              placeholder={"Write your feedback..."}
+              onChange={(event) => setFeedback(event.target.value)}
+              className={
+                "h-full min-h-[1.3vw] w-full appearance-none bg-bg-dark p-[0.521vw] font-museo text-[0.833vw] font-medium text-foreground outline-0 focus:border-right-accent"
+              }
+            />
+            <button
+              className={
+                "w-full rounded-[0.26vw] bg-left-accent p-[0.26vw] text-center font-museo text-[0.833vw] font-medium text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
+              }
+              disabled={feedback.length === 0 || stars == 0}
+              onClick={() => {
+                sendFeedback();
+                setIsOpen(false);
+                ratingParam === "forceModal" && router.push(pathname);
+              }}
+            >
+              Send feedback
+            </button>
+          </div>
         </div>
       </div>
     </BaseModal>

@@ -199,17 +199,23 @@ export default function Arkanoid({
                   {gameState === GameState.NotStarted && (
                     <div
                       className={
-                        "flex min-h-[50vh] w-full items-center justify-center lg:h-full lg:min-h-min"
+                        "flex h-full min-h-[50vh] w-full items-center justify-center lg:h-full lg:min-h-min"
                       }
                     >
                       {workerClientStore.status == "Initialized" ? (
                         <button
-                          className={
-                            "w-full max-w-[80%] rounded-[5px] border border-bg-dark bg-left-accent py-2 text-center text-[20px]/[20px] font-medium text-dark-buttons-text hover:border-left-accent hover:bg-bg-dark hover:text-left-accent lg:max-w-[40%]"
-                          }
                           onClick={startGame}
+                          className={
+                            "bg-left-accent group hover:bg-bg-grey border border-left-accent w-[40%] rounded-[0.26vw] py-[0.26vw] flex flex-row justify-center items-center"
+                          }
                         >
-                          Start game
+                          <span
+                            className={
+                              "text-bg-dark group-hover:text-left-accent font-medium font-museo text-[1.042vw]"
+                            }
+                          >
+                            Start game
+                          </span>
                         </button>
                       ) : (
                         <div
