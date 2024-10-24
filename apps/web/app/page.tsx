@@ -2,12 +2,15 @@
 
 import "reflect-metadata";
 import Footer from "@zknoid/sdk/components/widgets/Footer/Footer";
-import MainSection from "@/components/pages/MainSection";
 import Header from "@zknoid/sdk/components/widgets/Header";
 import ZkNoidGameContext from "@zknoid/sdk/lib/contexts/ZkNoidGameContext";
 import SetupStoreContext from "../../../packages/sdk/lib/contexts/SetupStoreContext";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { api } from "../trpc/react";
+import Swiper from "../sections/Swiper";
+import { Suspense } from "react";
+import CentralBlock from "../widgets/CentralBlock";
+import Storefront from "../sections/Storefront";
 
 export default function Home() {
   const networkStore = useNetworkStore();
@@ -72,7 +75,16 @@ export default function Home() {
       >
         <div className="flex min-h-screen flex-col">
           <Header />
-          <MainSection />
+
+          <main className={"px-[2.604vw]"}>
+            <Swiper />
+
+            <Suspense fallback={<p>Loading...</p>}>
+              <CentralBlock />
+              <Storefront />
+            </Suspense>
+          </main>
+
           <Footer />
         </div>
       </SetupStoreContext.Provider>
