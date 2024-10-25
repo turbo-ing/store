@@ -8,14 +8,14 @@ import { AnimatePresence } from "framer-motion";
 import PreviousRounds from "./PreviousRounds";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 import { useRoundsStore } from "../../lib/roundsStore";
-import OwnedGiftCodes from "./GiftCodes/OwnedGiftCodes";
 import BoughtGiftCodes from "./GiftCodes/BoughtGiftCodes";
 import UseGiftCodeForm from "./GiftCodes/UseGiftCodeForm";
 import ValidGiftCode from "./GiftCodes/ValidGiftCode";
-import NoUserGiftCodes from "./GiftCodes/NoUserGiftCodes";
 import BuyGiftCodesCounter from "./GiftCodes/BuyGiftCodesCounter";
 import { VoucherMode } from "./lib/voucherMode";
 import LotteryContext from "../../lib/contexts/LotteryContext";
+import Image from "next/image";
+import noCodesImg from "../../images/no-gift-codes.svg";
 
 interface TicketInfo {
   amount: number;
@@ -36,7 +36,6 @@ export default function TicketsSection() {
   );
   const [giftCode, setGiftCode] = useState<string>("");
   const [giftCodeToBuyAmount, setGiftCodeToBuyAmount] = useState<number>(1);
-  const [boughtGiftCodes, setBoughtGiftCodes] = useState<string[]>([]);
   const [hasOwnedTickets, setHasOwnedTickets] = useState<boolean>(false);
 
   useEffect(() => {
@@ -137,69 +136,51 @@ export default function TicketsSection() {
                       )}
                     </div>
                   )}
-                  {(voucherMode == VoucherMode.Buy ||
-                    voucherMode == VoucherMode.List ||
-                    voucherMode == VoucherMode.BuySuccess) && (
+                  {voucherMode == VoucherMode.List && (
                     <div
                       className={
                         "flex h-full w-[22.5vw] flex-col gap-0 rounded-b-[0.521vw] bg-[#252525]"
                       }
                     >
-                      <div className={"flex w-full flex-row"}>
-                        <button
-                          className={cn(
-                            "w-[40%] cursor-pointer rounded-t-[0.26vw] text-center font-plexsans text-[0.833vw] font-medium uppercase hover:opacity-80 disabled:cursor-default disabled:hover:opacity-100",
-                            {
-                              "border border-foreground text-foreground":
-                                voucherMode != VoucherMode.Buy &&
-                                voucherMode != VoucherMode.BuySuccess,
-                              "bg-right-accent text-bg-dark":
-                                voucherMode == VoucherMode.Buy ||
-                                voucherMode == VoucherMode.BuySuccess,
-                            },
-                          )}
-                          onClick={() => setVoucherMode(VoucherMode.Buy)}
-                          disabled={voucherMode == VoucherMode.BuySuccess}
+                      <div
+                        className={"flex w-full justify-center items-center"}
+                      >
+                        <span
+                          className={
+                            "rounded-t-[0.26vw] w-full text-center font-plexsans text-[0.833vw] font-medium uppercase bg-right-accent text-bg-dark"
+                          }
                         >
-                          New Codes
-                        </button>
-                        <button
-                          className={cn(
-                            "w-[60%] cursor-pointer rounded-t-[0.26vw] bg-[#252525] text-center font-plexsans text-[0.833vw] font-medium uppercase hover:opacity-80",
-                            {
-                              "border border-foreground text-foreground":
-                                voucherMode != VoucherMode.List,
-                              "bg-right-accent text-bg-dark":
-                                voucherMode == VoucherMode.List,
-                            },
-                          )}
-                          onClick={() => setVoucherMode(VoucherMode.List)}
-                        >
-                          Already bought codes
-                        </button>
+                          Access codes payment & Using
+                        </span>
                       </div>
-                      {voucherMode == VoucherMode.Buy && (
-                        <BuyGiftCodesCounter
-                          giftCodeToBuyAmount={giftCodeToBuyAmount}
-                          setGiftCodeToBuyAmount={setGiftCodeToBuyAmount}
+                      <BuyGiftCodesCounter
+                        giftCodeToBuyAmount={giftCodeToBuyAmount}
+                        setGiftCodeToBuyAmount={setGiftCodeToBuyAmount}
+                      />
+                      {userGiftCodes.length > 0 ? (
+                        <BoughtGiftCodes
+                          giftCodes={userGiftCodes.map((item) => {
+                            return {
+                              code: item.code,
+                              used: item.used,
+                              createdAt: item.createdAt,
+                              pending: false,
+                            };
+                          })}
                         />
-                      )}
-                      {voucherMode == VoucherMode.BuySuccess &&
-                        boughtGiftCodes.length != 0 && (
-                          <BoughtGiftCodes giftCodes={boughtGiftCodes} />
-                        )}
-                      {voucherMode == VoucherMode.List &&
-                        userGiftCodes.length == 0 && (
-                          <NoUserGiftCodes
-                            setVoucherMode={() =>
-                              setVoucherMode(VoucherMode.Buy)
-                            }
+                      ) : (
+                        <div
+                          className={
+                            "w-full h-full flex flex-col justify-center items-center"
+                          }
+                        >
+                          <Image
+                            src={noCodesImg}
+                            alt={"noGiftCodes img"}
+                            className={"w-[6.25vw]"}
                           />
-                        )}
-                      {voucherMode == VoucherMode.List &&
-                        userGiftCodes.length != 0 && (
-                          <OwnedGiftCodes userGiftCodes={userGiftCodes} />
-                        )}
+                        </div>
+                      )}
                     </div>
                   )}
                   {(voucherMode == VoucherMode.Closed ||
@@ -254,7 +235,7 @@ export default function TicketsSection() {
                       className={
                         "flex w-full cursor-pointer flex-row items-center justify-center gap-[0.781vw] rounded-[0.521vw] bg-[#252525] py-[0.365vw] hover:opacity-80"
                       }
-                      onClick={() => setVoucherMode(VoucherMode.Buy)}
+                      onClick={() => setVoucherMode(VoucherMode.List)}
                     >
                       <svg
                         width="25"
@@ -288,11 +269,7 @@ export default function TicketsSection() {
                       className={
                         "mb-[0.521vw] flex h-[1.354vw] w-[3.802vw] flex-row items-center justify-center rounded-[0.144vw] border border-foreground hover:opacity-80"
                       }
-                      onClick={() => {
-                        if (voucherMode == VoucherMode.BuySuccess)
-                          setBoughtGiftCodes([]);
-                        setVoucherMode(VoucherMode.Closed);
-                      }}
+                      onClick={() => setVoucherMode(VoucherMode.Closed)}
                     >
                       <svg
                         width="0.378vw"
@@ -325,7 +302,7 @@ export default function TicketsSection() {
                         workerClientStore.lotteryCompiled &&
                         !workerClientStore.isActiveTx &&
                         ((tickets.length > 0 && tickets[0].amount != 0) ||
-                          voucherMode == VoucherMode.Buy)
+                          voucherMode == VoucherMode.List)
                       }
                       ticketsInfo={tickets}
                       loaderActive={
@@ -339,7 +316,6 @@ export default function TicketsSection() {
                       setVoucherMode={setVoucherMode}
                       giftCodeToBuyAmount={giftCodeToBuyAmount}
                       setGiftCodeToBuyAmount={setGiftCodeToBuyAmount}
-                      setBoughtGiftCodes={setBoughtGiftCodes}
                       giftCode={giftCode}
                     />
                     {/*<GetMoreTicketsButton*/}

@@ -24,7 +24,6 @@ export default function BuyInfoCard({
   setVoucherMode,
   giftCodeToBuyAmount,
   setGiftCodeToBuyAmount,
-  setBoughtGiftCodes,
   giftCode,
 }: {
   buttonActive: ReactNode;
@@ -38,7 +37,6 @@ export default function BuyInfoCard({
   setVoucherMode: (mode: VoucherMode) => void;
   giftCodeToBuyAmount: number;
   setGiftCodeToBuyAmount: (amount: number) => void;
-  setBoughtGiftCodes: (codes: string[]) => void;
   giftCode: string;
 }) {
   const workerStore = useWorkerClientStore();
@@ -49,16 +47,16 @@ export default function BuyInfoCard({
     addGiftCodesMutation,
     sendTicketQueueMutation,
     useGiftCodeMutation,
-    roundInfo
+    roundInfo,
   } = useContext(LotteryContext);
 
   const numberOfTickets =
-    voucherMode == VoucherMode.Buy
+    voucherMode == VoucherMode.List
       ? giftCodeToBuyAmount
       : ticketsInfo.map((x) => x.amount).reduce((x, y) => x + y, 0);
   const cost = +TICKET_PRICE;
   const totalPrice =
-    voucherMode == VoucherMode.Buy
+    voucherMode == VoucherMode.List
       ? giftCodeToBuyAmount * cost
       : numberOfTickets * cost;
 
@@ -73,7 +71,7 @@ export default function BuyInfoCard({
       roundInfo!.plotteryAddress,
       networkStore.address!,
       ticketsInfo[0].numbers,
-      numberOfTickets
+      numberOfTickets,
     );
     console.log("txJson", txJson);
     await sendTransaction(txJson)
@@ -113,12 +111,16 @@ export default function BuyInfoCard({
 
       const addedCodes = {
         userAddress: networkStore.address,
-        transactionHash: '',
-        signature: '',
-        codes
+        transactionHash: "",
+        signature: "",
+        codes,
       };
 
-      const dataToSign = codes.map(x => Poseidon.hashPacked(CircuitString, CircuitString.fromString(x))).flatMap(x => x.toFields()); 
+      const dataToSign = codes
+        .map((x) =>
+          Poseidon.hashPacked(CircuitString, CircuitString.fromString(x)),
+        )
+        .flatMap((x) => x.toFields());
 
       const response = await (window as any).mina.signFields({
         message: dataToSign.map((field) => field.toString()),
@@ -126,7 +128,7 @@ export default function BuyInfoCard({
 
       addedCodes.signature = response.signature;
 
-      console.log('Added codes', addedCodes);
+      console.log("Added codes", addedCodes);
 
       const tx = await (window as any).mina.sendPayment({
         memo: `zknoid.io lottery gift code`,
@@ -139,9 +141,8 @@ export default function BuyInfoCard({
       addedCodes.transactionHash = tx.hash;
 
       addGiftCodesMutation(addedCodes);
-      setBoughtGiftCodes(codes);
       setGiftCodeToBuyAmount(1);
-      setVoucherMode(VoucherMode.BuySuccess);
+      setVoucherMode(VoucherMode.List);
       notificationStore.create({
         type: "success",
         message: "Gift codes successfully bought",
@@ -178,14 +179,18 @@ export default function BuyInfoCard({
   return (
     <div className="flex h-[13.53vw] w-[20vw] flex-col rounded-[0.67vw] bg-[#252525] p-[1.33vw] font-plexsans text-[0.833vw] shadow-2xl">
       <div className="flex flex-row">
-        <div className="text-nowrap">Number of tickets</div>
+        <div className="text-nowrap">
+          Number of {voucherMode == VoucherMode.List ? "codes" : "tickets"}
+        </div>
         <div className="mx-1 mb-[0.3vw] w-full border-spacing-6 border-b border-dotted border-[#F9F8F4] opacity-50"></div>
         <div className="">
           {voucherMode == VoucherMode.UseValid ? "1" : numberOfTickets}
         </div>
       </div>
       <div className="flex flex-row">
-        <div className="text-nowrap">Cost per ticket</div>
+        <div className="text-nowrap">
+          Cost per {voucherMode == VoucherMode.List ? "code" : "ticket"}
+        </div>
         <div className="mx-1 mb-[0.3vw] w-full border-spacing-6 border-b border-dotted border-[#F9F8F4] opacity-50"></div>
         <div className="">
           {formatUnits(cost)}
@@ -251,19 +256,19 @@ export default function BuyInfoCard({
             "cursor-progress": loaderActive,
             "mt-[0.25vw]": Number(balance) < Number(formatUnits(totalPrice)),
             "mt-[1vw]": Number(balance) > Number(formatUnits(totalPrice)),
-          }
+          },
         )}
         disabled={
           voucherMode != VoucherMode.UseValid
             ? Number(balance) < Number(formatUnits(totalPrice)) ||
               !buttonActive ||
-              (voucherMode != VoucherMode.Buy && !ticketsInfo.length)
+              (voucherMode != VoucherMode.List && !ticketsInfo.length)
             : !ticketsInfo.length && !buttonActive
         }
         onClick={async () => {
           voucherMode == VoucherMode.UseValid
             ? sendTicketQueue()
-            : voucherMode == VoucherMode.Buy
+            : voucherMode == VoucherMode.List
               ? await buyVoucher()
               : await buyTicket();
         }}
