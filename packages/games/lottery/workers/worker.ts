@@ -188,6 +188,10 @@ const functions = {
       nullifierWitness.computeRootAndKeyV2(Field(0)).toString()
     );
 
+    await fetchAccount({
+      publicKey: args.plotteryAddress,
+    });
+
     const lotteryGame = new PLottery(
       PublicKey.fromBase58(args.plotteryAddress)
     );
