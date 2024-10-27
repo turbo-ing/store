@@ -35,7 +35,7 @@ export default function BaseModal({
         >
           <div
             className={cn(
-              "relative flex flex-col rounded-[0.26vw] border border-right-accent bg-bg-dark p-[0.833vw]",
+              "relative flex flex-col rounded-[1.042vw] border border-left-accent bg-bg-dark p-[2.604vw]",
               border,
             )}
             onClick={(e) => e.stopPropagation()}
@@ -44,7 +44,7 @@ export default function BaseModal({
             {isDismissible && (
               <div
                 className={
-                  "absolute right-0 top-0 z-50 cursor-pointer hover:opacity-80"
+                  "absolute m-[0.365vw] right-0 top-0 z-50 cursor-pointer hover:opacity-80"
                 }
                 onClick={() => {
                   setIsOpen?.(false);
@@ -57,6 +57,7 @@ export default function BaseModal({
                     viewBox="0 0 53 64"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className={"w-[3.125vw] h-[3.125vws]"}
                   >
                     <rect
                       x="13.5469"
