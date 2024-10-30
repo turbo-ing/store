@@ -11,6 +11,8 @@ import SnakeNoEvents from "../../lib/assets/ZKNoid_Snake_Intro_03_05.json";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 
 export const EventFilter = ({
   eventType,
@@ -32,13 +34,7 @@ export const EventFilter = ({
           ? "border-left-accent bg-left-accent text-bg-dark"
           : "cursor-pointer hover:border-left-accent hover:text-left-accent",
       )}
-      onClick={() =>
-        setTypesSelected(
-          typesSelected.includes(eventType)
-            ? typesSelected.filter((x) => x != eventType)
-            : [...typesSelected, eventType],
-        )
-      }
+      onClick={() => setTypesSelected([eventType])}
     >
       {eventType}
     </button>
@@ -52,6 +48,7 @@ export const EventItem = ({
   image,
   imageFullWidth = false,
   textColor = "white",
+  eventsLength,
 }: {
   headText: string;
   description: string;
@@ -59,6 +56,7 @@ export const EventItem = ({
   image?: string;
   imageFullWidth?: boolean;
   textColor?: "white" | "black";
+  eventsLength: number;
 }) => {
   const eventCounter = useEventTimer(event);
   const time = eventCounter.startsIn
@@ -71,7 +69,13 @@ export const EventItem = ({
   return (
     <Link
       href={event.link}
-      className={"group relative rounded-[0.26vw] border border-left-accent"}
+      className={cn(
+        "group relative rounded-[0.26vw] border border-left-accent min-w-0 flex-[0_0_50%] ml-[0.938vw]",
+        {
+          "ml-0": eventsLength == 1,
+          "first:!ml-0": eventsLength == 2,
+        },
+      )}
     >
       {image && (
         <div className={"h-full w-full"}>
@@ -164,10 +168,27 @@ export default function Events({
   eventTypesSelected: ZkNoidEventType[];
   setEventTypesSelected: (eventTypes: ZkNoidEventType[]) => void;
 }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    dragFree: true,
+  });
+  // const filteredEvents = GAME_EVENTS.filter(
+  //   (x) =>
+  //     (eventTypesSelected.includes(getEventType(x)) ||
+  //       eventTypesSelected.length == 0) &&
+  //     x.eventEnds > Date.now(),
+  // );
+
+  useEffect(() => {
+    GAME_EVENTS.filter((x) => x.eventEnds > Date.now()).length == 0
+      ? setEventTypesSelected([ZkNoidEventType.PAST_EVENTS])
+      : setEventTypesSelected([ZkNoidEventType.CURRENT_EVENTS]);
+  }, []);
+
   const filteredEvents = GAME_EVENTS.filter(
     (x) =>
-      (eventTypesSelected.includes(getEventType(x)) ||
-        eventTypesSelected.length == 0) &&
+      eventTypesSelected.includes(getEventType(x)) ||
+      eventTypesSelected.length == 0 ||
       x.eventEnds > Date.now(),
   );
 
@@ -200,20 +221,21 @@ export default function Events({
         </div>
       )}
       {filteredEvents.length > 0 && (
-        <div
-          className={"grid w-full grid-cols-1 gap-[0.938vw] lg:!grid-cols-2"}
-        >
-          {filteredEvents.map((event) => (
-            <EventItem
-              key={event.name}
-              headText={event.name}
-              description={event.description}
-              event={event}
-              image={event.image}
-              imageFullWidth={event.imageFullWidth}
-              textColor={event.textColor}
-            />
-          ))}
+        <div className="w-full overflow-hidden" ref={emblaRef}>
+          <div className={"flex w-full"}>
+            {filteredEvents.map((event) => (
+              <EventItem
+                key={event.name}
+                headText={event.name}
+                description={event.description}
+                event={event}
+                image={event.image}
+                imageFullWidth={event.imageFullWidth}
+                textColor={event.textColor}
+                eventsLength={filteredEvents.length}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
