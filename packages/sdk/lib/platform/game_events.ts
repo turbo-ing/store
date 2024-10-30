@@ -82,7 +82,7 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     description:
       "The long-awaited event: The lottery game testnet is coming. The testnet allows users to test game features, check tasks, do it, help the team fix bugs and get rewards.",
     eventStarts: new Date("2024-10-14").getTime(),
-    eventEnds: new Date("2024-10-29").getTime(),
+    eventEnds: new Date("2024-10-28T19:00:00.000+03:00").getTime(),
     link: "https://quest.zknoid.io",
     image: "/image/events/lottery-testnet.svg",
     imageFullWidth: true,
