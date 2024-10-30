@@ -208,6 +208,7 @@ export default function DesktopNavbar({
               })),
             )}
           />
+          <Tab title={"Quest"} link={"https://quest.zknoid.io"} />
         </div>
 
         <div className="relative flex gap-[1.042vw]">
