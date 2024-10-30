@@ -62,8 +62,6 @@ export default function GameStore({
         setGenresSelected={setGenresSelected}
         featuresSelected={featuresSelected}
         setFeaturesSelected={setFeaturesSelected}
-        eventTypesSelected={eventTypesSelected}
-        setEventTypesSelected={setEventTypesSelected}
       />
       <div className={"flex w-full flex-col"}>
         <div className={"flex w-full flex-row items-center justify-between"}>

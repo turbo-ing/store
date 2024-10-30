@@ -4,7 +4,6 @@ import {
   ZkNoidGameFeature,
   ZkNoidGameGenre,
 } from "@zknoid/sdk/lib/platform/game_tags";
-import { ZkNoidEventType } from "@zknoid/sdk/lib/platform/game_events";
 import GameStoreFilter from "../../entities/GameStoreFilter";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -13,15 +12,11 @@ export default function GameStoreFilters({
   setGenresSelected,
   featuresSelected,
   setFeaturesSelected,
-  eventTypesSelected,
-  setEventTypesSelected,
 }: {
   genresSelected: ZkNoidGameGenre[];
   setGenresSelected: (genresSelected: ZkNoidGameGenre[]) => void;
   featuresSelected: ZkNoidGameFeature[];
   setFeaturesSelected: (featuresSelected: ZkNoidGameFeature[]) => void;
-  eventTypesSelected: ZkNoidEventType[];
-  setEventTypesSelected: (eventTypesSelected: ZkNoidEventType[]) => void;
 }) {
   return (
     <div className={"flex w-1/3 flex-col gap-[1.042vw]"}>
@@ -43,9 +38,7 @@ export default function GameStoreFilters({
         setItemsSelected={setFeaturesSelected}
       />
       <AnimatePresence initial={false} mode={"wait"}>
-        {genresSelected.length != 0 ||
-        featuresSelected.length != 0 ||
-        eventTypesSelected.length != 0 ? (
+        {genresSelected.length != 0 || featuresSelected.length != 0 ? (
           <motion.div
             className={
               "cursor-pointer rounded-[0.26vw] border border-left-accent bg-left-accent py-[0.26vw] text-center font-museo text-[1.042vw] font-medium text-bg-dark hover:bg-bg-grey hover:text-left-accent"
@@ -56,7 +49,6 @@ export default function GameStoreFilters({
             onClick={() => {
               setGenresSelected([]);
               setFeaturesSelected([]);
-              setEventTypesSelected([]);
             }}
           >
             Reset filters
