@@ -20,7 +20,7 @@ export function TicketItem({
   amount,
   noCombination,
   claimed,
-  hash,
+  claimHash,
 }: {
   plotteryAddress: string,
   roundId: number;
@@ -29,7 +29,7 @@ export function TicketItem({
   amount: number;
   noCombination: boolean;
   claimed: boolean;
-  hash: string;
+  claimHash: string;
 }) {
   const workerClient = useWorkerClientStore();
   const networkStore = useNetworkStore();
@@ -114,7 +114,7 @@ export function TicketItem({
       )}
       {!!funds && claimed && (
         <Link
-          href={`https://minascan.io/devnet/tx/${hash}?type=zk-tx`}
+          href={`https://minascan.io/devnet/tx/${claimHash}?type=zk-tx`}
           target={'_blank'}
           rel={'noopener noreferrer'}
           className={

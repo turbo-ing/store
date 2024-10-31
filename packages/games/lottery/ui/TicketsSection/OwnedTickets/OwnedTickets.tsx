@@ -50,12 +50,7 @@ export default function OwnedTickets({
         )
         .map((x, i) => ({
           id: `${i}`,
-          numbers: x.numbers,
-          amount: x.amount,
-          funds: x.funds,
-          claimed: x.claimed,
-          owner: x.owner,
-          hash: x.hash,
+          ...x,
         })),
     );
   }, [roundsStore.roundToShowId, roundInfo]);
@@ -172,7 +167,7 @@ export default function OwnedTickets({
             claimed={item.claimed}
             funds={item.funds}
             roundId={roundsStore.roundToShowId}
-            hash={item.hash}
+            hash={item.buyHash || ''}
           />
         ))}
         {tickets.length > TICKETS_PER_PAGE &&

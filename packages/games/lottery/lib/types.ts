@@ -3,6 +3,8 @@ export interface ILotteryTicket {
   numbers: number[];
   owner: string;
   claimed: boolean;
+  buyHash?: string;
+  claimHash?: string;
   funds: bigint;
   hash: string;
 }
