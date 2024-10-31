@@ -12,7 +12,8 @@ export const claimRequestRouter = createTRPCRouter({
       z.object({
         userAddress: z.string(),
         roundId: z.number(),
-        ticketId: z.number(),
+        ticketNumbers: z.number().array(),
+        ticketAmount: z.number(),
       })
     )
     .mutation(async ({ input }) => {
@@ -21,7 +22,8 @@ export const claimRequestRouter = createTRPCRouter({
       await db.collection("claim-request").insertOne({
         userAddress: input.userAddress,
         roundId: input.roundId,
-        ticketId: input.ticketId,
+        ticketNumbers: input.ticketNumbers,
+        ticketAmount: input.ticketAmount,
         status: "pending",
         createdAt: new Date().toISOString(),
       });

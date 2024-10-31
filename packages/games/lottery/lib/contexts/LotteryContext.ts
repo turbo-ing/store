@@ -8,6 +8,13 @@ interface IAddedGiftCodes {
   transactionHash: string;
 }
 
+interface IClaimRequest {
+  userAddress: string;
+  roundId: number;
+  ticketNumbers: number[];
+  ticketAmount: number;
+}
+
 interface ITicketQueue {
   userAddress: string;
   giftCode: string;
@@ -23,9 +30,10 @@ interface ILotteryContext {
   userGiftCodes: { code: string; used: boolean; createdAt: string }[];
   getRoundsInfosQuery: (
     roundsIds: number[],
-    params?: { refetchInterval?: number | false },
+    params?: { refetchInterval?: number | false }
   ) => Record<number, ILotteryRound> | undefined;
   addGiftCodesMutation: (giftCodes: IAddedGiftCodes) => void;
+  addClaimRequestMutation: (claimRequest: IClaimRequest) => void;
   removeUsedGiftCodesMutation: (userAddress: string) => void;
   sendTicketQueueMutation: (ticketQueue: ITicketQueue) => void;
   useGiftCodeMutation: (giftCode: string) => void;
@@ -37,6 +45,7 @@ const LotteryContext = createContext<ILotteryContext>({
   userGiftCodes: [],
   getRoundsInfosQuery: () => undefined,
   addGiftCodesMutation: () => {},
+  addClaimRequestMutation: () => {},
   removeUsedGiftCodesMutation: () => {},
   sendTicketQueueMutation: () => {},
   useGiftCodeMutation: () => {},

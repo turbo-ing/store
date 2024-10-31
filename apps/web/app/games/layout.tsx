@@ -35,6 +35,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const removeUsedGiftCodesMutation =
     api.giftCodes.removeUsedGiftCodes.useMutation();
   const addGiftCodesMutation = api.giftCodes.addGiftCodes.useMutation();
+  const addClaimRequestMutation = api.claimRequests.requestClaim.useMutation();
   const sendTicketQueueMutation = api.giftCodes.sendTicketQueue.useMutation();
   const useGiftCodeMutation = api.giftCodes.useGiftCode.useMutation();
 
@@ -125,6 +126,8 @@ export default function Layout({ children }: { children: ReactNode }) {
               ?.data as Record<number, ILotteryRound>) || undefined,
           addGiftCodesMutation: (giftCodes) =>
             addGiftCodesMutation.mutate(giftCodes),
+          addClaimRequestMutation: (claim) => 
+            addClaimRequestMutation.mutate(claim),
           removeUsedGiftCodesMutation: (userAddress) =>
             removeUsedGiftCodesMutation.mutate({ userAddress: userAddress }),
           sendTicketQueueMutation: (ticketQueue) =>
