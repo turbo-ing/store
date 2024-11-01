@@ -16,25 +16,93 @@ export default function PreviousRounds() {
   const { getRoundsInfosQuery } = useContext(LotteryContext);
 
   const [page, setPage] = useState<number>(0);
-  const [roundInfos, setRoundInfos] = useState<ILotteryRound[] | undefined>(
-    undefined
-  );
+  // const [roundInfos, setRoundInfos] = useState<ILotteryRound[] | undefined>(
+  //   undefined,
+  // );
+  //
+  // const roundsToShow = Array.from(
+  //   { length: ROUNDS_PER_PAGE },
+  //   (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE,
+  // ).filter((x) => x >= 0);
+  // const roundInfosData = getRoundsInfosQuery(roundsToShow, {
+  //   refetchInterval: 5000,
+  // });
+  //
+  // useEffect(() => {
+  //   if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
+  //
+  //   const roundInfos = roundInfosData!;
+  //   setRoundInfos(Object.values(roundInfos));
+  // }, [roundInfosData, chainStore.block?.slotSinceGenesis]);
 
-  const roundsToShow = Array.from(
-    { length: ROUNDS_PER_PAGE },
-    (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE
-  ).filter((x) => x >= 0);
-  const roundInfosData = getRoundsInfosQuery(roundsToShow, {
-    refetchInterval: 5000,
-  });
-
-  useEffect(() => {
-    if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
-
-    const roundInfos = roundInfosData!;
-    console.log("ROund infoss", roundInfos);
-    setRoundInfos(Object.values(roundInfos));
-  }, [roundInfosData, chainStore.block?.slotSinceGenesis]);
+  const DEBUG_TICKETS_ADDRESS = '":::::::WRITE YOUR ADDRESS!!!:::::"';
+  const roundInfos: ILotteryRound[] = [
+    {
+      id: 1,
+      bank: 121n,
+      winningCombination: undefined,
+      plotteryAddress: "1",
+      randomManagerAddress: "",
+      tickets: [
+        {
+          amount: 1n,
+          numbers: [1, 1, 1, 1, 1],
+          owner: DEBUG_TICKETS_ADDRESS,
+          claimed: false,
+          funds: 0n,
+          hash: "12",
+        },
+        {
+          amount: 1n,
+          numbers: [1, 1, 1, 1, 1],
+          owner: DEBUG_TICKETS_ADDRESS,
+          claimed: false,
+          funds: 0n,
+          hash: "12",
+        },
+        {
+          amount: 1n,
+          numbers: [1, 1, 1, 1, 1],
+          owner: DEBUG_TICKETS_ADDRESS,
+          claimed: false,
+          funds: 0n,
+          hash: "12",
+        },
+        {
+          amount: 1n,
+          numbers: [1, 1, 1, 1, 1],
+          owner: DEBUG_TICKETS_ADDRESS,
+          claimed: false,
+          funds: 0n,
+          hash: "12",
+        },
+        {
+          amount: 1n,
+          numbers: [1, 1, 1, 1, 1],
+          owner: DEBUG_TICKETS_ADDRESS,
+          claimed: false,
+          funds: 0n,
+          hash: "12",
+        },
+        {
+          amount: 1n,
+          numbers: [1, 1, 1, 1, 1],
+          owner: DEBUG_TICKETS_ADDRESS,
+          claimed: false,
+          funds: 0n,
+          hash: "12",
+        },
+        {
+          amount: 1n,
+          numbers: [1, 1, 1, 1, 1],
+          owner: DEBUG_TICKETS_ADDRESS,
+          claimed: false,
+          funds: 0n,
+          hash: "12",
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="">
@@ -66,7 +134,6 @@ export default function PreviousRounds() {
             </button>
             <div className={"grid w-full grid-cols-2 gap-[1.042vw]"}>
               {chainStore.block &&
-                
                 chainStore.block?.slotSinceGenesis > 0 &&
                 lotteryStore.onchainState?.startBlock &&
                 roundInfos.map((round, index) => (
@@ -78,23 +145,23 @@ export default function PreviousRounds() {
                         Date.now() -
                           (Number(
                             chainStore.block?.slotSinceGenesis! -
-                              lotteryStore.onchainState?.startBlock!
+                              lotteryStore.onchainState?.startBlock!,
                           ) -
                             round.id * BLOCK_PER_ROUND) *
                             3 *
                             60 *
-                            1000
+                            1000,
                       ),
                       end: new Date(
                         Date.now() -
                           (Number(
                             chainStore.block?.slotSinceGenesis! -
-                              lotteryStore.onchainState?.startBlock!
+                              lotteryStore.onchainState?.startBlock!,
                           ) -
                             (round.id + 1) * BLOCK_PER_ROUND) *
                             3 *
                             60 *
-                            1000
+                            1000,
                       ),
                     }}
                   />

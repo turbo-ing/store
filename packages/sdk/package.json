@@ -99,6 +99,7 @@
     "./components/shared/ConnectWalletModal": "./components/shared/ConnectWalletModal/index.ts",
     "./components/shared/ChooseWalletProviderModal": "./components/shared/ChooseWalletProviderModal/index.ts",
     "./components/shared/CustomScrollbar": "./components/shared/CustomScrollbar/index.ts",
+    "./components/shared/Scrollbar": "./components/shared/Scrollbar/index.ts",
     "./components/shared/misc/svg": "./components/shared/misc/svg.tsx",
 
     "./components/framework/GameWidget/ui/Leaderboard": "./components/framework/GameWidget/ui/Leaderboard.tsx",
