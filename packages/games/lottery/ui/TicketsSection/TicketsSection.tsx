@@ -16,6 +16,7 @@ import NoUserGiftCodes from "./GiftCodes/NoUserGiftCodes";
 import BuyGiftCodesCounter from "./GiftCodes/BuyGiftCodesCounter";
 import { VoucherMode } from "./lib/voucherMode";
 import LotteryContext from "../../lib/contexts/LotteryContext";
+import { useGiftCodes } from "../../stores/giftCodes";
 
 interface TicketInfo {
   amount: number;
@@ -27,7 +28,9 @@ export default function TicketsSection() {
   const lotteryStore = useWorkerClientStore();
   const roundsStore = useRoundsStore();
   const notificationStore = useNotificationStore();
-  const { userGiftCodes } = useContext(LotteryContext);
+  const { giftCodes } = useGiftCodes();
+
+  console.log('Gift codes', giftCodes);
 
   const [tickets, setTickets] = useState<TicketInfo[]>([]);
   const [blankTicket, setBlankTicket] = useState<boolean>(true);
@@ -189,7 +192,7 @@ export default function TicketsSection() {
                           <BoughtGiftCodes giftCodes={boughtGiftCodes} />
                         )}
                       {voucherMode == VoucherMode.List &&
-                        userGiftCodes.length == 0 && (
+                        giftCodes.length == 0 && (
                           <NoUserGiftCodes
                             setVoucherMode={() =>
                               setVoucherMode(VoucherMode.Buy)
@@ -197,8 +200,8 @@ export default function TicketsSection() {
                           />
                         )}
                       {voucherMode == VoucherMode.List &&
-                        userGiftCodes.length != 0 && (
-                          <OwnedGiftCodes userGiftCodes={userGiftCodes} />
+                        giftCodes.length != 0 && (
+                          <OwnedGiftCodes userGiftCodes={giftCodes} />
                         )}
                     </div>
                   )}
@@ -339,7 +342,6 @@ export default function TicketsSection() {
                       setVoucherMode={setVoucherMode}
                       giftCodeToBuyAmount={giftCodeToBuyAmount}
                       setGiftCodeToBuyAmount={setGiftCodeToBuyAmount}
-                      setBoughtGiftCodes={setBoughtGiftCodes}
                       giftCode={giftCode}
                     />
                     {/*<GetMoreTicketsButton*/}

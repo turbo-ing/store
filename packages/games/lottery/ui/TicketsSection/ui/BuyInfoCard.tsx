@@ -14,6 +14,7 @@ import { VoucherMode } from "../../../ui/TicketsSection/lib/voucherMode";
 import * as crypto from "crypto";
 import { Poseidon, PublicKey, CircuitString } from "o1js";
 import LotteryContext from "../../../lib/contexts/LotteryContext";
+import { useGiftCodes } from "../../../stores/giftCodes";
 
 export default function BuyInfoCard({
   buttonActive,
@@ -24,7 +25,6 @@ export default function BuyInfoCard({
   setVoucherMode,
   giftCodeToBuyAmount,
   setGiftCodeToBuyAmount,
-  setBoughtGiftCodes,
   giftCode,
 }: {
   buttonActive: ReactNode;
@@ -38,17 +38,14 @@ export default function BuyInfoCard({
   setVoucherMode: (mode: VoucherMode) => void;
   giftCodeToBuyAmount: number;
   setGiftCodeToBuyAmount: (amount: number) => void;
-  setBoughtGiftCodes: (codes: string[]) => void;
   giftCode: string;
 }) {
   const workerStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
-  const chain = useChainStore();
   const notificationStore = useNotificationStore();
   const {
     addGiftCodesMutation,
     sendTicketQueueMutation,
-    useGiftCodeMutation,
     roundInfo
   } = useContext(LotteryContext);
 
@@ -67,6 +64,7 @@ export default function BuyInfoCard({
     Number(minaBalancesStore.balances[networkStore.address!] ?? 0n) /
     10 ** 9
   ).toFixed(2);
+  const giftCodesStore = useGiftCodes();
 
   const buyTicket = async () => {
     const txJson = await workerStore.buyTicket(
@@ -113,7 +111,7 @@ export default function BuyInfoCard({
 
       const addedCodes = {
         userAddress: networkStore.address,
-        transactionHash: '',
+        paymentHash: '',
         signature: '',
         codes
       };
@@ -136,10 +134,17 @@ export default function BuyInfoCard({
         amount: parseFloat(formatUnits(totalPrice)),
       });
 
-      addedCodes.transactionHash = tx.hash;
+      addedCodes.paymentHash = tx.hash;
 
       addGiftCodesMutation(addedCodes);
-      setBoughtGiftCodes(codes);
+      giftCodesStore.addGiftCodes(addedCodes.codes.map(x => ({
+        code: x,
+        used: false,
+        approved: false,
+        deleted: false,
+        createdAt: Date.now()      
+      })));
+
       setGiftCodeToBuyAmount(1);
       setVoucherMode(VoucherMode.BuySuccess);
       notificationStore.create({
@@ -167,7 +172,6 @@ export default function BuyInfoCard({
       roundId: workerStore.lotteryRoundId,
       ticket: { numbers: ticketsInfo[0].numbers },
     });
-    useGiftCodeMutation(giftCode);
     setVoucherMode(VoucherMode.Closed);
     clearTickets();
     notificationStore.create({

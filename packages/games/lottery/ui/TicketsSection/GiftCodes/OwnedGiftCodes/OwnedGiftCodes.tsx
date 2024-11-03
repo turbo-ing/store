@@ -1,17 +1,19 @@
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
-import { useContext } from "react";
-import LotteryContext from "../../../../lib/contexts/LotteryContext";
+import { useContext, useEffect, useState } from "react";
+import LotteryContext, { IGiftCodeCheckResult } from "../../../../lib/contexts/LotteryContext";
+import { GiftCode, useGiftCodes } from "../../../../stores/giftCodes";
 
 export default function OwnedGiftCodes({
   userGiftCodes,
 }: {
-  userGiftCodes: { code: string; used: boolean; createdAt: string }[];
+  userGiftCodes: GiftCode[];
 }) {
   const notificationStore = useNotificationStore();
-  const networkStore = useNetworkStore();
-  const { removeUsedGiftCodesMutation } = useContext(LotteryContext);
+  const codesStore = useGiftCodes();
+  const lotteryContext = useContext(LotteryContext);
+
   const copyCodes = (giftCode: string | string[]) => {
     const codes = giftCode.toString().replaceAll(",", ", ");
     navigator.clipboard.writeText(codes);
@@ -20,6 +22,16 @@ export default function OwnedGiftCodes({
       message: "Copied!",
     });
   };
+
+  useEffect(() => {
+      lotteryContext.checkGiftCodesQuery(
+        codesStore.giftCodes.map((x) => x.code)
+      ).then(giftCodes => {
+        if (giftCodes)
+          codesStore.updateGiftCodes(giftCodes);
+      });
+  }, [codesStore.giftCodes]);
+
   return (
     <div className={"flex h-full flex-col gap-[0.521vw] p-[0.521vw]"}>
       <span className={"w-full font-plexsans text-[0.729vw] text-foreground"}>
@@ -73,10 +85,10 @@ export default function OwnedGiftCodes({
                 "my-auto font-plexsans text-[0.729vw] text-foreground",
                 {
                   "text-[#FF5B23]": item.used,
-                },
+                }
               )}
             >
-              {item.used ? "Used" : "Available"}
+              {!item.approved ? "Payment confirmation" : item.used ? 'Used': 'Active'}
             </span>
             {!item.used && (
               <button
@@ -98,11 +110,7 @@ export default function OwnedGiftCodes({
           }
           disabled={!userGiftCodes.find((item) => item.used)}
           onClick={() => {
-            removeUsedGiftCodesMutation(networkStore.address || "");
-            notificationStore.create({
-              type: "success",
-              message: "Successfully deleted used codes",
-            });
+            codesStore.removeGiftCodes([]);
           }}
         >
           Delete all used codes

@@ -67,6 +67,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
 
       console.log("Onchain state", onchainState);
 
+      if (!onchainState) return
+
       await workerClientStore.setOnchainState(onchainState);
 
       if (chainStore.block?.slotSinceGenesis) {
