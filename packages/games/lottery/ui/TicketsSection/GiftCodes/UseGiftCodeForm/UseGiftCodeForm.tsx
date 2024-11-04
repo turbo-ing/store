@@ -49,7 +49,7 @@ export default function UseGiftCodeForm({
           return errors;
         }}
       >
-        {({ errors, touched }) => (
+        {({ errors, values }) => (
           <Form
             className={
               "flex w-[80%] flex-row items-center justify-start gap-[0.521vw]"
@@ -106,7 +106,7 @@ export default function UseGiftCodeForm({
                     </span>
                   </motion.div>
                 )}
-                {!errors.giftCode && (
+                {!errors.giftCode && values.giftCode && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
