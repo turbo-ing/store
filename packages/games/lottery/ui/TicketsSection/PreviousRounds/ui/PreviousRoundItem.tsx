@@ -4,7 +4,6 @@ import { Currency } from "@zknoid/sdk/constants/currency";
 import { TicketItem } from "./TicketItem";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
 import { cn } from "@zknoid/sdk/lib/helpers";
-import Scrollbar from "@zknoid/sdk/components/shared/Scrollbar";
 import { useEffect, useRef, useState } from "react";
 import { ILotteryRound } from "../../../../lib/types";
 import { TICKET_PRICE } from "l1-lottery-contracts";
@@ -56,14 +55,14 @@ export default function PreviousRoundItem({
     round.tickets
       .filter((x) => !x.numbers.every((x) => x == 0))
       .map((x) => x.amount)
-      .reduce((x, y) => x + y, 0n) * TICKET_PRICE.toBigInt(),
+      .reduce((x, y) => x + y, 0n) * TICKET_PRICE.toBigInt()
   );
   const ticketsAmount = Number(
-    round.tickets.map((x) => x.amount).reduce((x, y) => x + y, 0n),
+    round.tickets.map((x) => x.amount).reduce((x, y) => x + y, 0n)
   );
 
   const userTickets = round.tickets.filter(
-    (x) => x.owner == networkStore.address,
+    (x) => x.owner == networkStore.address
   );
 
   const scrollHeight = ticketsListRef?.current?.scrollHeight || 0;
@@ -120,7 +119,7 @@ export default function PreviousRoundItem({
         <div
           className={cn(
             " flex flex-col gap-[0.5vw] font-plexsans text-[0.7vw] font-medium text-foreground",
-            { "mb-[1.563vw]": userTickets?.length !== 0 },
+            { "mb-[1.563vw]": userTickets?.length !== 0 }
           )}
         >
           <div
@@ -205,9 +204,17 @@ export default function PreviousRoundItem({
             </div>
             <div className={"flex w-full flex-row gap-[0.5vw]"}>
               <div
-                className={
-                  "flex max-h-[200px] w-full flex-col overflow-y-scroll no-scrollbar"
-                }
+                className={cn(
+                  "flex max-h-[200px] w-full flex-col overflow-y-scroll y-scrollbar",
+                  "[&::-webkit-scrollbar]:w-4",
+                  "[&::-webkit-scrollbar-track]:bg-[#252525]",
+                  "[&::-webkit-scrollbar-thumb]:bg-left-accent",
+                  "[&::-webkit-scrollbar-thumb]:rounded-[0.26vw]",
+                  "[&::-webkit-scrollbar-track]:outline",
+                  "[&::-webkit-scrollbar-track]:outline-left-accent",
+                  "[&::-webkit-scrollbar-track]:rounded-[0.26vw]",
+                  scrollHeight > clientHeight && "pr-[0.5vw]"
+                )}
                 ref={ticketsListRef}
               >
                 {userTickets.map((item, index) => (
@@ -220,13 +227,10 @@ export default function PreviousRoundItem({
                     funds={Number(item.funds)}
                     amount={Number(item.amount)}
                     claimed={item.claimed}
-                    claimHash={item.claimHash || ''}
+                    claimHash={item.claimHash || ""}
                   />
                 ))}
               </div>
-              {scrollHeight > clientHeight && (
-                <Scrollbar containerRef={ticketsListRef} />
-              )}
             </div>
           </div>
         )}
