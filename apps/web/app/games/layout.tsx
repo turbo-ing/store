@@ -112,6 +112,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               giftCode: ticketQueue.giftCode,
               roundId: ticketQueue.roundId,
               ticket: ticketQueue.ticket,
+              signature: ticketQueue.signature
             }),
           async checkGiftCodesQuery(codes) {
             const data = await vanilaApi.giftCodes.checkGiftCodes.query({

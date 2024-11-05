@@ -165,12 +165,19 @@ export default function BuyInfoCard({
     }
   };
 
-  const sendTicketQueue = () => {
+  const sendTicketQueue = async () => {
+    const dataToSign = Poseidon.hashPacked(CircuitString, CircuitString.fromString(giftCode)); 
+
+    const response = await (window as any).mina.signFields({
+      message: [dataToSign.toString()],
+    });
+
     sendTicketQueueMutation({
       userAddress: networkStore.address || "",
       giftCode: giftCode,
       roundId: workerStore.lotteryRoundId,
       ticket: { numbers: ticketsInfo[0].numbers },
+      signature: response.signature
     });
     setVoucherMode(VoucherMode.Closed);
     clearTickets();

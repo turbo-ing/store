@@ -19,6 +19,7 @@ interface ITicketQueue {
   ticket: {
     numbers: number[];
   };
+  signature: string;
 }
 
 interface ILotteryContext {

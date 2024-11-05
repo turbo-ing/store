@@ -52,6 +52,7 @@ export const giftCodesRouter = createTRPCRouter({
         ticket: z.object({
           numbers: z.array(z.number()),
         }),
+        signature: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -63,6 +64,7 @@ export const giftCodesRouter = createTRPCRouter({
         roundId: input.roundId,
         ticket: input.ticket,
         createdAt: new Date().toISOString(),
+        signature: input.signature,
       });
     }),
 });
