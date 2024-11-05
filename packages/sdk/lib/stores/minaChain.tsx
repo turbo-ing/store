@@ -84,6 +84,9 @@ export const useChainStore = create<ChainState, [["zustand/immer", never]]>(
       );
 
       const { data } = (await response.json()) as BlockQueryResponse;
+      if (!data) {
+        return;
+      }
       const height = data.bestChain[0].protocolState.consensusState.blockHeight;
       const slotSinceGenesis =
         data.bestChain[0].protocolState.consensusState.slotSinceGenesis;

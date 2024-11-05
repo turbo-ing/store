@@ -5,9 +5,13 @@ interface IAddedGiftCodes {
   userAddress: string;
   codes: string[];
   signature: string;
-  transactionHash: string;
+  paymentHash: string;
 }
-
+export interface IGiftCodeCheckResult {
+  code: string;
+  used: boolean;
+  approved: boolean;
+}
 interface ITicketQueue {
   userAddress: string;
   giftCode: string;
@@ -15,31 +19,30 @@ interface ITicketQueue {
   ticket: {
     numbers: number[];
   };
+  signature: string;
 }
 
 interface ILotteryContext {
   roundInfo: ILotteryRound | undefined;
   minaEvents: any | undefined;
-  userGiftCodes: { code: string; used: boolean; createdAt: string }[];
   getRoundsInfosQuery: (
     roundsIds: number[],
-    params?: { refetchInterval?: number | false },
+    params?: { refetchInterval?: number | false }
   ) => Record<number, ILotteryRound> | undefined;
+  checkGiftCodesQuery: (
+    codes: string[],
+  ) => Promise<IGiftCodeCheckResult[] | undefined>;
   addGiftCodesMutation: (giftCodes: IAddedGiftCodes) => void;
-  removeUsedGiftCodesMutation: (userAddress: string) => void;
   sendTicketQueueMutation: (ticketQueue: ITicketQueue) => void;
-  useGiftCodeMutation: (giftCode: string) => void;
 }
 
 const LotteryContext = createContext<ILotteryContext>({
   roundInfo: undefined,
   minaEvents: undefined,
-  userGiftCodes: [],
   getRoundsInfosQuery: () => undefined,
-  addGiftCodesMutation: () => {},
-  removeUsedGiftCodesMutation: () => {},
-  sendTicketQueueMutation: () => {},
-  useGiftCodeMutation: () => {},
+  addGiftCodesMutation: async () => {},
+  sendTicketQueueMutation: async () => {},
+  checkGiftCodesQuery: async () => undefined,
 });
 
 export default LotteryContext;

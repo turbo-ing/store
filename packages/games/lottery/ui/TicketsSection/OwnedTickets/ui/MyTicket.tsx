@@ -195,7 +195,7 @@ export default function MyTicket({
   funds,
   claimed,
   roundId,
-  hash = '5JvDnBiYQ4m3j8mLSJEYtpPJQ75V9wGqo93M1Bjnu2ooNrtrKSGQ',
+  hash,
 }: {
   plotteryAddress: string;
   isOpen: boolean;

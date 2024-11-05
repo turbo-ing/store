@@ -13,9 +13,9 @@ import UseGiftCodeForm from "./GiftCodes/UseGiftCodeForm";
 import ValidGiftCode from "./GiftCodes/ValidGiftCode";
 import BuyGiftCodesCounter from "./GiftCodes/BuyGiftCodesCounter";
 import { VoucherMode } from "./lib/voucherMode";
-import LotteryContext from "../../lib/contexts/LotteryContext";
 import Image from "next/image";
 import noCodesImg from "../../images/no-gift-codes.svg";
+import { useGiftCodes } from "../../stores/giftCodes";
 
 interface TicketInfo {
   amount: number;
@@ -27,12 +27,14 @@ export default function TicketsSection() {
   const lotteryStore = useWorkerClientStore();
   const roundsStore = useRoundsStore();
   const notificationStore = useNotificationStore();
-  const { userGiftCodes } = useContext(LotteryContext);
+  const { giftCodes } = useGiftCodes();
+
+  console.log("Gift codes", giftCodes);
 
   const [tickets, setTickets] = useState<TicketInfo[]>([]);
   const [blankTicket, setBlankTicket] = useState<boolean>(true);
   const [voucherMode, setVoucherMode] = useState<VoucherMode>(
-    VoucherMode.Closed,
+    VoucherMode.Closed
   );
   const [giftCode, setGiftCode] = useState<string>("");
   const [giftCodeToBuyAmount, setGiftCodeToBuyAmount] = useState<number>(1);
@@ -61,7 +63,7 @@ export default function TicketsSection() {
           "gap-[2.604vw]":
             hasOwnedTickets ||
             roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
-        },
+        }
       )}
     >
       <div className="">
@@ -96,7 +98,7 @@ export default function TicketsSection() {
                           "flex w-[22.5vw] cursor-pointer flex-row items-center justify-center gap-[0.781vw] rounded-[0.521vw] bg-right-accent py-[0.365vw] hover:opacity-80 disabled:cursor-default disabled:hover:opacity-100",
                           {
                             "rounded-b-none": voucherMode != VoucherMode.Closed,
-                          },
+                          }
                         )}
                         onClick={() => setVoucherMode(VoucherMode.Use)}
                         disabled={voucherMode != VoucherMode.Closed}
@@ -157,17 +159,8 @@ export default function TicketsSection() {
                         giftCodeToBuyAmount={giftCodeToBuyAmount}
                         setGiftCodeToBuyAmount={setGiftCodeToBuyAmount}
                       />
-                      {userGiftCodes.length > 0 ? (
-                        <BoughtGiftCodes
-                          giftCodes={userGiftCodes.map((item) => {
-                            return {
-                              code: item.code,
-                              used: item.used,
-                              createdAt: item.createdAt,
-                              pending: false,
-                            };
-                          })}
-                        />
+                      {giftCodes.length > 0 ? (
+                        <BoughtGiftCodes />
                       ) : (
                         <div
                           className={

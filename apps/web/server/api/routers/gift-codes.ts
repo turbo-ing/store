@@ -7,16 +7,20 @@ const client = await clientPromise;
 const db = client?.db(process.env.BACKEND_MONGODB_DB);
 
 export const giftCodesRouter = createTRPCRouter({
-  getUserGiftCodes: publicProcedure
-    .input(z.object({ userAddress: z.string() }))
+  checkGiftCodes: publicProcedure
+    .input(z.object({ giftCodes: z.string().array() }))
     .query(async ({ input }) => {
       if (!db) return;
 
       return {
-        giftCodes: await db
+        giftCodes: (await db
           .collection("gift-codes")
-          .find({ userAddress: input.userAddress, deleted: false })
-          .toArray(),
+          .find({ code: {$in: input.giftCodes} })
+          .toArray()).map(x => ({
+            code: x.code,
+            used: x.used,
+            approved: true
+          })),
       };
     }),
   addGiftCodes: publicProcedure
@@ -25,7 +29,7 @@ export const giftCodesRouter = createTRPCRouter({
         userAddress: z.string(),
         codes: z.string().array(),
         signature: z.string(),
-        transactionHash: z.string(),
+        paymentHash: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -33,42 +37,11 @@ export const giftCodesRouter = createTRPCRouter({
 
       await db.collection("gift-codes-requested").insertOne({
         userAddress: input.userAddress,
-        transactionHash: input.transactionHash,
+        paymentHash: input.paymentHash,
         codes: input.codes,
         signature: input.signature, 
         createdAt: new Date().toISOString(),
       });
-    }),
-  checkGiftCodeValidity: publicProcedure
-    .input(z.object({ code: z.string() }))
-    .query(async ({ input }) => {
-      if (!db) return;
-
-      const code = await db
-        .collection("gift-codes")
-        .findOne({ code: input.code, used: false, deleted: false });
-      return !!code;
-    }),
-  useGiftCode: publicProcedure
-    .input(z.object({ giftCode: z.string() }))
-    .mutation(async ({ input }) => {
-      if (!db) return;
-
-      await db
-        .collection("gift-codes")
-        .updateOne({ code: input.giftCode }, { $set: { used: true } });
-    }),
-  removeUsedGiftCodes: publicProcedure
-    .input(z.object({ userAddress: z.string() }))
-    .mutation(async ({ input }) => {
-      if (!db) return;
-
-      await db
-        .collection("gift-codes")
-        .updateMany(
-          { userAddress: input.userAddress, used: true },
-          { $set: { deleted: true } }
-        );
     }),
   sendTicketQueue: publicProcedure
     .input(
@@ -79,6 +52,7 @@ export const giftCodesRouter = createTRPCRouter({
         ticket: z.object({
           numbers: z.array(z.number()),
         }),
+        signature: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -90,6 +64,7 @@ export const giftCodesRouter = createTRPCRouter({
         roundId: input.roundId,
         ticket: input.ticket,
         createdAt: new Date().toISOString(),
+        signature: input.signature,
       });
     }),
 });

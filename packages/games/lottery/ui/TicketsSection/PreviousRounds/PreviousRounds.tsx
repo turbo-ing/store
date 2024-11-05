@@ -16,93 +16,24 @@ export default function PreviousRounds() {
   const { getRoundsInfosQuery } = useContext(LotteryContext);
 
   const [page, setPage] = useState<number>(0);
-  // const [roundInfos, setRoundInfos] = useState<ILotteryRound[] | undefined>(
-  //   undefined,
-  // );
-  //
-  // const roundsToShow = Array.from(
-  //   { length: ROUNDS_PER_PAGE },
-  //   (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE,
-  // ).filter((x) => x >= 0);
-  // const roundInfosData = getRoundsInfosQuery(roundsToShow, {
-  //   refetchInterval: 5000,
-  // });
-  //
-  // useEffect(() => {
-  //   if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
-  //
-  //   const roundInfos = roundInfosData!;
-  //   setRoundInfos(Object.values(roundInfos));
-  // }, [roundInfosData, chainStore.block?.slotSinceGenesis]);
-
-  const DEBUG_TICKETS_ADDRESS = '":::::::WRITE YOUR ADDRESS!!!:::::"';
-  const roundInfos: ILotteryRound[] = [
-    {
-      id: 1,
-      bank: 121n,
-      winningCombination: undefined,
-      plotteryAddress: "1",
-      randomManagerAddress: "",
-      tickets: [
-        {
-          amount: 1n,
-          numbers: [1, 1, 1, 1, 1],
-          owner: DEBUG_TICKETS_ADDRESS,
-          claimed: false,
-          funds: 0n,
-          hash: "12",
-        },
-        {
-          amount: 1n,
-          numbers: [1, 1, 1, 1, 1],
-          owner: DEBUG_TICKETS_ADDRESS,
-          claimed: false,
-          funds: 0n,
-          hash: "12",
-        },
-        {
-          amount: 1n,
-          numbers: [1, 1, 1, 1, 1],
-          owner: DEBUG_TICKETS_ADDRESS,
-          claimed: false,
-          funds: 0n,
-          hash: "12",
-        },
-        {
-          amount: 1n,
-          numbers: [1, 1, 1, 1, 1],
-          owner: DEBUG_TICKETS_ADDRESS,
-          claimed: false,
-          funds: 0n,
-          hash: "12",
-        },
-        {
-          amount: 1n,
-          numbers: [1, 1, 1, 1, 1],
-          owner: DEBUG_TICKETS_ADDRESS,
-          claimed: false,
-          funds: 0n,
-          hash: "12",
-        },
-        {
-          amount: 1n,
-          numbers: [1, 1, 1, 1, 1],
-          owner: DEBUG_TICKETS_ADDRESS,
-          claimed: false,
-          funds: 0n,
-          hash: "12",
-        },
-        {
-          amount: 1n,
-          numbers: [1, 1, 1, 1, 1],
-          owner: DEBUG_TICKETS_ADDRESS,
-          claimed: false,
-          funds: 0n,
-          hash: "12",
-        },
-      ],
-    },
-  ];
+  const [roundInfos, setRoundInfos] = useState<ILotteryRound[] | undefined>(
+    undefined,
+  );
+  
+  const roundsToShow = Array.from(
+    { length: ROUNDS_PER_PAGE },
+    (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE,
+  ).filter((x) => x >= 0);
+  const roundInfosData = getRoundsInfosQuery(roundsToShow, {
+    refetchInterval: 5000,
+  });
+  
+  useEffect(() => {
+    if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
+  
+    const roundInfos = roundInfosData!;
+    setRoundInfos(Object.values(roundInfos));
+  }, [roundInfosData, chainStore.block?.slotSinceGenesis]);
 
   return (
     <div className="">

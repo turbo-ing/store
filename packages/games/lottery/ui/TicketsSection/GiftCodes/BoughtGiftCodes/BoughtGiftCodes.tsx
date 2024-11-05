@@ -4,20 +4,11 @@ import { cn } from "@zknoid/sdk/lib/helpers";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { useContext } from "react";
 import LotteryContext from "../../../../lib/contexts/LotteryContext";
+import { useGiftCodes } from "../../../../stores/giftCodes";
 
-export default function BoughtGiftCodes({
-  giftCodes,
-}: {
-  giftCodes: {
-    code: string;
-    used: boolean;
-    createdAt: string;
-    pending: boolean;
-  }[];
-}) {
+export default function BoughtGiftCodes() {
   const notificationStore = useNotificationStore();
-  const networkStore = useNetworkStore();
-  const { removeUsedGiftCodesMutation } = useContext(LotteryContext);
+  const { removeGiftCodes, giftCodes } = useGiftCodes();
   const copyCodes = (giftCode: string | string[]) => {
     const codes = giftCode.toString().replaceAll(",", ", ");
     navigator.clipboard.writeText(codes);
@@ -56,7 +47,7 @@ export default function BoughtGiftCodes({
                   "w-full flex justify-start items-center gap-[0.26vw]"
                 }
               >
-                {item.pending ? (
+                {!item.approved ? (
                   <svg
                     width="15"
                     height="15"
@@ -94,14 +85,14 @@ export default function BoughtGiftCodes({
                     "text-[0.625vw] font-plexsans",
                     item.used
                       ? "text-[#FF5B23]"
-                      : item.pending
+                      : !item.approved
                         ? "text-right-accent"
                         : "text-foreground",
                   )}
                 >
                   {item.used
                     ? "Used"
-                    : item.pending
+                    : !item.approved
                       ? "Payment processing"
                       : "Ready to use"}
                 </span>
@@ -117,7 +108,7 @@ export default function BoughtGiftCodes({
           }
           disabled={!giftCodes.find((item) => item.used)}
           onClick={() => {
-            removeUsedGiftCodesMutation(networkStore.address || "");
+            removeGiftCodes(giftCodes.filter((item) => item.used).map(x => x.code));
             notificationStore.create({
               type: "success",
               message: "Successfully deleted used codes",
