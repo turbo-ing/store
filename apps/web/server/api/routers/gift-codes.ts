@@ -18,7 +18,7 @@ export const giftCodesRouter = createTRPCRouter({
           .find({ code: {$in: input.giftCodes} })
           .toArray()).map(x => ({
             code: x.code,
-            used: !!x.transactionHash,
+            used: !!x.buyTxHash,
             approved: true
           })),
       };
