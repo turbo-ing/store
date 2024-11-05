@@ -2,13 +2,16 @@ import BoughtGiftCodeItem from "./ui/BoughtGiftCodeItem";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import LotteryContext from "../../../../lib/contexts/LotteryContext";
 import { useGiftCodes } from "../../../../stores/giftCodes";
 
 export default function BoughtGiftCodes() {
   const notificationStore = useNotificationStore();
   const { removeGiftCodes, giftCodes } = useGiftCodes();
+  const lotteryContext = useContext(LotteryContext);
+  const codesStore = useGiftCodes();
+
   const copyCodes = (giftCode: string | string[]) => {
     const codes = giftCode.toString().replaceAll(",", ", ");
     navigator.clipboard.writeText(codes);
@@ -17,6 +20,15 @@ export default function BoughtGiftCodes() {
       message: "Copied!",
     });
   };
+
+  useEffect(() => {
+      lotteryContext.checkGiftCodesQuery(
+        codesStore.giftCodes.map((x) => x.code)
+      ).then(giftCodes => {
+        if (giftCodes)
+          codesStore.updateGiftCodes(giftCodes);
+      });
+  }, [codesStore.giftCodes]);
 
   return (
     <div
