@@ -6,7 +6,7 @@ import Loader from '@zknoid/sdk/components/shared/Loader';
 import { formatUnits } from '@zknoid/sdk/lib/unit';
 import { useContext, useState } from 'react';
 import Link from 'next/link';
-import LotteryContext from '@/lottery/lib/contexts/LotteryContext';
+import LotteryContext from '../../../../lib/contexts/LotteryContext';
 
 type Number = {
   number: number;
@@ -22,6 +22,8 @@ export function TicketItem({
   noCombination,
   claimed,
   claimHash,
+  claimRequested,
+  claimQueue
 }: {
   plotteryAddress: string,
   roundId: number;
@@ -31,6 +33,8 @@ export function TicketItem({
   noCombination: boolean;
   claimed: boolean;
   claimHash: string;
+  claimRequested: boolean | null;
+  claimQueue: number | null;
 }) {
   const workerClient = useWorkerClientStore();
   const networkStore = useNetworkStore();
@@ -85,7 +89,7 @@ export function TicketItem({
           <span>No funds</span>
         )}
       </div>
-      {!!funds && !claimed && (
+      {!!funds && !claimRequested && !claimed && (
         <button
           className={
             'flex items-center justify-center rounded-[0.33vw] bg-left-accent px-[0.74vw] py-[0.37vw] font-museo text-[0.833vw] font-medium text-black hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:opacity-60'
@@ -123,7 +127,7 @@ export function TicketItem({
           </div>
         </button>
       )}
-      {!!funds && claimed && (
+      {!!funds && !claimRequested && claimed && (
         <Link
           href={`https://minascan.io/devnet/tx/${claimHash}?type=zk-tx`}
           target={'_blank'}
@@ -135,6 +139,11 @@ export function TicketItem({
           Transaction link
         </Link>
       )}
+      {
+        claimRequested && (
+          <div> Claim requested. Queue {claimQueue} </div>
+        )
+      }
     </div>
   );
 }

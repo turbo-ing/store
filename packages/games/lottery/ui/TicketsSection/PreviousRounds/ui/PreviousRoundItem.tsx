@@ -227,6 +227,8 @@ export default function PreviousRoundItem({
                     funds={Number(item.funds)}
                     amount={Number(item.amount)}
                     claimed={item.claimed}
+                    claimRequested={item.claimRequested}
+                    claimQueue={item.claimQueue}
                     claimHash={item.claimHash || ""}
                   />
                 ))}

@@ -7,6 +7,8 @@ export interface ILotteryTicket {
   claimHash?: string;
   funds: bigint;
   hash: string;
+  claimRequested: boolean | null;
+  claimQueue: number | null;
 }
 
 export interface ILotteryRound {

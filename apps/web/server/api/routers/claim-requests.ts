@@ -19,7 +19,7 @@ export const claimRequestRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       if (!db) return;
 
-      await db.collection("claim-request").insertOne({
+      await db.collection("claim_requests").insertOne({
         userAddress: input.userAddress,
         roundId: input.roundId,
         ticketNumbers: input.ticketNumbers,

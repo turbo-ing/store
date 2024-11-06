@@ -48,6 +48,8 @@ export const lotteryBackendRouter = createTRPCRouter({
             claimHash?: string;
             funds: bigint;
             hash: string;
+            claimRequested: boolean | null;
+            claimQueue: number | null;
           }[];
           winningCombination: number[] | undefined;
           plotteryAddress: string;
@@ -71,6 +73,28 @@ export const lotteryBackendRouter = createTRPCRouter({
           randomManagerAddress: roundInfo?.randomManagerAddress,
         } as any;
       }
+
+      const claimRequestInfo = await db
+        .collection("claim_requests")
+        .find({
+          roundId: {
+            $in: input.roundIds,
+          },
+          status: "pending",
+        })
+        .toArray();
+
+      claimRequestInfo.forEach((claimRequest: any, index: number) => {
+        let ticketId = data[claimRequest.roundId].tickets.findIndex(
+          (ticket) =>
+            ticket.owner === claimRequest.userAddress &&
+            ticket.amount == claimRequest.ticketAmount &&
+            ticket.numbers.toString() == claimRequest.ticketNumbers.toString()
+        );
+
+        data[claimRequest.roundId].tickets[ticketId].claimRequested = true;
+        data[claimRequest.roundId].tickets[ticketId].claimQueue = index;
+      });
 
       return data;
     }),
