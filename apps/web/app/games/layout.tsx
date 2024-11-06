@@ -28,6 +28,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const getMinaEventsQuery = api.lotteryBackend.getMinaEvents.useQuery({});
 
   const addGiftCodesMutation = api.giftCodes.addGiftCodes.useMutation();
+  const addClaimRequestMutation = api.claimRequests.requestClaim.useMutation();
   const sendTicketQueueMutation = api.giftCodes.sendTicketQueue.useMutation();
   const getRoundsInfosQuery = api.lotteryBackend.getRoundInfos;
 
@@ -106,6 +107,8 @@ export default function Layout({ children }: { children: ReactNode }) {
               ?.data as Record<number, ILotteryRound>) || undefined,
           addGiftCodesMutation: (giftCodes) =>
             addGiftCodesMutation.mutate(giftCodes),
+          addClaimRequestMutation: (claim) => 
+            addClaimRequestMutation.mutate(claim),
           sendTicketQueueMutation: (ticketQueue) =>
             sendTicketQueueMutation.mutate({
               userAddress: ticketQueue.userAddress,

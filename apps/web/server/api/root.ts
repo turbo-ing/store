@@ -7,6 +7,7 @@ import { accountsRouter } from "./routers/accounts";
 import { giftCodesRouter } from "./routers/gift-codes";
 import { leaderboardRouter } from "./routers/leaderboard";
 import { lotteryBackendRouter } from "./routers/lottery-backend";
+import { claimRequestRouter } from "./routers/claim-requests";
 
 /**
  * This is the primary router for your server.
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   progress: progressRouter,
   accounts: accountsRouter,
   giftCodes: giftCodesRouter,
+  claimRequests: claimRequestRouter,
   leaderboard: leaderboardRouter,
   lotteryBackend: lotteryBackendRouter,
 });
