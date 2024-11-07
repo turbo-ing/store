@@ -50,11 +50,7 @@ const LotteryContext = createContext<ILotteryContext>({
   getRoundsInfosQuery: () => undefined,
   addGiftCodesMutation: () => {},
   addClaimRequestMutation: () => {},
-  removeUsedGiftCodesMutation: () => {},
   sendTicketQueueMutation: () => {},
-  useGiftCodeMutation: () => {},
-  addGiftCodesMutation: async () => {},
-  sendTicketQueueMutation: async () => {},
   checkGiftCodesQuery: async () => undefined,
 });
 
