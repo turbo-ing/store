@@ -206,6 +206,7 @@ export default function PreviousRoundItem({
               <div
                 className={cn(
                   "flex max-h-[200px] w-full flex-col overflow-y-scroll y-scrollbar",
+                  scrollHeight > clientHeight && cn(
                   "[&::-webkit-scrollbar]:w-4",
                   "[&::-webkit-scrollbar-track]:bg-[#252525]",
                   "[&::-webkit-scrollbar-thumb]:bg-left-accent",
@@ -213,7 +214,8 @@ export default function PreviousRoundItem({
                   "[&::-webkit-scrollbar-track]:outline",
                   "[&::-webkit-scrollbar-track]:outline-left-accent",
                   "[&::-webkit-scrollbar-track]:rounded-[0.26vw]",
-                  scrollHeight > clientHeight && "pr-[0.5vw]"
+                  "pr-[0.5vw]"
+                  )
                 )}
                 ref={ticketsListRef}
               >
