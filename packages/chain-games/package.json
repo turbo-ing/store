@@ -2,7 +2,7 @@
     "name": "@zknoid/chain-games",
     "version": "1.4.5",
     "type": "module",
-    "main": "dist/src/index.js",
+    "main": "dist/index.js",
     "watch": {
         "build-and-start": {
             "patterns": [
@@ -61,5 +61,9 @@
         "o1js": "1.8.0",
         "tsyringe": "^4.7.0",
         "@zknoid/chain-sdk": "workspace:*"
+    },
+    "exports": {
+        ".": "./dist/index.js",
+        "./dist/runtime": "./dist/runtime"
     }
 }
