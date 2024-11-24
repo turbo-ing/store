@@ -12,10 +12,10 @@ import {
   Field,
   Int64,
 } from 'o1js';
-import { MatchMaker } from '@zknoid/chain-sdk/dist/engine/MatchMaker';
-import type { QueueListItem } from '@zknoid/chain-sdk/dist/engine/MatchMaker';
+import { MatchMaker } from '@zknoid/chain-sdk';
+import type { QueueListItem } from '@zknoid/chain-sdk';
 import { UInt64 as ProtoUInt64 } from '@proto-kit/library';
-import { Lobby } from '@zknoid/chain-sdk/dist/engine/LobbyManager';
+import { Lobby } from '@zknoid/chain-sdk';
 
 const CHECKERS_FIELD_SIZE = 8;
 

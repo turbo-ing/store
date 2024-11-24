@@ -1,6 +1,6 @@
 import type { Field } from 'o1js';
 import { UInt64, Struct, Provable, Int64, Bool, Poseidon } from 'o1js';
-import { RandomGenerator } from '@zknoid/chain-sdk/dist';
+import { RandomGenerator } from '@zknoid/chain-sdk';
 import {
   BRICK_HALF_WIDTH,
   COLLISION_FINDING_ITERATIONS,

@@ -30,12 +30,7 @@
     "web#dev": {
       "cache": false,
       "persistent": true,
-      "outputs": [".next/**", "!.next/cache/**"],
-      "dependsOn": [
-        "@zknoid/chain-sdk#build",
-        "@zknoid/chain-games#build",
-        "zknoid-chain-dev#build"
-      ]
+      "outputs": [".next/**", "!.next/cache/**"]
     }
   }
 }

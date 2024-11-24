@@ -1,6 +1,6 @@
 import { PrivateKey, UInt64 } from 'o1js';
 import { client } from '../src';
-import { getDefaultCompetitions } from '@zknoid/chain-games/dist/arkanoid';
+import { getDefaultCompetitions } from '@zknoid/chain-games';
 
 const setDefaultGames = async () => {
   const alicePrivateKey = PrivateKey.random();
