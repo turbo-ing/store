@@ -148,11 +148,13 @@ const Connect4Game: React.FC = () => {
           ? GameState.Active
           : GameState.Waiting
       );
-      setBoard(
-        matchQueue.gameInfo.field.value.map((row: UInt32[]) =>
-          row.map((col: UInt32) => Number(col.value.toBigInt()))
-        )
-      );
+      if (matchQueue.gameInfo.field) {
+        setBoard(
+          matchQueue.gameInfo.field.value.map((row: UInt32[]) =>
+            row.map((col: UInt32) => Number(col.value.toBigInt()))
+          )
+        );
+      }
     }
   }, [matchQueue.gameInfo]);
 
