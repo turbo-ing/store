@@ -13,7 +13,7 @@ export const useStartGame = (setGameState: (state: GameState) => void) => {
   ).toPublicKey();
   const networkStore = useNetworkStore();
   return async () => {
-    const connect4Game = client.runtime.resolve('Connect4Game');
+    const connect4Game = client.runtime.resolve('Connect4');
 
     const tx = await client.transaction(
       PublicKey.fromBase58(networkStore.address!),
