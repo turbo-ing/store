@@ -160,7 +160,7 @@ export default function Randzu({
       (x: UInt32[]) => x.map((x) => x.toBigint()),
     );
 
-    updatedField[y][x] = matchQueue.gameInfo.currentUserIndex + 1;
+    updatedField[y][x] = BigInt(matchQueue.gameInfo.currentUserIndex + 1);
     // updatedField[x][y] = matchQueue.gameInfo.currentUserIndex + 1;
 
     const randzuLogic = client.runtime.resolve("RandzuLogic");

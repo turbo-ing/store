@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
+import React, { useState } from "react";
+import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import {
   useConnect4MatchQueueStore,
   useObserveConnect4MatchQueue,
-} from './stores/matchQueue';
+} from "./stores/matchQueue";
 import ZkNoidGameContext from "@zknoid/sdk/lib/contexts/ZkNoidGameContext";
-import { UInt32, UInt64 } from 'o1js';
-import { ClientAppChain } from 'zknoid-chain-dev';
-import { connect4Config } from './config';
+import { UInt32, UInt64 } from "o1js";
+import { ClientAppChain } from "zknoid-chain-dev";
+import { connect4Config } from "./config";
 import {
   useLobbiesStore,
   useObserveLobbiesStore,
 } from "@zknoid/sdk/lib/stores/lobbiesStore";
-import { useStore } from 'zustand';
-import { useSessionKeyStore } from '@zknoid/sdk/lib/stores/sessionKeyStorage';
-import { useStartGame } from './features/startGame';
+import { useStore } from "zustand";
+import { useSessionKeyStore } from "@zknoid/sdk/lib/stores/sessionKeyStorage";
+import { useStartGame } from "./features/startGame";
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
-import { useToasterStore } from '@zknoid/sdk/lib/stores/toasterStore';
-import { useRateGameStore } from '@zknoid/sdk/lib/stores/rateGameStore';
-import styles from './Game.module.css';
-import { GameWrap } from '@zknoid/sdk/components/framework/GamePage/GameWrap';
-import { Win } from '@zknoid/sdk/components/framework/GameWidget/ui/popups/Win';
-import { Lost } from '@zknoid/sdk/components/framework/GameWidget/ui/popups/Lost';
-import WaitingPopup from './components/popup/waiting';
+import { useToasterStore } from "@zknoid/sdk/lib/stores/toasterStore";
+import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
+import styles from "./Game.module.css";
+import { GameWrap } from "@zknoid/sdk/components/framework/GamePage/GameWrap";
+import { Win } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/Win";
+import { Lost } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/Lost";
+import WaitingPopup from "./components/popup/waiting";
 import { GameState } from "./lib/gameState";
 
-type Player = 1 | 2 | 'Draw' | null;
+type Player = 1 | 2 | "Draw" | null;
 
 const rows = 6;
 const cols = 6;
@@ -44,7 +44,7 @@ const Connect4Game: React.FC = () => {
   const { client } = React.useContext(ZkNoidGameContext);
 
   if (!client) {
-    throw Error('Context app chain client is not set');
+    throw Error("Context app chain client is not set");
   }
   const networkStore = useNetworkStore();
   useObserveConnect4MatchQueue();
@@ -64,14 +64,14 @@ const Connect4Game: React.FC = () => {
   useObserveLobbiesStore(query);
   const lobbiesStore = useLobbiesStore();
 
-  console.log('Active lobby', lobbiesStore.activeLobby);
+  console.log("Active lobby", lobbiesStore.activeLobby);
 
   React.useEffect(() => {
     // if (matchQueue.gameInfo?.parsed.currentCycle) {
     //     setGameState(GameState.Waiting)
     // }
 
-    console.log('Match Queue: ', matchQueue);
+    console.log("Match Queue: ", matchQueue);
 
     if (matchQueue.inQueue && !matchQueue.activeGameId) {
       setGameState(GameState.Matchmaking);
@@ -81,13 +81,13 @@ const Connect4Game: React.FC = () => {
     ) {
       setGameState(GameState.Active);
     } else {
-      if (matchQueue.lastGameState == 'win') {
+      if (matchQueue.lastGameState == "win") {
         setGameState(GameState.Won);
         setFinalState(GameState.Won);
       }
 
-      if (matchQueue.lastGameState == 'lost') {
-        console.log('LastGameState', matchQueue.lastGameState);
+      if (matchQueue.lastGameState == "lost") {
+        console.log("LastGameState", matchQueue.lastGameState);
         setGameState(GameState.Lost);
         setFinalState(GameState.Lost);
       }
@@ -104,10 +104,10 @@ const Connect4Game: React.FC = () => {
   );
 
   const makeMove = async (col: number = 2) => {
-    if (!matchQueue.gameInfo?.parsed.isCurrentUserMove) return;
-    console.log('making move', matchQueue.gameInfo);
+    if (!matchQueue.gameInfo?.isCurrentUserMove) return;
+    console.log("making move", matchQueue.gameInfo);
 
-    const Connect4 = client.runtime.resolve('Connect4');
+    const Connect4 = client.runtime.resolve("Connect4");
 
     const tx = await client.transaction(
       sessionPrivateKey.toPublicKey(),
@@ -128,28 +128,32 @@ const Connect4Game: React.FC = () => {
   };
 
   React.useEffect(() => {
+    console.log("Game info", matchQueue.gameInfo);
+
     if (matchQueue.gameInfo) {
-      console.log('BoardEffect', matchQueue.gameInfo?.parsed.board);
-      if (matchQueue.gameInfo.parsed.winner) {
-        if (matchQueue.gameInfo.parsed.winner == networkStore.address) {
-          console.log('WinnerIs', matchQueue.gameInfo.parsed.winner);
+      console.log("BoardEffect", matchQueue.gameInfo.field);
+      if (matchQueue.gameInfo.winner) {
+        if (matchQueue.gameInfo.winner.toBase58() == networkStore.address) {
+          console.log("WinnerIs", matchQueue.gameInfo.winner);
           setGameState(GameState.Won);
         } else {
-          console.log('LoserIs', matchQueue.gameInfo.parsed.winner);
+          console.log("LoserIs", matchQueue.gameInfo.winner);
           setGameState(GameState.Lost);
         }
+
+        console.log("CurrentMove", matchQueue.gameInfo.currentMoveUser);
       }
-
-      console.log('CurrentMove', matchQueue.gameInfo.parsed.currentMoveUser);
-
       setGameState(
-        matchQueue.gameInfo.parsed.isCurrentUserMove
+        matchQueue.gameInfo.isCurrentUserMove
           ? GameState.Active
           : GameState.Waiting
       );
+      setBoard(
+        matchQueue.gameInfo.field.value.map((row: UInt32[]) =>
+          row.map((col: UInt32) => Number(col.value.toBigInt()))
+        )
+      );
     }
-
-    setBoard(matchQueue.gameInfo?.parsed.board);
   }, [matchQueue.gameInfo]);
 
   const [board, setBoard] = useState<Player[][]>(
@@ -161,15 +165,13 @@ const Connect4Game: React.FC = () => {
   const [hoverCol, setHoverCol] = useState<number | null>(null);
 
   return (
-    <GamePage
-      gameConfig={connect4Config}
-    >
+    <GamePage gameConfig={connect4Config}>
       {finalState === GameState.Won && (
         <GameWrap>
           <Win
             onBtnClick={restart}
-            title={'You won! Congratulations!'}
-            btnText={'Find new game'}
+            title={"You won! Congratulations!"}
+            btnText={"Find new game"}
           />
         </GameWrap>
       )}
@@ -187,21 +189,21 @@ const Connect4Game: React.FC = () => {
                 {row.map((cell, colIndex) => (
                   <div
                     key={colIndex}
-                    className={`${styles.cell} ${hoverCol === colIndex ? styles.hoverCell : ''}`}
+                    className={`${styles.cell} ${hoverCol === colIndex ? styles.hoverCell : ""}`}
                     onClick={() => makeMove(colIndex)}
                     onMouseEnter={() => setHoverCol(colIndex)}
                     onMouseLeave={() => setHoverCol(null)}
                   >
                     <div
-                      className={`${styles.disc} ${cell === 1 ? styles.redDisc : cell === 2 ? styles.yellowDisc : ''}`}
+                      className={`${styles.disc} ${cell === 1 ? styles.redDisc : cell === 2 ? styles.yellowDisc : ""}`}
                     />
                   </div>
                 ))}
               </div>
             ))}
           </div>
-          {winner === 'Draw' && (
-            <h2 className={styles.winnerMessage + ' ' + styles.title}>
+          {winner === "Draw" && (
+            <h2 className={styles.winnerMessage + " " + styles.title}>
               It&apos;s a draw!
             </h2>
           )}

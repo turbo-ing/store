@@ -9,7 +9,7 @@ export interface MatchQueueState {
   queueLength: number;
   inQueue: boolean;
   activeGameId: bigint;
-  gameInfo: any | undefined;
+  gameInfo: IGameInfo<any> | undefined;
   lastGameState: 'win' | 'lost' | undefined;
   pendingBalance: bigint;
   getQueueLength: () => number;
@@ -132,7 +132,7 @@ export const matchQueueInitializer = immer<MatchQueueState>((set) => ({
           player1,
           player2,
           currentMoveUser: gameInfo.currentMoveUser as PublicKey,
-          field: gameInfo.field ?? gameInfo.thimblerigField, // @todo temporal workaround for proto-kit bug https://github.com/ZkNoid/proto-kit,
+          field: gameInfo.field || gameInfo.board,
           currentUserIndex,
           isCurrentUserMove: (gameInfo.currentMoveUser as PublicKey)
             .equals(address)
@@ -174,4 +174,5 @@ export interface IGameInfo<GameField> {
   isCurrentUserMove: boolean;
   opponent: PublicKey;
   gameId: bigint;
+  lastMoveBlockHeight: bigint;
 }

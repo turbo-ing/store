@@ -38,6 +38,11 @@ pnpm install
 pnpm env:inmemory dev
 ```
 
+### Running sequencer in docker
+```bash
+pnpm env:inmemory docker:up sequencer --build
+```
+
 ### Implementing your own game
 ZkNoid is a modular platform that makes it easy to implement you own game using platform infrastructure. 
 To build a game you need to create a game folder inside [packages/games](https://github.com/ZkNoid/store/tree/main/packages/games).

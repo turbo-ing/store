@@ -288,8 +288,8 @@ export default function Thimblerig({}: { params: { competitionId: string } }) {
       !matchQueue.gameInfo?.isCurrentUserMove &&
       matchQueue.activeGameId &&
       !loading &&
-      matchQueue.gameInfo.field.commitedHash.toBigInt() &&
-      !matchQueue.gameInfo.field.choice.toBigInt()
+      matchQueue.gameInfo?.field.commitedHash.toBigInt() &&
+      !matchQueue.gameInfo?.field.choice.toBigInt()
     ) {
       thimbleOpenedRef.current = undefined;
       setThimbleOpened(undefined);
@@ -305,27 +305,27 @@ export default function Thimblerig({}: { params: { competitionId: string } }) {
       !matchQueue.gameInfo?.isCurrentUserMove &&
       matchQueue.activeGameId &&
       !loading &&
-      matchQueue.gameInfo.field.commitedHash.toBigInt() &&
-      matchQueue.gameInfo.field.choice.toBigInt()
+      matchQueue.gameInfo?.field.commitedHash.toBigInt() &&
+      matchQueue.gameInfo?.field.choice.toBigInt()
     ) {
       setGameState(GameState.WaitingForReveal);
     } else {
       if (matchQueue.lastGameState == "win") {
         console.log(
           "Win, value:",
-          Number(matchQueue.gameInfo.field.value.toBigInt()),
+          Number(matchQueue.gameInfo?.field.value.toBigInt()),
         );
         console.log(
           "Win, salt:",
-          Number(matchQueue.gameInfo.field.choice.toBigInt()),
+          Number(matchQueue.gameInfo?.field.choice.toBigInt()),
         );
 
         setRevealedValue({
-          value: Number(matchQueue.gameInfo.field.value.toBigInt()) as
+          value: Number(matchQueue.gameInfo?.field.value.toBigInt()) as
             | 1
             | 2
             | 3,
-          choice: Number(matchQueue.gameInfo.field.choice.toBigInt()) as
+          choice: Number(matchQueue.gameInfo?.field.choice.toBigInt()) as
             | 1
             | 2
             | 3,
@@ -345,19 +345,19 @@ export default function Thimblerig({}: { params: { competitionId: string } }) {
       } else if (matchQueue.lastGameState == "lost") {
         console.log(
           "Lost, value:",
-          Number(matchQueue.gameInfo.field.value.toBigInt()),
+          Number(matchQueue.gameInfo?.field.value.toBigInt()),
         );
         console.log(
           "Lost, salt:",
-          Number(matchQueue.gameInfo.field.choice.toBigInt()),
+          Number(matchQueue.gameInfo?.field.choice.toBigInt()),
         );
 
         setRevealedValue({
-          value: Number(matchQueue.gameInfo.field.value.toBigInt()) as
+          value: Number(matchQueue.gameInfo?.field.value.toBigInt()) as
             | 1
             | 2
             | 3,
-          choice: Number(matchQueue.gameInfo.field.choice.toBigInt()) as
+          choice: Number(matchQueue.gameInfo?.field.choice.toBigInt()) as
             | 1
             | 2
             | 3,

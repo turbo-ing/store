@@ -18,6 +18,7 @@ export const useConnect4MatchQueueStore = create<
   [['zustand/immer', never]]
 >(matchQueueInitializer);
 
+
 export const useObserveConnect4MatchQueue = () => {
   const chain = useProtokitChainStore();
   const network = useNetworkStore();
