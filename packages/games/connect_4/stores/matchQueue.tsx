@@ -4,7 +4,7 @@ import { useProtokitChainStore } from '@zknoid/sdk/lib/stores/protokitChain';
 import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
 import ZkNoidGameContext from '@zknoid/sdk/lib/contexts/ZkNoidGameContext';
 import { connect4Config } from '../config';
-import { type ClientAppChain } from '@proto-kit/sdk';
+import { type ClientAppChain } from "zknoid-chain-dev";
 import { create } from 'zustand';
 
 import { immer } from 'zustand/middleware/immer';

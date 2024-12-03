@@ -243,7 +243,8 @@ export const useLobbiesStore = create<LobbiesState, [["zustand/immer", never]]>(
 
 export const useObserveLobbiesStore = (
   query: ModuleQuery<MatchMaker> | undefined,
-  rewardCoeff: number = 2
+  rewardCoeff: number = 2,
+  maxPlayers: number = 2
 ) => {
   const chain = useProtokitChainStore();
   const network = useNetworkStore();
@@ -264,7 +265,7 @@ export const useObserveLobbiesStore = (
         query!,
         PublicKey.fromBase58(network.address),
         rewardCoeff,
-        3
+        maxPlayers
       );
       console.log("bcl", chain.block?.height);
       if (chain.block?.height) {
