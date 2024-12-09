@@ -1,7 +1,7 @@
-import TerserPlugin from 'terser-webpack-plugin';
-import path from 'path';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import TerserPlugin from "terser-webpack-plugin";
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 // import ImageMinimizerPlugin from "image-minimizer-webpack-plugin";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,10 +12,10 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
-          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
-          { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          { key: "Cross-Origin-Embedder-Policy", value: "require-corp" },
         ],
       },
     ];
@@ -24,7 +24,7 @@ const nextConfig = {
     if (!isServer) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        o1js: path.resolve(__dirname, 'node_modules/o1js/dist/web/index.js'),
+        o1js: path.resolve(__dirname, "node_modules/o1js/dist/web/index.js"),
       };
     }
 
@@ -40,7 +40,7 @@ const nextConfig = {
       //       type: "asset",
       //     },
       //   ],
-      // },    
+      // },
       optimization: {
         minimize: true,
         minimizer: [
@@ -55,7 +55,7 @@ const nextConfig = {
               mangle: {
                 keep_classnames: true,
                 keep_fnames: true,
-              }
+              },
             },
             exclude: /node_modules/,
           }),
@@ -93,14 +93,28 @@ const nextConfig = {
     };
   },
   eslint: {
-    dirs: ['app', 'components', 'constants', 'containers', 'games', 'lib'],
+    dirs: ["app", "components", "constants", "containers", "games", "lib"],
   },
   experimental: {
     reactCompiler: true,
-    optimizePackageImports: ['@zknoid/sdk', '@zknoid/games', 'zknoid-chain-dev'],
+    optimizePackageImports: [
+      "@zknoid/sdk",
+      "@zknoid/games",
+      "zknoid-chain-dev",
+    ],
   },
   productionBrowserSourceMaps: false,
-  transpilePackages: ['@zknoid/sdk', '@zknoid/games', 'zknoid-chain-dev'],
+  transpilePackages: ["@zknoid/sdk", "@zknoid/games", "zknoid-chain-dev"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/dw4kivbv0/image/upload/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

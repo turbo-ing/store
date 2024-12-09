@@ -92,6 +92,7 @@ export default function GameCard({
       >
         <Image
           src={game.logo}
+          crossOrigin="anonymous"
           width={300}
           height={300}
           alt={game.name}
