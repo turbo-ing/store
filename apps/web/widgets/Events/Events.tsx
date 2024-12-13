@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ALL_GAME_EVENT_TYPES,
   GAME_EVENTS,
@@ -11,8 +13,9 @@ import SnakeNoEvents from "../../lib/assets/ZKNoid_Snake_Intro_03_05.json";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { motion } from "framer-motion";
 
 export const EventFilter = ({
   eventType,
@@ -44,19 +47,17 @@ export const EventFilter = ({
 export const EventItem = ({
   headText,
   description,
+  prizePool,
   event,
   image,
-  imageFullWidth = false,
   textColor = "white",
-  eventsLength,
 }: {
   headText: string;
   description: string;
+  prizePool?: { text: string; color: "left-accent" | "white" };
   event: ZkNoidEvent;
-  image?: string;
-  imageFullWidth?: boolean;
+  image: string;
   textColor?: "white" | "black";
-  eventsLength: number;
 }) => {
   const eventCounter = useEventTimer(event);
   const time = eventCounter.startsIn
@@ -66,78 +67,65 @@ export const EventItem = ({
         eventCounter.startsIn.seconds!,
       )}`
     : "";
+
   return (
-    <Link
-      href={event.link}
+    <div
       className={cn(
-        "group relative rounded-[0.26vw] border border-left-accent min-w-0 flex-[0_0_50%] ml-[0.938vw]",
-        {
-          "ml-0": eventsLength == 1,
-          "first:!ml-0": eventsLength == 2,
-        },
+        "flex flex-col group relative border ml-[0.781vw] border-left-accent rounded-[0.26vw] min-w-0 flex-[0_0_49.5%]",
+        textColor === "black" ? "text-bg-dark" : "text-foreground",
       )}
     >
-      {image && (
-        <div className={"h-full w-full"}>
-          <Image
-            src={image}
-            width={486}
-            height={301}
-            alt={"Event image"}
-            className={cn(
-              "h-[15.625vw] w-full rounded-[0.26vw] object-contain object-right 2xl:block",
-              {
-                "h-full object-center": imageFullWidth,
-              },
-            )}
-          />
-        </div>
-      )}
       <div
         className={
-          "absolute left-0 top-0 mr-auto flex h-full flex-col justify-between p-[1.042vw]"
+          "h-full flex flex-col p-[1.042vw] gap-[0.521vw] absolute left-0 top-0"
         }
       >
-        <div className={"flex flex-col gap-[0.521vw]"}>
-          <span
-            className={cn("font-museo text-[1.25vw] font-bold", {
-              "text-bg-dark": textColor == "black",
-              "text-foreground": textColor == "white",
-            })}
-          >
-            {headText}
-          </span>
-          <span
-            className={cn("max-w-[50%] font-plexsans text-[0.833vw]", {
-              "text-bg-dark": textColor == "black",
-              "text-foreground": textColor == "white",
-            })}
-          >
-            {description}
-          </span>
-        </div>
-        <div
-          className={cn("font-museo text-[1.563vw] font-medium", {
-            "text-bg-dark": textColor == "black",
-            "text-foreground": textColor == "white",
-          })}
+        <span className={"text-[1.25vw] font-bold font-museo"}>{headText}</span>
+        <span
+          className={"text-[0.833vw] leading-[110%] font-plexsans max-w-[50%]"}
         >
-          {eventCounter.type == ZkNoidEventType.UPCOMING_EVENTS && (
-            <>START IN {time}</>
-          )}
-          {eventCounter.type == ZkNoidEventType.CURRENT_EVENTS && (
-            <>END IN {time}</>
-          )}
-        </div>
+          {description}
+        </span>
+        {prizePool && (
+          <span
+            className={cn(
+              "leading-[110%] font-extrabold text-[1.25vw] font-plexsans uppercase",
+              prizePool.color == "left-accent"
+                ? "text-left-accent"
+                : "text-foreground",
+            )}
+          >
+            Prize pool {prizePool.text}
+          </span>
+        )}
+        {time.length > 0 && (
+          <span className={cn("text-[1.563vw] font-museo font-medium mt-auto")}>
+            {eventCounter.type == ZkNoidEventType.UPCOMING_EVENTS && (
+              <>START IN {time}</>
+            )}
+            {eventCounter.type == ZkNoidEventType.CURRENT_EVENTS && (
+              <>END IN {time}</>
+            )}
+          </span>
+        )}
+      </div>
+      <div className={"w-full h-full overflow-hidden rounded-[0.13vw]"}>
+        <Image
+          src={image}
+          width={700}
+          height={300}
+          alt={"Event image"}
+          className={"w-full h-full object-center object-cover"}
+        />
       </div>
       <div
         className={
-          "absolute -bottom-[1px] -right-[1px] z-[1] flex items-center justify-center rounded-tl-[0.26vw] border-l border-t border-left-accent bg-bg-grey pl-[0.365vw] pt-[0.365vw]"
+          "absolute -bottom-[1px] z-[1] -right-[1px] flex flex-col justify-end items-end pt-[0.375vw] pl-[0.375vw] rounded-tl-[0.26vw] border-t border-l border-left-accent bg-bg-grey"
         }
       >
         <div
           className={
-            "flex h-[3.646vw] w-[3.646vw] items-center justify-center rounded-[0.26vw] border border-left-accent group-hover:bg-left-accent"
+            "group-hover:bg-left-accent bg-bg-grey py-[0.781vw] px-[1.25vw] rounded-[0.26vw] flex flex-col justify-center items-center border border-left-accent"
           }
         >
           <svg
@@ -146,10 +134,10 @@ export const EventItem = ({
             viewBox="0 0 27 45"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className={"h-[2.083vw] w-[1.042vw]"}
+            className={"w-[1.042vw] h-[2.083vw]"}
           >
             <path
-              d="M2.7998 2.7334L22.6331 22.5667L2.7998 42.4001"
+              d="M2.86182 2.73242L22.6674 22.5658L2.86182 42.3991"
               stroke="#D2FF00"
               stroke-width="5.66667"
               className={"group-hover:stroke-bg-grey"}
@@ -157,7 +145,11 @@ export const EventItem = ({
           </svg>
         </div>
       </div>
-    </Link>
+      <Link
+        href={event.link}
+        className={"absolute left-0 top-0 w-full h-full"}
+      />
+    </div>
   );
 };
 
@@ -169,20 +161,18 @@ export default function Events({
   setEventTypesSelected: (eventTypes: ZkNoidEventType[]) => void;
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
+    startIndex: 0,
+    align: "start",
+    containScroll: false,
+    slidesToScroll: 1,
+    skipSnaps: true,
     loop: true,
-    dragFree: true,
   });
-  // const filteredEvents = GAME_EVENTS.filter(
-  //   (x) =>
-  //     (eventTypesSelected.includes(getEventType(x)) ||
-  //       eventTypesSelected.length == 0) &&
-  //     x.eventEnds > Date.now(),
-  // );
 
-  useEffect(() => {
-    GAME_EVENTS.filter((x) => x.eventEnds > Date.now()).length == 0
-      ? setEventTypesSelected([ZkNoidEventType.PAST_EVENTS])
-      : setEventTypesSelected([ZkNoidEventType.CURRENT_EVENTS]);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  const onSelect = useCallback((emblaApi: any) => {
+    setSelectedIndex(emblaApi.selectedScrollSnap());
   }, []);
 
   const filteredEvents = GAME_EVENTS.filter(
@@ -191,6 +181,20 @@ export default function Events({
       eventTypesSelected.length == 0 ||
       x.eventEnds > Date.now(),
   );
+
+  useEffect(() => {
+    GAME_EVENTS.filter((x) => x.eventEnds > Date.now()).length == 0
+      ? setEventTypesSelected([ZkNoidEventType.PAST_EVENTS])
+      : setEventTypesSelected([ZkNoidEventType.CURRENT_EVENTS]);
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    onSelect(emblaApi);
+
+    emblaApi.on("reInit", onSelect).on("select", onSelect);
+  }, [emblaApi, onSelect]);
 
   return (
     <div id={"events"} className="flex flex-col gap-[0.833vw]">
@@ -222,22 +226,34 @@ export default function Events({
       )}
       {filteredEvents.length > 0 && (
         <div className="w-full overflow-hidden" ref={emblaRef}>
-          <div className={"flex w-full"}>
+          <div className={"flex flex-row w-full"}>
             {filteredEvents.map((event) => (
               <EventItem
                 key={event.name}
                 headText={event.name}
                 description={event.description}
+                prizePool={event.prizePool}
                 event={event}
                 image={event.image}
-                imageFullWidth={event.imageFullWidth}
                 textColor={event.textColor}
-                eventsLength={filteredEvents.length}
               />
             ))}
           </div>
         </div>
       )}
+      <div className={"flex flex-row gap-[0.182vw] mx-auto mt-[0.781vw]"}>
+        {[...Array(filteredEvents.length)].map((_, index) => (
+          <motion.div
+            key={index}
+            className={"h-[0.313vw] rounded-full border-left-accent border"}
+            animate={
+              index == selectedIndex
+                ? { backgroundColor: "#D2FF00", width: "0.938vw" }
+                : { width: "0.313vw" }
+            }
+          />
+        ))}
+      </div>
     </div>
   );
 }

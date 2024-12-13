@@ -16,32 +16,15 @@ export const ALL_GAME_EVENT_TYPES = [
 export type ZkNoidEvent = {
   name: string;
   description: string;
+  prizePool?: { text: string; color: "white" | "left-accent" };
   eventStarts: number;
   eventEnds: number;
   link: string;
-  image?: string;
-  imageFullWidth?: boolean;
+  image: string;
   textColor?: "white" | "black";
 };
 
 export const GAME_EVENTS: ZkNoidEvent[] = [
-  // {
-  //   name: "TileVille Challenge",
-  //   description:
-  //     "Three-day city-builder challenge in strategic city-builder in game TileVille",
-  //   eventStarts: new Date("2024-06-21").getTime(),
-  //   eventEnds: new Date("2024-06-24").getTime(),
-  //   link: "https://www.tileville.xyz/",
-  //   image: "/image/events/banner/tileville_banner.svg",
-  // },
-  // {
-  //   name: "Checkers game test",
-  //   description: "Play chess, find bugs, report bugs and grab reward!",
-  //   eventStarts: new Date("2024-06-30").getTime(),
-  //   eventEnds: new Date("2024-09-10").getTime(),
-  //   link: "/games/arkanoid/0",
-  //   image: "/image/events/banner/checkers_banner.svg",
-  // },
   {
     name: "ETHGlobal Online Hack",
     description:
@@ -49,8 +32,8 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventStarts: new Date("2024-08-23").getTime(),
     eventEnds: new Date("2024-09-13").getTime(),
     link: "https://ethglobal.com/events/ethonline2024",
-    image: "/image/events/eth-online.svg",
-    imageFullWidth: true,
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/etiuiudpxcjdeu6kqt8r",
     textColor: "black",
   },
   {
@@ -60,30 +43,32 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventStarts: new Date("2024-09-20").getTime(),
     eventEnds: new Date("2024-09-22").getTime(),
     link: "https://ethglobal.com/events/singapore2024",
-    image: "/image/events/eth-singapore.svg",
-    imageFullWidth: true,
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/vwr9hbzkuruf68nxxih0",
     textColor: "black",
   },
   {
     name: "ZkNoid Bounty for Gamers",
     description:
       "To participate in the bounty, simply record your ZkNoid gaming journey with any screen recording software and send it to us. Be creative, using editing software is encouraged! Don’t forget to describe your experience in a comment to the submission.",
+    prizePool: { text: "500 $MINA", color: "white" },
     eventStarts: new Date("2024-09-13").getTime(),
     eventEnds: new Date("2024-10-04").getTime(),
     link: "https://github.com/ZkNoid/zknoid/issues/13",
-    image: "/image/events/astromina.svg",
-    imageFullWidth: true,
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/zwx9etjctw3xjoigdfbt",
     textColor: "white",
   },
   {
     name: "Lottery L1 Testnet",
     description:
       "The long-awaited event: The lottery game testnet is coming. The testnet allows users to test game features, check tasks, do it, help the team fix bugs and get rewards.",
+    prizePool: { text: "500 $MINA", color: "left-accent" },
     eventStarts: new Date("2024-10-14").getTime(),
     eventEnds: new Date("2024-10-28T19:00:00.000+03:00").getTime(),
     link: "https://quest.zknoid.io",
-    image: "/image/events/lottery-testnet.svg",
-    imageFullWidth: true,
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/icwduehzsvuguqgxb1g0",
     textColor: "white",
   },
 ];
