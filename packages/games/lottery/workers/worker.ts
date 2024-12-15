@@ -156,8 +156,10 @@ const functions = {
       amount: args.amount,
     });
 
+    const claimApiDomain = process.env.NEXT_PUBLIC_CLAIM_API_ENDPOINT || 'api2.zknoid.io';
+
     const claimData = await fetch(
-      "https://api2.zknoid.io/claim-api/get-claim-data",
+      `https://${claimApiDomain}/claim-api/get-claim-data`,
       {
         method: "POST",
         headers: {
