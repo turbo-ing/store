@@ -20,7 +20,7 @@
     "formik": "^2.4.6",
     "framer-motion": "^11.0.10",
     "immer": "^10.0.4",
-    "l1-lottery-contracts": "0.7.45",
+    "l1-lottery-contracts": "2.7.7",
     "ldrs": "^1.0.2",
     "lottie-react": "^2.4.0",
     "luxon": "^3.4.4",
