@@ -162,7 +162,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
 
       {networkStore.address && networkStore.walletConnected ? (
         networkStore.minaNetwork?.networkID !=
-          NETWORKS[NetworkIds.MINA_DEVNET].networkID && <WrongNetworkModal />
+          NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET].networkID && <WrongNetworkModal />
       ) : (
         <ConnectWalletModal />
       )}

@@ -82,7 +82,7 @@ export default function NetworkSwitchButton() {
   }, []);
   return (
     <button
-      onClick={() => switchNetwork(NETWORKS[NetworkIds.MINA_DEVNET])}
+      onClick={() => switchNetwork(NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET])}
       className={
         'w-full rounded-[0.26vw] bg-left-accent p-[0.5vw] text-center font-museo text-[0.833vw] font-medium text-bg-dark hover:opacity-80'
       }
