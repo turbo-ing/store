@@ -83,10 +83,12 @@ const functions = {
   compileLotteryContracts: async (args: {}) => {
     console.log("[Worker] compiling lottery contracts");
 
-    await PLottery.compile({
+    const vk = await PLottery.compile({
       cache: WebFileSystem(state.lotteryCache!),
     });
+    
     console.log("Lottery provers", PLottery._provers);
+    console.log("Lottery vk", PLottery._verificationKey?.data);
 
     console.log("[Worker] compiling contracts ended");
   },
