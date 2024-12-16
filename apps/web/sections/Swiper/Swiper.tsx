@@ -15,20 +15,20 @@ export default function Swiper() {
   const slides: { image: string; link?: string; openAsNewTab?: boolean }[] = [
     {
       image:
-        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2000,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/lcahkwvpo8htyesmxpa2",
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/lcahkwvpo8htyesmxpa2",
     },
     {
       image:
-        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2000,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/usg56j3zrjgkg6galivu",
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/usg56j3zrjgkg6galivu",
       link: "/games/lottery/global",
     },
     {
       image:
-        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2000,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/pkfoaj76fsxrozcszvo3",
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/pkfoaj76fsxrozcszvo3",
     },
     {
       image:
-        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2000,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/bgec1ebrphakoqbdixfe",
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/bgec1ebrphakoqbdixfe",
       link: "https://quest.zknoid.io",
       openAsNewTab: true,
     },

@@ -13,7 +13,7 @@ export const lotteryConfig = createZkNoidGameConfig({
   description:
     "Ticket based lottery game. Choose lucky numbers, buy tickets, win rewards",
   image:
-    "https://res.cloudinary.com/dw4kivbv0/image/upload/w_800,f_auto,q_auto:best/v1/store/games/vbg1ubmli2yhua2cjbqa",
+    "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1000,f_auto,q_auto:best/v1/store/games/vbg1ubmli2yhua2cjbqa",
   genre: ZkNoidGameGenre.Lucky,
   features: [ZkNoidGameFeature.SinglePlayer],
   isReleased: true,

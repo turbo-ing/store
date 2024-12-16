@@ -15,7 +15,7 @@ export const connect4Config = createZkNoidGameConfig({
   description:
     "Guess who is a game where a player hides a character and gives the PC to another player. Other player tries to guess the character",
   image:
-    "https://res.cloudinary.com/dw4kivbv0/image/upload/w_800,f_auto,q_auto:best/v1/store/games/khswsk5ivmhjyxdiupae",
+    "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1000,f_auto,q_auto:best/v1/store/games/khswsk5ivmhjyxdiupae",
   genre: ZkNoidGameGenre.BoardGames,
   features: [ZkNoidGameFeature.Multiplayer],
   isReleased: true,
