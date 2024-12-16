@@ -87,7 +87,7 @@ export default function NetworkSwitchButton() {
         'w-full rounded-[0.26vw] bg-left-accent p-[0.5vw] text-center font-museo text-[0.833vw] font-medium text-bg-dark hover:opacity-80'
       }
     >
-      Switch to Devnet
+      Switch to {(NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET].name)}
     </button>
   );
 }

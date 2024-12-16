@@ -28,7 +28,7 @@ export const NETWORKS: { readonly [networkId: string]: Network } = {
   [NetworkIds.MINA_MAINNET]: {
     networkID: NetworkIds.MINA_MAINNET,
     palladNetworkID: PalladNetworkIds.MINA_MAINNET,
-    name: 'Ьфшттуе',
+    name: 'Mainnet',
     graphql: 'https://proxy.zknoid.io/mina-node/mainnet-main-node',
     archive: 'https://proxy.zknoid.io/mina-node/devnet-archive-node',
   },
@@ -49,6 +49,7 @@ export const NETWORKS: { readonly [networkId: string]: Network } = {
 };
 
 export const ALL_NETWORKS = [
+  NETWORKS[NetworkIds.MINA_MAINNET],
   NETWORKS[NetworkIds.MINA_DEVNET],
   NETWORKS[NetworkIds.ZEKO_TESTNET],
 ];

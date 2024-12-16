@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import catWifeIMG from "../../../../images/cat-wife.svg";
 import Image from "next/image";
+import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
+import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 
 const NetworkSwitchButton = dynamic(
   () => import("./nonSSR/NetworkSwitchButton"),
@@ -14,6 +16,8 @@ const NetworkSwitchButton = dynamic(
 
 export default function WrongNetworkModal() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const networkStore = useNetworkStore();
+
   return (
     <BaseModal isOpen={isOpen} setIsOpen={setIsOpen} isDismissible={false}>
       <div className={"flex max-w-[26.042vw] max-h-[20.833vw] flex-col"}>
@@ -25,7 +29,8 @@ export default function WrongNetworkModal() {
         <span
           className={"my-[1vw] text-center font-museo text-[1vw] font-medium"}
         >
-          This game only supports Devnet network, in order to play you need to
+          |{networkStore.minaNetwork?.name}|
+          This game only supports {(NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET].name)} network, in order to play you need to
           switch network
         </span>
         <div className={"flex flex-col gap-[1vw]"}>
