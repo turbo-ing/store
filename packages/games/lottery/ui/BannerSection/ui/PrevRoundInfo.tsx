@@ -2,7 +2,7 @@ import Image from 'next/image';
 import minaImg from '@zknoid/sdk/public/image/tokens/mina.svg';
 import Skeleton from '@zknoid/sdk/components/shared/Skeleton';
 import { formatUnits } from '@zknoid/sdk/lib/unit';
-import { TICKET_PRICE } from 'l1-lottery-contracts';
+import { COMMISSION, PRECISION, TICKET_PRICE } from 'l1-lottery-contracts';
 import { Currency } from '@zknoid/sdk/constants/currency';
 
 export default function PrevRoundInfo({
@@ -75,7 +75,7 @@ export default function PrevRoundInfo({
                   'font-museo text-[0.833vw] font-bold text-foreground'
                 }
               >
-                {formatUnits(bank - (bank / 100) * 3)} {Currency.MINA}
+                {formatUnits(bank - (bank * COMMISSION) / PRECISION)} {Currency.MINA}
               </span>
             </Skeleton>
           </div>

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import minaImg from "@zknoid/sdk/public/image/tokens/mina.svg";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
-import { TICKET_PRICE } from "l1-lottery-contracts";
+import { COMMISSION, PRECISION, TICKET_PRICE } from "l1-lottery-contracts";
 import { Currency } from "@zknoid/sdk/constants/currency";
 
 export default function CurrentRoundInfo({
@@ -30,7 +30,7 @@ export default function CurrentRoundInfo({
             alt={"mina"}
             className={"h-[1.146vw] w-[1.146vw]"}
           />
-          <span>{formatUnits(bank - (bank / 100) * 3)}</span>
+          <span>{formatUnits(bank - (bank * COMMISSION) / PRECISION)}</span>
           <span>{Currency.MINA}</span>
         </div>
       </div>

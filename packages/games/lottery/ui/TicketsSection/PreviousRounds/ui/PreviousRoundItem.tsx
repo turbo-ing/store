@@ -6,7 +6,7 @@ import { formatUnits } from "@zknoid/sdk/lib/unit";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { useEffect, useRef, useState } from "react";
 import { ILotteryRound } from "../../../../lib/types";
-import { TICKET_PRICE } from "l1-lottery-contracts";
+import { COMMISSION, PRECISION, TICKET_PRICE } from "l1-lottery-contracts";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 
 export default function PreviousRoundItem({
@@ -145,7 +145,7 @@ export default function PreviousRoundItem({
               }
             >
               <span>
-                {formatUnits(Number(bank) - (Number(bank) / 100) * 3)}
+                {formatUnits(bank - (bank * COMMISSION) / PRECISION)}
               </span>
               <span>{Currency.MINA}</span>
             </div>
