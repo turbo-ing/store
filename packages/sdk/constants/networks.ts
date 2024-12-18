@@ -2,6 +2,7 @@ export interface Network {
   networkID: string;
   palladNetworkID: string;
   name: string;
+  isMainnet: boolean;
   graphql: string;
   archive: string;
 }
@@ -29,13 +30,15 @@ export const NETWORKS: { readonly [networkId: string]: Network } = {
     networkID: NetworkIds.MINA_MAINNET,
     palladNetworkID: PalladNetworkIds.MINA_MAINNET,
     name: 'Mainnet',
-    graphql: 'https://proxy.zknoid.io/mina-node/mainnet-main-node',
-    archive: 'https://proxy.zknoid.io/mina-node/devnet-archive-node',
+    isMainnet: true,
+    graphql: 'https://api.minascan.io/node/mainnet/v1/graphql',
+    archive: 'https://api.minascan.io/archive/mainnet/v1/graphql',
   },
   [NetworkIds.MINA_DEVNET]: {
     networkID: NetworkIds.MINA_DEVNET,
     palladNetworkID: PalladNetworkIds.MINA_DEVNET,
     name: 'Devnet',
+    isMainnet: false,
     graphql: 'https://proxy.zknoid.io/mina-node/devnet-main-node',
     archive: 'https://proxy.zknoid.io/mina-node/devnet-archive-node',
   },
@@ -43,6 +46,7 @@ export const NETWORKS: { readonly [networkId: string]: Network } = {
     networkID: NetworkIds.ZEKO_TESTNET,
     palladNetworkID: PalladNetworkIds.ZEKO_TESTNET,
     name: 'Zeko',
+    isMainnet: false,
     graphql: 'https://devnet.zeko.io/graphql',
     archive: '',
   },

@@ -101,6 +101,7 @@ const functions = {
 
     console.log("[Worker] lottery instance init");
     const Network = Mina.Network({
+      networkId: NETWORKS[args.networkId.toString()].isMainnet ? 'mainnet' : 'testnet',
       mina: NETWORKS[args.networkId.toString()].graphql,
       archive: NETWORKS[args.networkId.toString()].archive,
     });
