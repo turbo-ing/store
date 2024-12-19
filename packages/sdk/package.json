@@ -25,6 +25,7 @@
     "@vercel/analytics": "^1.2.2",
     "@vercel/blob": "^0.23.3",
     "@vercel/speed-insights": "^1.0.10",
+    "algoliasearch": "^5.18.0",
     "clsx": "^2.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "formik": "^2.4.6",
@@ -38,6 +39,7 @@
     "o1js": "npm:o1js@1.8.0",
     "react": "19.0.0-rc-4c2e457c7c-20240522",
     "react-dom": "19.0.0-rc-4c2e457c7c-20240522",
+    "react-instantsearch-dom": "^6.40.4",
     "react-lottie": "^1.2.4",
     "reflect-metadata": "^0.2.2",
     "tailwind-merge": "^2.2.2",
@@ -50,13 +52,13 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@zknoid/tsconfig": "workspace:*",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.12.7",
     "@types/node-telegram-bot-api": "^0.64.6",
     "@types/react": "^18.2.75",
     "@types/react-dom": "^18.2.24",
     "@types/react-lottie": "^1.2.10",
+    "@zknoid/tsconfig": "workspace:*",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.0.1",
@@ -72,7 +74,6 @@
     "./components/framework/dynamic/GamePageWrapper": "./components/framework/dynamic/GamePageWrapper.tsx",
     "./components/framework/dynamic/CompetitionsPageWrapper": "./components/framework/dynamic/CompetitionsPageWrapper.tsx",
     "./components/framework/dynamic/NewCompetitionPageWrapper": "./components/framework/dynamic/NewCompetitionPageWrapper.tsx",
-
     "./components/widgets/Footer/Footer": "./components/widgets/Footer/Footer.tsx",
     "./components/widgets/Footer": "./components/widgets/Footer/index.ts",
     "./components/widgets/Header": "./components/widgets/Header/index.ts",
@@ -90,7 +91,6 @@
     "./lib/stores/minaChain": "./lib/stores/minaChain.tsx",
     "./lib/stores/minaBalances": "./lib/stores/minaBalances.tsx",
     "./lib/stores/commitmentStorage": "./lib/stores/commitmentStorage.tsx",
-
     "./components/shared/Notification/NotificationsContainer": "./components/shared/Notification/NotificationsContainer.tsx",
     "./components/shared/Notification/lib/notificationStore": "./components/shared/Notification/lib/notificationStore.ts",
     "./components/shared/Loader": "./components/shared/Loader/index.ts",
@@ -101,7 +101,6 @@
     "./components/shared/CustomScrollbar": "./components/shared/CustomScrollbar/index.ts",
     "./components/shared/Scrollbar": "./components/shared/Scrollbar/index.ts",
     "./components/shared/misc/svg": "./components/shared/misc/svg.tsx",
-
     "./components/framework/GameWidget/ui/Leaderboard": "./components/framework/GameWidget/ui/Leaderboard.tsx",
     "./components/framework/GameWidget": "./components/framework/GameWidget/index.ts",
     "./components/framework/GameWidget/ui/popups/Win": "./components/framework/GameWidget/ui/popups/Win.tsx",
@@ -132,7 +131,6 @@
     "./components/framework/GamePage/PvPGameView": "./components/framework/GamePage/PvPGameView.tsx",
     "./lib/helpers": "./lib/helpers.ts",
     "./lib/cache": "./lib/cache.ts",
-
     "./lib/envContext": "./lib/envContext.ts",
     "./lib/stores/matchQueue": "./lib/stores/matchQueue.tsx",
     "./lib/platform/game_tags": "./lib/platform/game_tags.ts",
@@ -153,7 +151,6 @@
     "./constants/games": "./constants/games.ts",
     "./constants/snakeNames": "./constants/snakeNames.ts",
     "./constants/networks": "./constants/networks.ts",
-
     "./styles.css": "./dist/index.css"
   }
 }
