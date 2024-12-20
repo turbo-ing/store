@@ -25,7 +25,8 @@ export const arkanoidConfig = createZkNoidGameConfig({
   type: ZkNoidGameType.SinglePlayer,
   name: "Arkanoid game",
   description: description,
-  image: "/image/games/arkanoid.svg",
+  image:
+    "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1000,f_auto,q_auto:best/v1/store/games/gj5xrummszrtt0mz1i5t",
   genre: ZkNoidGameGenre.Arcade,
   features: [ZkNoidGameFeature.SinglePlayer],
   isReleased: true,

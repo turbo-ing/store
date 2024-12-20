@@ -1,35 +1,34 @@
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import pokerSlide from "@/public/image/slides/poker.svg";
-import lotterySlide from "@/public/image/slides/lottery.svg";
-import avatarsSlide from "@/public/image/slides/avatars.svg";
-import testnetSlide from "@/public/image/slides/testnet.svg";
 import Link from "next/link";
 import Image from "next/image";
 import mobileCoverIMG from "@/public/image/section1/mobile-cover.svg";
 
 export default function Swiper() {
-  const [emblaRef, emblaApi] = useEmblaCarousel(
+  const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
     },
     [Autoplay({ playOnInit: true, delay: 8000 })],
   );
 
-  const slides: { image: any; link?: string; openAsNewTab?: boolean }[] = [
+  const slides: { image: string; link?: string; openAsNewTab?: boolean }[] = [
     {
-      image: pokerSlide,
+      image:
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/lcahkwvpo8htyesmxpa2",
     },
     {
-      image: lotterySlide,
-      link: "https://forums.minaprotocol.com/t/zknoid-l1-lottery/6269",
-      openAsNewTab: true,
+      image:
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/usg56j3zrjgkg6galivu",
+      link: "/games/lottery/global",
     },
     {
-      image: avatarsSlide,
+      image:
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/pkfoaj76fsxrozcszvo3",
     },
     {
-      image: testnetSlide,
+      image:
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/bgec1ebrphakoqbdixfe",
       link: "https://quest.zknoid.io",
       openAsNewTab: true,
     },
@@ -74,13 +73,25 @@ export default function Swiper() {
                     className="min-w-0 flex-[0_0_100%]"
                   >
                     <div className="flex h-full w-full items-center justify-center">
-                      <Image src={slide.image} alt="Slide" className="w-full" />
+                      <Image
+                        width={1600}
+                        height={1000}
+                        src={slide.image}
+                        alt="Slide"
+                        className="w-full"
+                      />
                     </div>
                   </Link>
                 ) : (
                   <div key={index} className="min-w-0 flex-[0_0_100%]">
                     <div className="flex h-full w-full items-center justify-center">
-                      <Image src={slide.image} alt="Slide" className="w-full" />
+                      <Image
+                        width={1600}
+                        height={1000}
+                        src={slide.image}
+                        alt="Slide"
+                        className="w-full"
+                      />
                     </div>
                   </div>
                 ),

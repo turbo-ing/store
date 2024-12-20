@@ -14,7 +14,8 @@ export const randzuConfig = createZkNoidGameConfig({
   name: "Randzu game",
   description:
     "Two players take turns placing pieces on the board attempting to create lines of 5 of their own color",
-  image: "/image/games/randzu.svg",
+  image:
+    "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1000,f_auto,q_auto:best/v1/store/games/rtlpxkdv5oy5gpeh77if",
   genre: ZkNoidGameGenre.BoardGames,
   features: [ZkNoidGameFeature.Multiplayer],
   isReleased: true,
