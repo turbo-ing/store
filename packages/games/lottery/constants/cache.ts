@@ -54,9 +54,11 @@ const LOTTERY_CACHE_LIST = [
   'wrap-vk-ticket-reduce-program.header',
 ];
 
+const LOTTERY_CACHE_ID = process.env.NEXT_PUBLIC_LOTTERY_CACHE_ID || 'testnet';
+
 export const LOTTERY_CACHE: ContractCache = {
   files: LOTTERY_CACHE_LIST,
-  urls: LOTTERY_CACHE_LIST.map((x) => `https://zknoid-data.b-cdn.net/${x}`),
+  urls: LOTTERY_CACHE_LIST.map((x) => `https://zknoid-data.b-cdn.net/${LOTTERY_CACHE_ID}/${x}`),
 };
 
 console.log('Lottery cache', LOTTERY_CACHE);
