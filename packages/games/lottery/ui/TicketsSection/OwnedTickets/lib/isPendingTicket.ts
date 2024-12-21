@@ -1,8 +1,12 @@
 'use server';
 
+import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
+
+const network = NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET];
+
 export const isPendingTicket = async (hash: string) => {
   const res = await fetch(
-    `https://api.blockberry.one/mina-devnet/v1/zkapps/txs/${hash}`,
+    `${network.blockberryEndpoint}/zkapps/txs/${hash}`,
     {
       method: 'GET',
       headers: {

@@ -7,11 +7,14 @@ import { formatUnits } from "@zknoid/sdk/lib/unit";
 import { useContext, useState } from "react";
 import Link from "next/link";
 import LotteryContext from "../../../../lib/contexts/LotteryContext";
+import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
 
 type Number = {
   number: number;
   win: boolean;
 };
+
+const network = NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET];
 
 export function TicketItem({
   plotteryAddress,
@@ -127,7 +130,7 @@ export function TicketItem({
       )}
       {!!funds && !claimRequested && claimed && (
         <Link
-          href={`https://minascan.io/devnet/tx/${claimHash}?type=zk-tx`}
+          href={`${network.minscanUrl}/tx/${claimHash}?type=zk-tx`}
           target={"_blank"}
           rel={"noopener noreferrer"}
           className={

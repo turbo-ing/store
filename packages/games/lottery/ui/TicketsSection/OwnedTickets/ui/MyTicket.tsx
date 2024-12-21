@@ -16,6 +16,9 @@ import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
 import { useWorkerClientStore } from '../../../../workers/workerClientStore';
 import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
 import Link from 'next/link';
+import { NetworkIds, NETWORKS } from '@zknoid/sdk/constants/networks';
+
+const network = NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET];
 
 const ticketsImages = [
   TicketBG1,
@@ -387,7 +390,7 @@ export default function MyTicket({
                     </div>
                   ))}
                 <Link
-                  href={`https://minascan.io/devnet/tx/${hash}?type=zk-tx`}
+                  href={`${network.minscanUrl}/tx/${hash}?type=zk-tx`}
                   target={'_blank'}
                   rel={'noopener noreferrer'}
                   className={
