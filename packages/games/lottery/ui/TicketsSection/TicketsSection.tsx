@@ -292,14 +292,14 @@ export default function TicketsSection() {
                   >
                     <BuyInfoCard
                       buttonActive={
-                        workerClientStore.lotteryCompiled &&
+                        (workerClientStore.lotteryCompiled || !(window as any).localProving) &&
                         !workerClientStore.isActiveTx &&
                         ((tickets.length > 0 && tickets[0].amount != 0) ||
                           voucherMode == VoucherMode.List)
                       }
                       ticketsInfo={tickets}
                       loaderActive={
-                        workerClientStore.lotteryCompiled &&
+                        (workerClientStore.lotteryCompiled || !(window as any).localProving) &&
                         workerClientStore.isActiveTx
                       }
                       clearTickets={() => {

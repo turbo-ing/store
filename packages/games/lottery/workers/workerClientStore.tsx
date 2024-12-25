@@ -208,18 +208,48 @@ export const useWorkerClientStore = create<
         state.isActiveTx = true;
       });
 
-      await this.client?._call("buyTicket", {
-        senderAccount,
-        startBlock: this.onchainState?.startBlock,
-        ticketNums,
-        amount,
-      });
+      let txJson;
 
-      set((state) => {
-        state.status = "Ticket buy tx proving";
-      });
+      if ((window as any).isLocalProving) {
+        await this.client?._call("buyTicket", {
+          senderAccount,
+          startBlock: this.onchainState?.startBlock,
+          ticketNums,
+          amount,
+        });
 
-      const txJson = await this.client?._call("proveBuyTicketTransaction", {});
+        set((state) => {
+          state.status = "Ticket buy tx proving";
+        });
+
+        txJson = await this.client?._call(
+          "proveBuyTicketTransaction",
+          {}
+        );
+      } else {
+        const claimApiDomain =
+          process.env.NEXT_PUBLIC_CLAIM_API_ENDPOINT ||
+          "https://api2.zknoid.io";
+
+        const claimData = await fetch(
+          `${claimApiDomain}/buy-api/get-buy-data`,
+          {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              ticketNums,
+              senderAccount,
+              amount,
+            }),
+          }
+        );
+        const resp = await claimData.json();  
+        txJson = JSON.parse(resp["txJson"]);
+      }
+
+      console.log("txJson", txJson);
 
       set((state) => {
         state.status = "Ticket buy tx proved";

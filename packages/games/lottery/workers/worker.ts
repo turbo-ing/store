@@ -131,23 +131,7 @@ const functions = {
 
     console.log("BT args", args);
     const ticket = Ticket.from(args.ticketNums, senderAccount, args.amount);
-    // const claimApiDomain = 'api-mainnet.zknoid.io';  // process.env.NEXT_PUBLIC_CLAIM_API_ENDPOINT || 
-
-    // const claimData = await fetch(
-    //   `https://${claimApiDomain}/buy-api/get-buy-data`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       ticketNums: args.ticketNums,
-    //       senderAccount,
-    //       amount: args.amount,
-    //     }),
-    //   }
-    // );
-
+    
     let tx = await Mina.transaction(senderAccount, async () => {
       await state.lotteryGame!.buyTicket!(ticket);
     });

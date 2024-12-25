@@ -61,7 +61,7 @@ export default function PreviousRoundItem({
     round.tickets.map((x) => x.amount).reduce((x, y) => x + y, 0n)
   );
 
-  const userTickets = round.tickets.filter(
+  const userTickets = round.tickets.map((x, i) => ({...x, ticketId: i})).filter(
     (x) => x.owner == networkStore.address
   );
 
@@ -144,9 +144,7 @@ export default function PreviousRoundItem({
                 "flex w-full flex-row items-center justify-end gap-[0.5vw]"
               }
             >
-              <span>
-                {formatUnits(bank - (bank * COMMISSION) / PRECISION)}
-              </span>
+              <span>{formatUnits(bank - (bank * COMMISSION) / PRECISION)}</span>
               <span>{Currency.MINA}</span>
             </div>
           </div>
@@ -206,34 +204,38 @@ export default function PreviousRoundItem({
               <div
                 className={cn(
                   "flex max-h-[200px] w-full flex-col overflow-y-scroll y-scrollbar",
-                  scrollHeight > clientHeight && cn(
-                  "[&::-webkit-scrollbar]:w-4",
-                  "[&::-webkit-scrollbar-track]:bg-[#252525]",
-                  "[&::-webkit-scrollbar-thumb]:bg-left-accent",
-                  "[&::-webkit-scrollbar-thumb]:rounded-[0.26vw]",
-                  "[&::-webkit-scrollbar-track]:outline",
-                  "[&::-webkit-scrollbar-track]:outline-left-accent",
-                  "[&::-webkit-scrollbar-track]:rounded-[0.26vw]",
-                  "pr-[0.5vw]"
-                  )
+                  scrollHeight > clientHeight &&
+                    cn(
+                      "[&::-webkit-scrollbar]:w-4",
+                      "[&::-webkit-scrollbar-track]:bg-[#252525]",
+                      "[&::-webkit-scrollbar-thumb]:bg-left-accent",
+                      "[&::-webkit-scrollbar-thumb]:rounded-[0.26vw]",
+                      "[&::-webkit-scrollbar-track]:outline",
+                      "[&::-webkit-scrollbar-track]:outline-left-accent",
+                      "[&::-webkit-scrollbar-track]:rounded-[0.26vw]",
+                      "pr-[0.5vw]"
+                    )
                 )}
                 ref={ticketsListRef}
               >
-                {userTickets.map((item, index) => (
-                  <TicketItem
-                    key={index}
-                    plotteryAddress={round.plotteryAddress}
-                    roundId={round.id}
-                    noCombination={!round.winningCombination}
-                    numbers={parseNumbers(item.numbers)}
-                    funds={Number(item.funds)}
-                    amount={Number(item.amount)}
-                    claimed={item.claimed}
-                    claimRequested={item.claimRequested}
-                    claimQueue={item.claimQueue}
-                    claimHash={item.claimHash || ""}
-                  />
-                ))}
+                {userTickets.map((item, index) => {
+                  return (
+                    <TicketItem
+                      key={index}
+                      plotteryAddress={round.plotteryAddress}
+                      roundId={round.id}
+                      noCombination={!round.winningCombination}
+                      numbers={parseNumbers(item.numbers)}
+                      ticketId={item.ticketId}
+                      funds={Number(item.funds)}
+                      amount={Number(item.amount)}
+                      claimed={item.claimed}
+                      claimRequested={item.claimRequested}
+                      claimQueue={item.claimQueue}
+                      claimHash={item.claimHash || ""}
+                    />
+                  );
+                })}
               </div>
             </div>
           </div>
