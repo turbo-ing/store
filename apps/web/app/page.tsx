@@ -14,16 +14,16 @@ import Storefront from "../sections/Storefront";
 
 export default function Home() {
   const networkStore = useNetworkStore();
-  const accountData = api.accounts.getAccount.useQuery({
+  const accountData = api.http.accounts.getAccount.useQuery({
     userAddress: networkStore.address || "",
   }).data;
-  const nameMutator = api.accounts.setName.useMutation();
-  const avatarIdMutator = api.accounts.setAvatar.useMutation();
-  const gameFeedbackMutator = api.ratings.setGameFeedback.useMutation();
-  const getGameIdQuery = api.ratings.getGameRating;
+  const nameMutator = api.http.accounts.setName.useMutation();
+  const avatarIdMutator = api.http.accounts.setAvatar.useMutation();
+  const gameFeedbackMutator = api.http.ratings.setGameFeedback.useMutation();
+  const getGameIdQuery = api.http.ratings.getGameRating;
   const setFavoriteGameStatusMutation =
-    api.favorites.setFavoriteGameStatus.useMutation();
-  const getFavoriteGamesQuery = api.favorites.getFavoriteGames.useQuery({
+    api.http.favorites.setFavoriteGameStatus.useMutation();
+  const getFavoriteGamesQuery = api.http.favorites.getFavoriteGames.useQuery({
     userAddress: networkStore.address || "",
   });
   return (

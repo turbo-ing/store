@@ -36,7 +36,7 @@ import { algoliasearch } from "algoliasearch";
 
 const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_PROJECT || "",
-  process.env.NEXT_PUBLIC_ALGOLIA_KEY || ""
+  process.env.NEXT_PUBLIC_ALGOLIA_KEY || "",
 );
 
 const zknoidAvatars = [
@@ -68,7 +68,7 @@ const AccountPopupBalance = dynamic(
   () => import("./nonSSR/AccountPopupBalance"),
   {
     ssr: false,
-  }
+  },
 );
 
 export default function AccountPopup({
@@ -94,19 +94,23 @@ export default function AccountPopup({
   // });
 
   useEffect(() => {
-    const search = client.searchSingleIndex({
-      indexName: "mainnet",
-      searchParams: {
-        facetFilters: ['collection:Minaty', 'owner:B62qrf3EeALJmMN5Xc5JSz6jB7xZCnGnv2DhTfQKJsaFPChTSs3De3n']
-      },
-      
-    }).then((resp) => {
-      console.log("Algolia response", resp);
-      setAvatars([...avatars, ...resp.hits.map(x => (x as any).image)])
-    })
-    .catch((error) => {
-      console.log("algolia error", error);
-    });
+    const search = client
+      .searchSingleIndex({
+        indexName: "mainnet",
+        searchParams: {
+          facetFilters: [
+            "collection:Minaty",
+            "owner:B62qrf3EeALJmMN5Xc5JSz6jB7xZCnGnv2DhTfQKJsaFPChTSs3De3n",
+          ],
+        },
+      })
+      .then((resp) => {
+        console.log("Algolia response", resp);
+        setAvatars([...avatars, ...resp.hits.map((x) => (x as any).image)]);
+      })
+      .catch((error) => {
+        console.log("algolia error", error);
+      });
     console.log("Search source", search);
   }, []);
 
@@ -305,7 +309,7 @@ export default function AccountPopup({
                       </div>
                     )}
                   </div>
-                )
+                ),
             )}
           </div>
         </div>
@@ -467,7 +471,7 @@ export default function AccountPopup({
                     "w-full rounded-[5px] border border-bg-dark px-2 py-1 text-center text-bg-dark",
                     {
                       "opacity-60": linkCopied,
-                    }
+                    },
                   )}
                 >
                   {networkStore.address &&
