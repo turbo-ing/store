@@ -131,8 +131,8 @@ importers:
         specifier: ^10.0.4
         version: 10.1.1
       l1-lottery-contracts:
-        specifier: '=2.8.16'
-        version: 2.8.16(o1js@1.8.0)
+        specifier: '=2.8.17'
+        version: 2.8.17(o1js@1.8.0)
       ldrs:
         specifier: ^1.0.2
         version: 1.0.2
@@ -681,8 +681,8 @@ importers:
         specifier: ^10.0.4
         version: 10.1.1
       l1-lottery-contracts:
-        specifier: '=2.8.16'
-        version: 2.8.16(o1js@1.8.0)
+        specifier: '=2.8.17'
+        version: 2.8.17(o1js@1.8.0)
       ldrs:
         specifier: ^1.0.2
         version: 1.0.2
@@ -4970,8 +4970,8 @@ packages:
     resolution: {integrity: sha512-j/8tY9j5t+GVMLeioLaxweJiKUayFhlGqNTzf2ZGwL0ZCQijd2RLHK0SLW5Tsko8YyyqCZC2cojIb0/s62qTAg==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
-  l1-lottery-contracts@2.8.16:
-    resolution: {integrity: sha512-i91ZEc0xYnTcLmRqW8ShqaTUn8Kd31UNtlAmJmWiO8z0jNtytaYWB0MQtj8vpnj/V7le/E3KJnL+cSecte14vw==}
+  l1-lottery-contracts@2.8.17:
+    resolution: {integrity: sha512-FGxpPEE4L/gk+sDO/Sj4hRbZOBylQNd8y2Gp4d4gSR5TdxnP7AZG3zCuX5TAvA2vfYCNfapxYeYL0291Wjifqw==}
     engines: {node: '>=18.14.0'}
     peerDependencies:
       o1js: 1.8.0
@@ -12100,7 +12100,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  l1-lottery-contracts@2.8.16(o1js@1.8.0):
+  l1-lottery-contracts@2.8.17(o1js@1.8.0):
     dependencies:
       '@types/node': 20.16.5
       axios: 1.7.7

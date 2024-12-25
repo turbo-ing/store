@@ -7,7 +7,7 @@ import { cn } from '@zknoid/sdk/lib/helpers';
 export default function StateManager() {
   const workerClientStore = useWorkerClientStore();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(!!(window as any).localProving);
   const [loadedMsg, setLoadedMsg] = useState<string | undefined>();
 
   useEffect(() => {

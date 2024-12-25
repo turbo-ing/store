@@ -20,6 +20,7 @@ export function TicketItem({
   plotteryAddress,
   roundId,
   numbers,
+  ticketId,
   funds,
   amount,
   noCombination,
@@ -31,6 +32,7 @@ export function TicketItem({
   plotteryAddress: string;
   roundId: number;
   numbers: Number[];
+  ticketId: number;
   funds: number | undefined;
   amount: number;
   noCombination: boolean;
@@ -95,7 +97,7 @@ export function TicketItem({
           className={
             "flex items-center justify-center rounded-[0.33vw] bg-left-accent px-[0.74vw] py-[0.37vw] font-museo text-[0.833vw] font-medium text-black hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:opacity-60"
           }
-          disabled={!workerClient.lotteryCompiled || workerClient.isActiveTx}
+          disabled={workerClient.isActiveTx}
           onClick={async () => {
             // let txJson = await workerClient.getReward(
             //   plotteryAddress,
@@ -107,9 +109,8 @@ export function TicketItem({
             // );
             const claimRequest = {
               userAddress: networkStore.address!,
-              roundId: roundId,
-              ticketNumbers: numbers.map((x) => x.number),
-              ticketAmount: amount,
+              roundId,
+              ticketId
             };
             addClaimRequestMutation(claimRequest);
 

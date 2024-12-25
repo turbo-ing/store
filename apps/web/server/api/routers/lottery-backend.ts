@@ -85,15 +85,8 @@ export const lotteryBackendRouter = createTRPCRouter({
         .toArray();
 
       claimRequestInfo.forEach((claimRequest: any, index: number) => {
-        let ticketId = data[claimRequest.roundId].tickets.findIndex(
-          (ticket) =>
-            ticket.owner === claimRequest.userAddress &&
-            ticket.amount == claimRequest.ticketAmount &&
-            ticket.numbers.toString() == claimRequest.ticketNumbers.toString()
-        );
-
-        data[claimRequest.roundId].tickets[ticketId].claimRequested = true;
-        data[claimRequest.roundId].tickets[ticketId].claimQueue = index;
+        data[claimRequest.roundId].tickets[claimRequest.ticketId].claimRequested = true;
+        data[claimRequest.roundId].tickets[claimRequest.ticketId].claimQueue = index;
       });
 
       return data;
