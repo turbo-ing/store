@@ -36,11 +36,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
 
   const workerClientStore = useWorkerClientStore();
   const chainStore = useChainStore();
-  // const events = api.lotteryBackend.getMinaEvents.useQuery({});
-  const { minaEvents } = useContext(LotteryContext);
-  const localProving = (window as any).localProving;
 
-  if (localProving) useRegisterWorkerClient();
+  useRegisterWorkerClient();
 
   const roundsStore = useRoundsStore();
   const lotteryStore = useWorkerClientStore();
@@ -85,8 +82,9 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   }, [networkStore.minaNetwork?.networkID, chainStore.block]);
 
   useEffect(() => {
+
     if (
-      localProving &&
+      workerClientStore.isLocalProving &&
       workerClientStore.client &&
       !workerClientStore.lotteryCompilationStarted
     ) {

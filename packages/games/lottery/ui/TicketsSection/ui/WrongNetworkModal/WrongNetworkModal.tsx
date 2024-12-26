@@ -29,7 +29,6 @@ export default function WrongNetworkModal() {
         <span
           className={"my-[1vw] text-center font-museo text-[1vw] font-medium"}
         >
-          |{networkStore.minaNetwork?.name}|
           This game only supports {(NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET].name)} network, in order to play you need to
           switch network
         </span>
