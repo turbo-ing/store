@@ -151,7 +151,7 @@ export const EventItem = ({
             <path
               d="M2.7998 2.7334L22.6331 22.5667L2.7998 42.4001"
               stroke="#D2FF00"
-              stroke-width="5.66667"
+              strokeWidth="5.66667"
               className={"group-hover:stroke-bg-grey"}
             />
           </svg>

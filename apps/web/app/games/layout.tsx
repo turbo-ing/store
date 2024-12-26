@@ -16,34 +16,36 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   const [roundInfo, setRoundInfo] = useState<ILotteryRound | undefined>();
   const [minaEvents, setMinaEvents] = useState<any | undefined>(undefined);
-  const getRoundQuery = api.lotteryBackend.getRoundInfos.useQuery(
+  const getRoundQuery = api.http.lotteryBackend.getRoundInfos.useQuery(
     {
       roundIds: [roundsStore.roundToShowId],
     },
     {
       refetchInterval: 5000,
-    }
+    },
   );
 
-  const getMinaEventsQuery = api.lotteryBackend.getMinaEvents.useQuery({});
+  const getMinaEventsQuery = api.http.lotteryBackend.getMinaEvents.useQuery({});
 
-  const addGiftCodesMutation = api.giftCodes.addGiftCodes.useMutation();
-  const addClaimRequestMutation = api.claimRequests.requestClaim.useMutation();
-  const sendTicketQueueMutation = api.giftCodes.sendTicketQueue.useMutation();
-  const getRoundsInfosQuery = api.lotteryBackend.getRoundInfos;
+  const addGiftCodesMutation = api.http.giftCodes.addGiftCodes.useMutation();
+  const addClaimRequestMutation =
+    api.http.claimRequests.requestClaim.useMutation();
+  const sendTicketQueueMutation =
+    api.http.giftCodes.sendTicketQueue.useMutation();
+  const getRoundsInfosQuery = api.http.lotteryBackend.getRoundInfos;
 
-  const accountData = api.accounts.getAccount.useQuery({
+  const accountData = api.http.accounts.getAccount.useQuery({
     userAddress: networkStore.address || "",
   }).data;
-  const nameMutator = api.accounts.setName.useMutation();
-  const avatarIdMutator = api.accounts.setAvatar.useMutation();
+  const nameMutator = api.http.accounts.setName.useMutation();
+  const avatarIdMutator = api.http.accounts.setAvatar.useMutation();
 
-  const gameFeedbackMutator = api.ratings.setGameFeedback.useMutation();
-  const getGameIdQuery = api.ratings.getGameRating;
+  const gameFeedbackMutator = api.http.ratings.setGameFeedback.useMutation();
+  const getGameIdQuery = api.http.ratings.getGameRating;
 
   const setFavoriteGameStatusMutation =
-    api.favorites.setFavoriteGameStatus.useMutation();
-  const getFavoriteGamesQuery = api.favorites.getFavoriteGames.useQuery({
+    api.http.favorites.setFavoriteGameStatus.useMutation();
+  const getFavoriteGamesQuery = api.http.favorites.getFavoriteGames.useQuery({
     userAddress: networkStore.address || "",
   });
 
@@ -107,7 +109,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               ?.data as Record<number, ILotteryRound>) || undefined,
           addGiftCodesMutation: (giftCodes) =>
             addGiftCodesMutation.mutate(giftCodes),
-          addClaimRequestMutation: (claim) => 
+          addClaimRequestMutation: (claim) =>
             addClaimRequestMutation.mutate(claim),
           sendTicketQueueMutation: (ticketQueue) =>
             sendTicketQueueMutation.mutate({
@@ -115,10 +117,10 @@ export default function Layout({ children }: { children: ReactNode }) {
               giftCode: ticketQueue.giftCode,
               roundId: ticketQueue.roundId,
               ticket: ticketQueue.ticket,
-              signature: ticketQueue.signature
+              signature: ticketQueue.signature,
             }),
           async checkGiftCodesQuery(codes) {
-            const data = await vanilaApi.giftCodes.checkGiftCodes.query({
+            const data = await vanilaApi.http.giftCodes.checkGiftCodes.query({
               giftCodes: codes,
             });
             return data?.giftCodes;
