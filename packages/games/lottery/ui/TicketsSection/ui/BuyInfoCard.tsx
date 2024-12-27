@@ -74,7 +74,7 @@ export default function BuyInfoCard({
       numberOfTickets,
     );
     console.log("txJson", txJson);
-    await sendTransaction(txJson)
+    await sendTransaction(JSON.stringify(txJson))
       .then((transaction: string | undefined) => {
         if (transaction) {
           clearTickets();
