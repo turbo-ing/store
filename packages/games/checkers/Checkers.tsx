@@ -266,6 +266,8 @@ export default function RandzuPage({
   return (
     <GamePage gameConfig={checkersConfig} gameTitleImage={CheckersCoverSVG}>
       <PvPGameView
+        gameId={checkersConfig.id}
+        competitionId={params.competitionId}
         status={statuses[gameState]}
         opponent={matchQueue.gameInfo?.opponent!}
         startPrice={lobbiesStore.lobbies?.[0]?.fee || 0n}

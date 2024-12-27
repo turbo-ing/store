@@ -29,12 +29,10 @@ export default function TicketsSection() {
   const notificationStore = useNotificationStore();
   const { giftCodes } = useGiftCodes();
 
-  console.log("Gift codes", giftCodes);
-
   const [tickets, setTickets] = useState<TicketInfo[]>([]);
   const [blankTicket, setBlankTicket] = useState<boolean>(true);
   const [voucherMode, setVoucherMode] = useState<VoucherMode>(
-    VoucherMode.Closed
+    VoucherMode.Closed,
   );
   const [giftCode, setGiftCode] = useState<string>("");
   const [giftCodeToBuyAmount, setGiftCodeToBuyAmount] = useState<number>(1);
@@ -63,7 +61,7 @@ export default function TicketsSection() {
           "gap-[2.604vw]":
             hasOwnedTickets ||
             roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
-        }
+        },
       )}
     >
       <div className="">
@@ -98,7 +96,7 @@ export default function TicketsSection() {
                           "flex w-[22.5vw] cursor-pointer flex-row items-center justify-center gap-[0.781vw] rounded-[0.521vw] bg-right-accent py-[0.365vw] hover:opacity-80 disabled:cursor-default disabled:hover:opacity-100",
                           {
                             "rounded-b-none": voucherMode != VoucherMode.Closed,
-                          }
+                          },
                         )}
                         onClick={() => setVoucherMode(VoucherMode.Use)}
                         disabled={voucherMode != VoucherMode.Closed}
@@ -292,14 +290,16 @@ export default function TicketsSection() {
                   >
                     <BuyInfoCard
                       buttonActive={
-                        (workerClientStore.lotteryCompiled || !(window as any).localProving) &&
+                        (workerClientStore.lotteryCompiled ||
+                          !(window as any).localProving) &&
                         !workerClientStore.isActiveTx &&
                         ((tickets.length > 0 && tickets[0].amount != 0) ||
                           voucherMode == VoucherMode.List)
                       }
                       ticketsInfo={tickets}
                       loaderActive={
-                        (workerClientStore.lotteryCompiled || !(window as any).localProving) &&
+                        (workerClientStore.lotteryCompiled ||
+                          !(window as any).localProving) &&
                         workerClientStore.isActiveTx
                       }
                       clearTickets={() => {

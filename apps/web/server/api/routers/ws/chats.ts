@@ -6,7 +6,16 @@ import { observable } from "@trpc/server/observable";
 import { EventEmitter } from "events";
 import { z } from "zod";
 import { publicProcedure, createTRPCRouter } from "../../trpc";
-import { IMessage } from "../../../../entities/Chat/Chat";
+
+interface IMessage {
+  roomId: string;
+  sender: {
+    address: string;
+    name?: string;
+  };
+  text: string;
+  createdAt: string;
+}
 
 interface MyEvents {
   sendMessage: (message: IMessage) => void;
@@ -53,12 +62,10 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         roomId: z.string(),
-        senderAddress: z.string(),
-        // sender: z.object({
-        //   address: z.string(),
-        //   name: z.string().optional(),
-        //   avatar: z.string().optional(),
-        // }),
+        sender: z.object({
+          address: z.string(),
+          name: z.string().optional(),
+        }),
         text: z.string(),
       }),
     )
@@ -71,15 +78,19 @@ export const chatRouter = createTRPCRouter({
       ee.emit("sendMessage", message);
       return message;
     }),
-  onMessage: publicProcedure.subscription(() => {
-    return observable<IMessage>((emit) => {
-      const onMessage = (data: IMessage) => {
-        emit.next(data);
-      };
-      ee.on("sendMessage", onMessage);
-      return () => {
-        ee.off("sendMessage", onMessage);
-      };
-    });
-  }),
+  onMessage: publicProcedure
+    .input(z.object({ roomId: z.string() }))
+    .subscription(({ input }) => {
+      return observable<IMessage>((emit) => {
+        const onMessage = (data: IMessage) => {
+          if (input.roomId === data.roomId) {
+            emit.next(data);
+          }
+        };
+        ee.on("sendMessage", onMessage);
+        return () => {
+          ee.off("sendMessage", onMessage);
+        };
+      });
+    }),
 });

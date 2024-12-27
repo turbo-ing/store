@@ -3,7 +3,7 @@
 import { ReactNode, useState, useEffect } from "react";
 import { useRoundsStore } from "../../../../packages/games/lottery/lib/roundsStore";
 import { api } from "../../trpc/react";
-import { api as vanilaApi } from "../../trpc/vanilla";
+import { api as vanillaApi } from "../../trpc/vanilla";
 
 import { ILotteryRound } from "../../../../packages/games/lottery/lib/types";
 import { useNetworkStore } from "../../../../packages/sdk/lib/stores/network";
@@ -48,6 +48,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   const getFavoriteGamesQuery = api.http.favorites.getFavoriteGames.useQuery({
     userAddress: networkStore.address || "",
   });
+
+  const sendMessageMutation = api.ws.chat.sendMessage.useMutation();
+  const onMessageSubscription = api.ws.chat.onMessage;
 
   useEffect(() => {
     if (!getRoundQuery.data) return undefined;
@@ -98,6 +101,16 @@ export default function Layout({ children }: { children: ReactNode }) {
             }),
           userFavoriteGames: getFavoriteGamesQuery.data?.favorites as [],
         },
+        chat: {
+          sendMessageMutator: async ({ roomId, sender, text }) =>
+            await sendMessageMutation.mutateAsync({
+              roomId: roomId,
+              sender: sender,
+              text: text,
+            }),
+          onMessageSubscription: ({ roomId, opts }) =>
+            onMessageSubscription.useSubscription({ roomId }, opts),
+        },
       }}
     >
       <LotteryContext.Provider
@@ -120,7 +133,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               signature: ticketQueue.signature,
             }),
           async checkGiftCodesQuery(codes) {
-            const data = await vanilaApi.http.giftCodes.checkGiftCodes.query({
+            const data = await vanillaApi.http.giftCodes.checkGiftCodes.query({
               giftCodes: codes,
             });
             return data?.giftCodes;

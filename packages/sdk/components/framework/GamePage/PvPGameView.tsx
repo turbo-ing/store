@@ -7,6 +7,7 @@ import { PublicKey } from "o1js";
 import { ReactNode } from "react";
 import Image from "next/image";
 import znakesImg from "../../../public/image/tokens/znakes.svg";
+import Chat from "../../shared/Chat";
 
 export enum MainButtonState {
   WalletNotInstalled,
@@ -20,6 +21,8 @@ export enum MainButtonState {
 }
 
 type PvPGameViewProps = {
+  gameId: string;
+  competitionId: string;
   status: string;
   opponent: PublicKey;
   startPrice: bigint;
@@ -108,6 +111,18 @@ export const PvPGameView = (props: PvPGameViewProps) => {
         <div className="font-plexsans text-[20px]/[20px] font-medium text-left-accent">
           PLAYERS IN QUEUE: {props.queueSize}
         </div>
+        <div
+          className={"w-full flex flex-col justify-end items-end"}
+          style={{
+            height: "18.229vw",
+            marginBottom: "5.4vw",
+          }}
+        >
+          <Chat
+            roomId={`${props.gameId}-${props.competitionId}`}
+            className={"w-full h-full"}
+          />
+        </div>
         <div className="flex flex-grow flex-col justify-center font-plexsans font-medium">
           <div className="flex flex-row gap-2 text-[16px]/[16px]">
             <div className="text-left-accent">GAME RATING:</div>{" "}
@@ -126,7 +141,8 @@ export const PvPGameView = (props: PvPGameViewProps) => {
             </svg>
           </div>
           <div className="flex flex-row gap-2">
-            <div className="text-left-accent">AUTHOR:</div> {props.gameAuthor}
+            <div className="text-left-accent">AUTHOR:</div>
+            {props.gameAuthor}
           </div>
         </div>
       </div>

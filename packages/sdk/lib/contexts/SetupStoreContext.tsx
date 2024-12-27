@@ -34,6 +34,43 @@ interface ISetupStoreContext {
         }[]
       | undefined;
   };
+  chat: {
+    sendMessageMutator:
+      | (({
+          roomId,
+          sender,
+          text,
+        }: {
+          roomId: string;
+          sender: {
+            address: string;
+            name?: string;
+          };
+          text: string;
+        }) => Promise<{
+          roomId: string;
+          sender: {
+            address: string;
+            name?: string;
+          };
+          text: string;
+          createdAt: string;
+        }>)
+      | undefined;
+    onMessageSubscription:
+      | (({
+          roomId,
+          opts,
+        }: {
+          roomId: string;
+          opts?: {
+            onStarted?: () => void;
+            onData<T>(data: T): void;
+            onError<T>(err: T): void;
+          };
+        }) => void)
+      | undefined;
+  };
 }
 
 const SetupStoreContext = createContext<ISetupStoreContext>({
@@ -50,6 +87,10 @@ const SetupStoreContext = createContext<ISetupStoreContext>({
   favorites: {
     setFavoriteGameStatus: undefined,
     userFavoriteGames: undefined,
+  },
+  chat: {
+    sendMessageMutator: undefined,
+    onMessageSubscription: undefined,
   },
 });
 
