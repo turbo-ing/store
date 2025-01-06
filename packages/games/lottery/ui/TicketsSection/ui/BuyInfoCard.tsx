@@ -171,10 +171,18 @@ export default function BuyInfoCard({
 
   const sendTicketQueue = async () => {
     const dataToSign = Poseidon.hashPacked(CircuitString, CircuitString.fromString(giftCode)); 
+    let response; 
 
-    const response = await (window as any).mina.signFields({
-      message: [dataToSign.toString()],
-    });
+    try {
+      response = await (window as any).mina.signFields({
+        message: [dataToSign.toString()],
+      });
+    } catch (e: any) {
+      if (e?.code == 1001) {
+        await requestAccounts();
+        return await sendTicketQueue();
+      }
+    }
 
     sendTicketQueueMutation({
       userAddress: networkStore.address || "",
