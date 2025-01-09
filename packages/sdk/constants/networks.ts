@@ -7,34 +7,35 @@ export interface Network {
 }
 
 export const NetworkIds = {
-  ZEKO_TESTNET: 'zeko:testnet',
-  MINA_DEVNET: 'mina:testnet',
+  ZEKO_TESTNET: "zeko:testnet",
+  MINA_DEVNET: "mina:devnet",
 };
 
 export const PalladNetworkIds = {
-  ZEKO_TESTNET: '69420',
-  MINA_DEVNET: '29936104443aaf264a7f0192ac64b1c7173198c1ed404c1bcff5e562e05eb7f6',
+  ZEKO_TESTNET: "69420",
+  MINA_DEVNET:
+    "29936104443aaf264a7f0192ac64b1c7173198c1ed404c1bcff5e562e05eb7f6",
 };
 
 export const PALLAD_TO_AURO_NETWORK_IDS = {
   [PalladNetworkIds.MINA_DEVNET]: NetworkIds.MINA_DEVNET,
-  [PalladNetworkIds.ZEKO_TESTNET]: NetworkIds.ZEKO_TESTNET
-}
+  [PalladNetworkIds.ZEKO_TESTNET]: NetworkIds.ZEKO_TESTNET,
+};
 
 export const NETWORKS: { readonly [networkId: string]: Network } = {
   [NetworkIds.MINA_DEVNET]: {
     networkID: NetworkIds.MINA_DEVNET,
     palladNetworkID: PalladNetworkIds.MINA_DEVNET,
-    name: 'Devnet',
-    graphql: 'https://proxy.zknoid.io/mina-node/devnet-main-node',
-    archive: 'https://proxy.zknoid.io/mina-node/devnet-archive-node',
+    name: "Devnet",
+    graphql: "https://proxy.zknoid.io/mina-node/devnet-main-node",
+    archive: "https://proxy.zknoid.io/mina-node/devnet-archive-node",
   },
   [NetworkIds.ZEKO_TESTNET]: {
     networkID: NetworkIds.ZEKO_TESTNET,
     palladNetworkID: PalladNetworkIds.ZEKO_TESTNET,
-    name: 'Zeko',
-    graphql: 'https://devnet.zeko.io/graphql',
-    archive: '',
+    name: "Zeko",
+    graphql: "https://devnet.zeko.io/graphql",
+    archive: "",
   },
 };
 
