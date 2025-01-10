@@ -1,26 +1,24 @@
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
 import { lotteryConfig } from "../config";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import BannerSection from "./BannerSection";
 import TicketsSection from "./TicketsSection";
 import { useChainStore } from "@zknoid/sdk/lib/stores/minaChain";
 import { DateTime, Duration } from "luxon";
-import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
-import WrongNetworkModal from "./TicketsSection/ui/WrongNetworkModal";
 import { fetchAccount } from "o1js";
 import { FACTORY_ADDRESS } from "../constants/addresses";
 import { BLOCK_PER_ROUND } from "l1-lottery-contracts";
 import StateManager from "./StateManager";
-import ConnectWalletModal from "@zknoid/sdk/components/shared/ConnectWalletModal";
 import TicketsStorage from "./TicketsStorage";
 import {
   useRegisterWorkerClient,
   useWorkerClientStore,
 } from "../workers/workerClientStore";
 import { useRoundsStore } from "../lib/roundsStore";
-import LotteryContext from "../lib/contexts/LotteryContext";
+import NetworkValidator from "@zknoid/sdk/components/widgets/NetworkValidator";
+import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
 
 export enum Pages {
   Main,
@@ -30,7 +28,7 @@ export enum Pages {
 export default function Lottery({}: { params: { competitionId: string } }) {
   const networkStore = useNetworkStore();
   const [roundEndsIn, setRoundEndsIn] = useState<DateTime>(
-    DateTime.fromMillis(0)
+    DateTime.fromMillis(0),
   );
   const [page, setPage] = useState<Pages>(Pages.Main);
 
@@ -73,7 +71,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       if (chainStore.block?.slotSinceGenesis) {
         const roundId = Math.floor(
           Number(chainStore.block!.slotSinceGenesis - onchainState.startBlock) /
-            BLOCK_PER_ROUND
+            BLOCK_PER_ROUND,
         );
 
         workerClientStore.setRoundId(roundId);
@@ -82,7 +80,6 @@ export default function Lottery({}: { params: { competitionId: string } }) {
   }, [networkStore.minaNetwork?.networkID, chainStore.block]);
 
   useEffect(() => {
-
     if (
       workerClientStore.isLocalProving &&
       workerClientStore.client &&
@@ -117,8 +114,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
                   (Number(blockNum - startBlock) % BLOCK_PER_ROUND)) *
                 3 *
                 60,
-            })
-          )
+            }),
+          ),
         )
       : 0;
   }, [workerClientStore.onchainState, workerClientStore.lotteryRoundId]);
@@ -161,13 +158,13 @@ export default function Lottery({}: { params: { competitionId: string } }) {
         animate={"windowed"}
       ></motion.div>
 
-      {networkStore.address && networkStore.walletConnected ? (
-        networkStore.minaNetwork?.networkID !=
-          NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET]
-            .networkID && <WrongNetworkModal />
-      ) : (
-        <ConnectWalletModal />
-      )}
+      <NetworkValidator
+        expectedNetwork={
+          NETWORKS[
+            process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_MAINNET
+          ]
+        }
+      />
     </GamePage>
   );
 }

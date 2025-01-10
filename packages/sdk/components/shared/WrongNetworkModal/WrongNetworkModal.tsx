@@ -1,11 +1,10 @@
-import BaseModal from "@zknoid/sdk/components/shared/Modal/BaseModal";
+import BaseModal from "../Modal/BaseModal";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import catWifeIMG from "../../../../images/cat-wife.svg";
+import catWifeIMG from "../../../public/image/cat-wife.svg";
 import Image from "next/image";
-import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
-import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
+import { Network, NETWORKS } from "../../../constants/networks";
 
 const NetworkSwitchButton = dynamic(
   () => import("./nonSSR/NetworkSwitchButton"),
@@ -14,9 +13,12 @@ const NetworkSwitchButton = dynamic(
   },
 );
 
-export default function WrongNetworkModal() {
+export default function WrongNetworkModal({
+  expectedNetwork,
+}: {
+  expectedNetwork: Network;
+}) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
-  const networkStore = useNetworkStore();
 
   return (
     <BaseModal isOpen={isOpen} setIsOpen={setIsOpen} isDismissible={false}>
@@ -29,11 +31,11 @@ export default function WrongNetworkModal() {
         <span
           className={"my-[1vw] text-center font-museo text-[1vw] font-medium"}
         >
-          This game only supports {(NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET].name)} network, in order to play you need to
-          switch network
+          This game only supports {expectedNetwork.name} network, in order to
+          play you need to switch network
         </span>
         <div className={"flex flex-col gap-[1vw]"}>
-          <NetworkSwitchButton />
+          <NetworkSwitchButton switchToNetwork={expectedNetwork} />
           <div className={"flex flex-row items-center"}>
             <div className={"h-px w-full bg-neutral-500"} />
             <span className={"px-[0.5vw] text-[0.5vw]"}>or</span>

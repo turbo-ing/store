@@ -78,6 +78,7 @@
     "./components/widgets/Footer/Footer": "./components/widgets/Footer/Footer.tsx",
     "./components/widgets/Footer": "./components/widgets/Footer/index.ts",
     "./components/widgets/Header": "./components/widgets/Header/index.ts",
+    "./components/widgets/NetworkValidator": "./components/widgets/NetworkValidator/index.ts",
     "./components/shared/Modal/StatefulModal": "./components/shared/Modal/StatefulModal.tsx",
     "./lib/contexts/ZkNoidGameContext": "./lib/contexts/ZkNoidGameContext.ts",
     "./lib/api/getZkAppTxByHash": "./lib/api/getZkAppTxByHash.ts",
