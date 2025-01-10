@@ -53,7 +53,7 @@ export default function OwnedTickets({
           ...x,
         })),
     );
-  }, [roundsStore.roundToShowId, roundInfo]);
+  }, [roundsStore.roundToShowId, roundInfo, roundInfo?.tickets]);
 
   useEffect(() => {
     if (tickets.length != 0 && !hasOwnedTickets) {
