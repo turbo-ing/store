@@ -46,7 +46,7 @@ export default function BoughtGiftCodes() {
             "flex max-h-[6.771vw] w-full flex-col gap-x-[1.094vw] gap-y-[0.521vw] overflow-y-scroll pr-[0.5vw]"
           }
         >
-          {giftCodes.map((item, index) => (
+          {giftCodes.filter(x => !x.deleted).map((item, index) => (
             <div
               key={index}
               className={
