@@ -11,7 +11,7 @@ export interface Network {
 
 export const NetworkIds = {
   ZEKO_TESTNET: "zeko:testnet",
-  MINA_DEVNET: "mina:testnet",
+  MINA_DEVNET: "mina:devnet",
   MINA_MAINNET: "mina:mainnet",
 };
 

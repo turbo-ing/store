@@ -29,9 +29,6 @@ import { formatPubkey } from "@zknoid/sdk/lib/utils";
 import Button from "@zknoid/sdk/components/shared/Button";
 import { Competition } from "@zknoid/sdk/components/framework/GameWidget/ui/Competition";
 import { Currency } from "@zknoid/sdk/constants/currency";
-import { formatUnits } from "@zknoid/sdk/lib/unit";
-import znakesImg from "@zknoid/sdk/public/image/tokens/znakes.svg";
-import Image from "next/image";
 import { UnsetCompetitionPopup } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/UnsetCompetitionPopup";
 import { Win } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/Win";
 import { Lost } from "@zknoid/sdk/components/framework/GameWidget/ui/popups/Lost";
@@ -48,6 +45,7 @@ import {
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
+import Chat from "@zknoid/sdk/components/shared/Chat";
 
 const competition = {
   id: "global",
@@ -396,6 +394,18 @@ export default function Randzu({
               isReadonly
             />
           )}
+          <div
+            className={"w-full flex flex-col justify-end items-end"}
+            style={{
+              height: "18.229vw",
+              marginBottom: "5.4vw",
+            }}
+          >
+            <Chat
+              roomId={`${randzuConfig.id}-${params.competitionId}`}
+              className={"w-full h-full"}
+            />
+          </div>
         </div>
         <GameWidget
           author={randzuConfig.author}

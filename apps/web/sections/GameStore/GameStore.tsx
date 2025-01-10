@@ -15,7 +15,6 @@ import GameStoreFilters from "../../widgets/GameStoreFilters";
 import SortByFilter from "../../entities/SortByFilter";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import GameCard from "../../widgets/GameCard";
-import Chat from "../../entities/Chat";
 
 export default function GameStore({
   games,
@@ -65,7 +64,6 @@ export default function GameStore({
         setFeaturesSelected={setFeaturesSelected}
       />
       <div className={"flex w-full flex-col"}>
-        <Chat roomId={"base"} />
         <div className={"flex w-full flex-row items-center justify-between"}>
           <span
             className={"font-museo text-[1.667vw] font-bold text-foreground"}

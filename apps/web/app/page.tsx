@@ -26,6 +26,8 @@ export default function Home() {
   const getFavoriteGamesQuery = api.http.favorites.getFavoriteGames.useQuery({
     userAddress: networkStore.address || "",
   });
+  const sendMessageMutation = api.ws.chat.sendMessage.useMutation();
+  const onMessageSubscription = api.ws.chat.onMessage;
   return (
     <ZkNoidGameContext.Provider
       value={{
@@ -70,6 +72,16 @@ export default function Home() {
                 status: status,
               }),
             userFavoriteGames: getFavoriteGamesQuery.data?.favorites as [],
+          },
+          chat: {
+            sendMessageMutator: async ({ roomId, sender, text }) =>
+              await sendMessageMutation.mutateAsync({
+                roomId: roomId,
+                sender: sender,
+                text: text,
+              }),
+            onMessageSubscription: ({ roomId, opts }) =>
+              onMessageSubscription.useSubscription({ roomId }, opts),
           },
         }}
       >
