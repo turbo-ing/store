@@ -14,7 +14,8 @@ type Number = {
   win: boolean;
 };
 
-const network = NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET];
+const network =
+  NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET];
 
 export function TicketItem({
   plotteryAddress,
@@ -49,20 +50,22 @@ export function TicketItem({
   return (
     <div
       className={
-        "grid grid-cols-4 border-b py-[0.521vw] first:border-t hover:bg-[#464646]"
+        "grid grid-cols-3 lg:!grid-cols-4 gap-y-[2.326vw] lg:!gap-y-0 border-b py-[2.326vw] lg:!py-[0.521vw] first:border-t hover:bg-[#464646]"
       }
     >
-      <div className={"flex flex-row items-center gap-[0.25vw]"}>
+      <div
+        className={"flex flex-row items-center gap-[1.163vw] lg:!gap-[0.25vw]"}
+      >
         {numbers.map((item, index) => (
           <div
             key={index}
             className={cn(
-              "flex h-[1.33vw] w-[1.33vw] items-center justify-center rounded-[0.15vw] border font-plexsans text-[0.833vw]",
+              "flex h-[5.814vw] lg:!h-[1.33vw] w-[5.814vw] lg:!w-[1.33vw] items-center justify-center rounded-[0.465vw] lg:!rounded-[0.15vw] border font-plexsans text-[3.488vw] lg:!text-[0.833vw] p-[1.163vw] lg:!p-0",
               {
                 "border-left-accent bg-left-accent": item.win,
                 "border-foreground text-foreground": !item.win,
                 "text-black": item.win,
-              }
+              },
             )}
           >
             {item.number}
@@ -71,14 +74,14 @@ export function TicketItem({
       </div>
       <div
         className={
-          "flex flex-row items-center justify-center gap-[0.25vw] font-plexsans text-[0.833vw]"
+          "flex flex-row items-center justify-center gap-[0.25vw] font-plexsans text-[3.721vw] lg:!text-[0.833vw]"
         }
       >
         {amount}
       </div>
       <div
         className={
-          "flex flex-row items-center gap-[0.25vw] font-plexsans text-[0.833vw]"
+          "flex flex-row items-center gap-[0.25vw] font-plexsans text-[3.721vw] lg:!text-[0.833vw]"
         }
       >
         {!!funds ? (
@@ -95,7 +98,7 @@ export function TicketItem({
       {!!funds && !claimRequested && !claimed && (
         <button
           className={
-            "flex items-center justify-center rounded-[0.33vw] bg-left-accent px-[0.74vw] py-[0.37vw] font-museo text-[0.833vw] font-medium text-black hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:opacity-60"
+            "col-span-3 lg:!col-span-1 flex items-center justify-center rounded-[1.163vw] lg:!rounded-[0.33vw] bg-left-accent px-[0.74vw] py-[1.163vw] lg:!py-[0.37vw] font-museo text-[3.721vw] lg:!text-[0.833vw] font-medium text-black hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:opacity-60"
           }
           disabled={workerClient.isActiveTx}
           onClick={async () => {
@@ -110,7 +113,7 @@ export function TicketItem({
             const claimRequest = {
               userAddress: networkStore.address!,
               roundId,
-              ticketId
+              ticketId,
             };
             addClaimRequestMutation(claimRequest);
 
@@ -121,7 +124,7 @@ export function TicketItem({
         >
           <div
             className={
-              "flex flex-row items-center gap-[10%] pr-[10%] text-center"
+              "flex flex-row items-center gap-[10%] lg:!pr-[10%] text-center"
             }
           >
             {isLoader && <Loader size={"19"} color={"#212121"} />}
@@ -135,7 +138,7 @@ export function TicketItem({
           target={"_blank"}
           rel={"noopener noreferrer"}
           className={
-            "items-center rounded-[0.33vw] px-[0.74vw] py-[0.37vw] font-museo text-[0.833vw] font-medium text-foreground underline hover:cursor-pointer hover:text-left-accent"
+            "items-center rounded-[0.33vw] px-[0.74vw] py-[0.37vw] font-museo text-[3.721vw] lg:!text-[0.833vw] font-medium text-foreground underline hover:cursor-pointer hover:text-left-accent"
           }
         >
           Transaction link
@@ -144,7 +147,7 @@ export function TicketItem({
       {claimRequested && (
         <div
           className={
-            "px-[0.74vw] py-[0.37vw] font-museo text-[0.833vw] font-medium text-foreground"
+            "px-[0.74vw] py-[0.37vw] font-museo text-[3.721vw] lg:!text-[0.833vw] font-medium text-foreground"
           }
         >
           {" "}

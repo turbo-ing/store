@@ -17,8 +17,8 @@ const TicketsNumPicker = ({
   return (
     <div
       className={cn(
-        "flex h-[1.6vw] items-center justify-between rounded-[0.33vw]",
-        "border border-bg-dark border-opacity-50 text-[1.07vw] text-[#252525]",
+        "flex h-[5.581vw] lg:!h-[1.6vw] items-center justify-between rounded-[1.163vw] lg:!rounded-[0.33vw]",
+        "border border-bg-dark border-opacity-50 text-[3.721vw] lg:!text-[1.07vw] text-[#252525]",
       )}
     >
       <div
@@ -37,13 +37,13 @@ const TicketsNumPicker = ({
           viewBox="0 0 16 3"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-[1.07vw]"
+          className="w-[3.721vw] lg:!w-[1.07vw]"
         >
           <path d="M0 0.5H16V2.5H0V0.5Z" fill="#000000" />
           <path d="M0 0.5H16V2.5H0V0.5Z" fill="#000000" />
         </svg>
       </div>
-      <div className="mx-[0.4vw] opacity-50">{amount}</div>
+      <div className="mx-[1.163vw] lg:!mx-[0.4vw] opacity-50">{amount}</div>
       <div
         className="cursor-pointer p-[0.3vw] hover:opacity-60"
         onClick={() => setAmount(amount + 1)}
@@ -54,7 +54,7 @@ const TicketsNumPicker = ({
           viewBox="0 0 16 17"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-[1.07vw]"
+          className="w-[3.721vw] lg:!w-[1.07vw]"
         >
           <path
             fillRule="evenodd"
@@ -83,7 +83,7 @@ const ClearTicketButton = ({ onClick }: { onClick: () => void }) => {
         viewBox="0 0 17 18"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={"h-[0.885vw] w-[0.885vw]"}
+        className={"h-[3.721vw] lg:!h-[0.885vw] w-[3.721vw] lg:!w-[0.885vw]"}
       >
         <path
           fillRule="evenodd"
@@ -170,8 +170,8 @@ export default function TicketCard({
   return (
     <motion.div
       className={cn(
-        "relative -mt-[25%] w-[22.5vw] rounded-[1.33vw] bg-right-accent p-[0.33vw] first:mt-0",
-        { "h-[13.53vw]": !finalized, "h-fit": finalized },
+        "relative -mt-[25%] w-full lg:!w-[22.5vw] rounded-[4.651vw] lg:!rounded-[1.33vw] bg-right-accent p-[1.163vw] lg:!p-[0.33vw] first:mt-0",
+        { "h-[51.163vw] lg:!h-[13.53vw]": !finalized, "h-fit": finalized },
       )}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -183,25 +183,27 @@ export default function TicketCard({
     >
       <div
         className={cn(
-          "flex w-full flex-col rounded-[1.042vw] border border-bg-dark p-[0.781vw]",
+          "flex w-full flex-col rounded-[3.488vw] lg:!rounded-[1.042vw] border border-bg-dark p-[4.651vw] lg:!p-[0.781vw]",
           { "h-full": !finalized },
         )}
       >
         <div className="flex flex-row items-center">
-          <div className="text-[1.5vw] uppercase text-black">Ticket</div>
-          <div className="ml-auto flex gap-[0.33vw] text-[1.07vw] text-right-accent">
+          <div className="text-[5.581vw] lg:!text-[1.5vw] uppercase text-black">
+            Ticket
+          </div>
+          <div className="ml-auto flex gap-[0.33vw] text-[3.721vw] lg:!text-[1.07vw] text-right-accent">
             {amount == 0 ? (
               <TicketBlockButton onClick={() => setAmount(1)}>
                 Get ticket
               </TicketBlockButton>
             ) : finalized ? (
-              <div className={"flex flex-row gap-[0.26vw]"}>
+              <div className={"flex flex-row gap-[2.326vw] lg:!gap-[0.26vw]"}>
                 {!workerClientStore.isActiveTx && (
                   <ClearTicketButton onClick={removeTicket} />
                 )}
                 <div
                   className={
-                    "h-[1.6vw] rounded-[0.33vw] border border-bg-dark px-[0.3vw] pb-[0.3vw] pt-[0.15vw] font-plexsans text-[0.833vw] font-medium text-bg-dark"
+                    "h-[5.581vw] lg:!h-[1.6vw] rounded-[1.163vw] lg:!rounded-[0.33vw] border border-bg-dark px-[0.3vw] pb-[0.3vw] pt-[0.15vw] font-plexsans text-[3.721vw] lg:!text-[0.833vw] font-medium text-bg-dark"
                   }
                 >
                   {finalAmount
@@ -210,7 +212,7 @@ export default function TicketCard({
                 </div>
               </div>
             ) : (
-              <div className={"flex flex-row gap-[0.26vw]"}>
+              <div className={"flex flex-row gap-[2.326vw] lg:!gap-[0.26vw]"}>
                 <ClearTicketButton onClick={removeTicket} />
                 {voucherMode !== VoucherMode.UseValid && (
                   <TicketsNumPicker
@@ -223,20 +225,20 @@ export default function TicketCard({
             )}
           </div>
         </div>
-        <div className="flex flex-row gap-[0.33vw]">
+        <div className="flex flex-row gap-[1.163vw] lg:!gap-[0.33vw]">
           {[0, 1, 2, 3, 4, 5].map((fieldId) => (
             <div
               key={fieldId}
               className={cn(
-                "h-[2.67vw] w-[2.67vw] rounded-[0.33vw] border-[0.07vw] border-bg-dark shadow-[inset_5px_5px_5px_#C89EF1,inset_-5px_-5px_5px_rgba(200,158,241,0.5)]",
-                "flex items-center justify-center font-museo text-[2.13vw] font-bold text-black",
+                "h-[9.302vw] lg:!h-[2.67vw] w-[9.302vw] lg:!w-[2.67vw] rounded-[1.163vw] lg:!rounded-[0.33vw] border-[0.07vw] border-bg-dark shadow-[inset_5px_5px_5px_#C89EF1,inset_-5px_-5px_5px_rgba(200,158,241,0.5)]",
+                "flex items-center justify-center font-museo text-[7.442vw] lg:!text-[2.13vw] font-bold text-black",
               )}
             >
               {symbols?.[fieldId] || "_"}
             </div>
           ))}
         </div>
-        <div className="mt-[1.6vw] flex flex-row justify-between gap-[0.33vw]">
+        <div className="mt-[5.581vw] lg:!mt-[1.6vw] flex flex-row justify-between gap-[1.163vw] lg:!gap-[0.33vw]">
           <AnimatePresence>
             {!finalized &&
               amount > 0 &&
@@ -256,7 +258,7 @@ export default function TicketCard({
                       : undefined
                   }
                   className={
-                    "relative flex h-[1.6vw] w-[1.6vw] flex-col items-center justify-center"
+                    "relative flex h-[6.512vw] lg:!h-[1.6vw] w-[6.512vw] lg:!w-[1.6vw] flex-col items-center justify-center"
                   }
                   onClick={() => {
                     setSymbols(
@@ -273,7 +275,9 @@ export default function TicketCard({
                     viewBox="0 0 28 28"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className={"h-[1.6vw] w-[1.6vw]"}
+                    className={
+                      "h-[6.512vw] lg:!h-[1.6vw] w-[6.512vw] lg:!w-[1.6vw]"
+                    }
                   >
                     <g opacity="1">
                       <rect
@@ -291,10 +295,14 @@ export default function TicketCard({
                   </svg>
                   <div
                     className={
-                      "absolute bottom-px right-px z-[1] flex h-full w-full items-center justify-center "
+                      "absolute bottom-px right-px z-[1] flex h-full w-full items-center justify-center"
                     }
                   >
-                    <span className={"text-[1vw] text-bg-dark"}>{fieldId}</span>
+                    <span
+                      className={"text-[3.721vw] lg:!text-[1vw] text-bg-dark"}
+                    >
+                      {fieldId}
+                    </span>
                   </div>
                 </motion.button>
               ))}
@@ -312,7 +320,7 @@ export default function TicketCard({
               exit={{ opacity: 0 }}
               whileHover={{ opacity: 0.8 }}
               className={
-                "mb-auto mt-[0.26vw] w-full rounded-[0.26vw] bg-bg-dark py-[0.417vw] text-center font-museo text-[0.833vw] text-foreground"
+                "mb-auto mt-[1.163vw] lg:!mt-[0.26vw] w-full rounded-[1.163vw] lg:!rounded-[0.26vw] bg-bg-dark py-[1.86vw] lg:!py-[0.417vw] text-center font-museo text-[3.721vw] lg:!text-[0.833vw] text-foreground"
               }
               disabled={symbols.length != 0 && symbols.length != 6}
               onClick={() => {

@@ -1,7 +1,7 @@
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
 import { lotteryConfig } from "../config";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import BannerSection from "./BannerSection";
 import TicketsSection from "./TicketsSection";
@@ -19,6 +19,10 @@ import {
 import { useRoundsStore } from "../lib/roundsStore";
 import NetworkValidator from "@zknoid/sdk/components/widgets/NetworkValidator";
 import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
+import { cn } from "@zknoid/sdk/lib/helpers";
+import CurrentRoundInfo from "../ui/BannerSection/ui/CurrentRoundInfo";
+import PrevRoundInfo from "../ui/BannerSection/ui/PrevRoundInfo";
+import LotteryContext from "../lib/contexts/LotteryContext";
 
 export enum Pages {
   Main,
@@ -120,6 +124,12 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       : 0;
   }, [workerClientStore.onchainState, workerClientStore.lotteryRoundId]);
 
+  const { roundInfo } = useContext(LotteryContext);
+
+  const ticketsNum = roundInfo?.tickets
+    .map((x) => x.amount)
+    .reduce((x, y) => x + y, 0n);
+
   return (
     <GamePage
       gameConfig={lotteryConfig}
@@ -136,7 +146,94 @@ export default function Lottery({}: { params: { competitionId: string } }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
+            <div
+              className={"lg:!hidden flex flex-row gap-[3.488vw] mb-[3.488vw]"}
+            >
+              <button
+                onClick={() =>
+                  roundsStore.setRoundToShowId(roundsStore.roundToShowId - 1)
+                }
+                disabled={roundsStore.roundToShowId < 1}
+                className={cn(
+                  "w-full flex flex-row items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
+                  roundsStore.roundToShowId < 1 ? "opacity-0" : "opacity-100",
+                )}
+              >
+                <svg
+                  width="10"
+                  height="16"
+                  viewBox="0 0 10 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={"w-[1.628vw] h-[3.256vw]"}
+                >
+                  <path
+                    d="M9 1L2 8L9 15"
+                    stroke="#F9F8F4"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span
+                  className={
+                    "uppercase text-[3.256vw] font-bold font-museo text-foreground leading-[100%]"
+                  }
+                >
+                  Previous round
+                </span>
+              </button>
+              <button
+                onClick={() =>
+                  roundsStore.setRoundToShowId(roundsStore.roundToShowId + 1)
+                }
+                disabled={
+                  roundsStore.roundToShowId >= lotteryStore.lotteryRoundId
+                }
+                className={cn(
+                  "w-full flex flex-row-reverse items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
+                  roundsStore.roundToShowId >= lotteryStore.lotteryRoundId
+                    ? "opacity-0"
+                    : "opacity-100",
+                )}
+              >
+                <svg
+                  width="10"
+                  height="16"
+                  viewBox="0 0 10 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={"w-[1.628vw] h-[3.256vw] rotate-180"}
+                >
+                  <path
+                    d="M9 1L2 8L9 15"
+                    stroke="#F9F8F4"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span
+                  className={
+                    "uppercase text-[3.256vw] font-bold font-museo text-foreground leading-[100%]"
+                  }
+                >
+                  Next round
+                </span>
+              </button>
+            </div>
             <BannerSection roundEndsIn={roundEndsIn} setPage={setPage} />
+            <div className={"lg:!hidden"}>
+              {roundsStore.roundToShowId == lotteryStore.lotteryRoundId && (
+                <CurrentRoundInfo ticketsNum={ticketsNum} />
+              )}
+            </div>
+            <div className={"lg:!hidden"}>
+              {roundsStore.roundToShowId != lotteryStore.lotteryRoundId && (
+                <PrevRoundInfo
+                  ticketsNum={ticketsNum}
+                  winningCombination={roundInfo?.winningCombination}
+                />
+              )}
+            </div>
             <TicketsSection />
           </motion.div>
         )}

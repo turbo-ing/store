@@ -30,16 +30,16 @@ export default function BannerSection({
   return (
     <div
       className={cn(
-        "relative mb-[2.083vw] h-[17.969vw] items-center justify-center rounded-[0.67vw] border border-left-accent",
+        "relative mb-[3.488vw] lg:!mb-[2.083vw] h-[80.233vw] lg:!h-[17.969vw] items-center justify-center rounded-[4.651vw] lg:!rounded-[0.67vw] border border-left-accent",
         {
-          "bg-[url('/image/games/lottery/TopBanner-1.svg')] bg-contain bg-center bg-no-repeat":
+          "bg-[url('/image/games/lottery/TopBanner-1-mobile.svg')] lg:!bg-[url('/image/games/lottery/TopBanner-1.svg')] bg-cover lg:!bg-contain bg-center bg-no-repeat":
             roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
-          "bg-[url('/image/games/lottery/TopBanner-2.svg')] bg-contain bg-center bg-no-repeat":
+          "bg-[url('/image/games/lottery/TopBanner-2-mobile.svg')] lg:!bg-[url('/image/games/lottery/TopBanner-2.svg')] bg-cover lg:!bg-contain bg-center bg-no-repeat":
             roundsStore.roundToShowId != lotteryStore.lotteryRoundId,
         },
       )}
     >
-      <div className="absolute m-[1vw] flex h-[3.13vw] gap-[0.33vw]">
+      <div className="hidden lg:!flex absolute m-[1vw] h-[3.13vw] gap-[0.33vw]">
         <BannerButton
           onClick={() =>
             roundsStore.setRoundToShowId(roundsStore.roundToShowId - 1)
@@ -77,12 +77,14 @@ export default function BannerSection({
           </svg>
         </BannerButton>
       </div>
-      {roundsStore.roundToShowId != lotteryStore.lotteryRoundId && (
-        <PrevRoundInfo
-          ticketsNum={ticketsNum}
-          winningCombination={roundInfo?.winningCombination}
-        />
-      )}
+      <div className={"hidden lg:!block"}>
+        {roundsStore.roundToShowId != lotteryStore.lotteryRoundId && (
+          <PrevRoundInfo
+            ticketsNum={ticketsNum}
+            winningCombination={roundInfo?.winningCombination}
+          />
+        )}
+      </div>
 
       <CenterConsole
         roundToShow={roundsStore.roundToShowId}
@@ -98,7 +100,7 @@ export default function BannerSection({
           }
           disabled={roundsStore.roundToShowId == lotteryStore.lotteryRoundId}
           className={
-            "absolute right-[1vw] top-[1vw] flex cursor-pointer flex-row items-center justify-center gap-[0.26vw] hover:opacity-80 disabled:opacity-60"
+            "absolute right-[1vw] top-[1vw] hidden lg:!flex cursor-pointer flex-row items-center justify-center gap-[0.26vw] hover:opacity-80 disabled:opacity-60"
           }
         >
           <div className="flex h-[2.448vw] items-center justify-center rounded-[0.33vw] border border-right-accent px-[1vw] text-center text-[1.25vw] text-right-accent">
@@ -123,9 +125,11 @@ export default function BannerSection({
         </button>
       )}
 
-      {roundsStore.roundToShowId == lotteryStore.lotteryRoundId && (
-        <CurrentRoundInfo ticketsNum={ticketsNum} />
-      )}
+      <div className={"hidden lg:!block"}>
+        {roundsStore.roundToShowId == lotteryStore.lotteryRoundId && (
+          <CurrentRoundInfo ticketsNum={ticketsNum} />
+        )}
+      </div>
 
       <Rules />
     </div>

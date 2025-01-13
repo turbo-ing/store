@@ -49,7 +49,7 @@ export default function CenterConsole({
 
   useEffect(() => {
     console.log("Round lottery address", roundInfo?.plotteryAddress);
-    
+
     if (
       workerStore.client &&
       roundInfo?.id == lotteryStore.lotteryRoundId &&
@@ -58,7 +58,7 @@ export default function CenterConsole({
     ) {
       workerStore.initLotteryInstance(
         roundInfo.plotteryAddress,
-        networkStore.minaNetwork?.networkID!
+        networkStore.minaNetwork?.networkID!,
       );
     }
   }, [
@@ -84,18 +84,21 @@ export default function CenterConsole({
   }, [leaderboard?.length]);
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 top-0 mx-auto h-[13vw] w-[19.4vw]">
+    <div className="absolute bottom-0 left-0 right-0 top-0 mx-auto h-[41.86vw] lg:!h-[13vw] w-[59.302vw] lg:!w-[19.4vw]">
       <div
-        className={cn("mt-[1vw] flex h-full w-[17.969vw] flex-col", {
-          "items-center justify-center":
-            roundToShow == lotteryStore.lotteryRoundId ||
-            (roundToShow != lotteryStore.lotteryRoundId &&
-              !roundInfo?.winningCombination),
-        })}
+        className={cn(
+          "mt-[10vw] lg:!mt-[1vw] flex h-full w-[59.302vw] lg:!w-[17.969vw] flex-col",
+          {
+            "items-center justify-center":
+              roundToShow == lotteryStore.lotteryRoundId ||
+              (roundToShow != lotteryStore.lotteryRoundId &&
+                !roundInfo?.winningCombination),
+          },
+        )}
       >
         <div
           className={
-            "w-full text-center font-museo text-[1.45vw] font-bold uppercase"
+            "w-full text-center font-museo text-[5.814vw] lg:!text-[1.45vw] font-bold uppercase"
           }
         >
           {roundToShow != lotteryStore.lotteryRoundId
@@ -103,51 +106,66 @@ export default function CenterConsole({
             : `Lottery Round ${roundToShow}`}
         </div>
         <div
-          className={cn("flex h-full flex-row gap-[0.781vw]", {
-            "mt-[0.938vw]":
-              roundToShow == lotteryStore.lotteryRoundId ||
-              (roundToShow != lotteryStore.lotteryRoundId &&
-                !roundInfo?.winningCombination),
-            "w-full":
-              roundInfo?.winningCombination &&
-              roundToShow != lotteryStore.lotteryRoundId,
-          })}
+          className={cn(
+            "flex h-full flex-row gap-[2.558vw] lg:!gap-[0.781vw]",
+            {
+              "mt-[2vw] lg:!mt-[0.938vw]":
+                roundToShow == lotteryStore.lotteryRoundId ||
+                (roundToShow != lotteryStore.lotteryRoundId &&
+                  !roundInfo?.winningCombination),
+              "w-full":
+                roundInfo?.winningCombination &&
+                roundToShow != lotteryStore.lotteryRoundId,
+            },
+          )}
         >
           {roundToShow == lotteryStore.lotteryRoundId ? (
             <>
               <div className={"flex flex-col gap-0"}>
-                <div className="flex h-[5.469vw] w-[5.469vw] items-center justify-center rounded-[0.67vw] bg-white text-center font-museo text-[4.219vw] font-bold text-bg-dark">
+                <div className="flex h-[17.907vw] lg:!h-[5.469vw] w-[17.907vw] lg:!w-[5.469vw] items-center justify-center rounded-[1.628vw] lg:!rounded-[0.67vw] bg-white text-center font-museo text-[13.953vw] lg:!text-[4.219vw] font-bold text-bg-dark">
                   {!!roundTimer.startsIn.hours
                     ? roundTimer.startsIn.hours < 10
                       ? "0" + roundTimer.startsIn.hours
                       : roundTimer.startsIn.hours
                     : "00"}
                 </div>
-                <span className={"text-center font-plexsans text-[0.625vw]"}>
+                <span
+                  className={
+                    "hidden lg:!inline-block text-center font-plexsans text-[0.625vw]"
+                  }
+                >
                   Hours
                 </span>
               </div>
               <div className={"flex flex-col gap-0"}>
-                <div className="flex h-[5.469vw] w-[5.469vw] items-center justify-center rounded-[0.67vw] bg-white text-center font-museo text-[4.219vw] font-bold text-bg-dark">
+                <div className="flex h-[17.907vw] lg:!h-[5.469vw] w-[17.907vw] lg:!w-[5.469vw] items-center justify-center rounded-[1.628vw] lg:!rounded-[0.67vw] bg-white text-center font-museo text-[13.953vw] lg:!text-[4.219vw] font-bold text-bg-dark">
                   {!!roundTimer.startsIn.minutes
                     ? roundTimer.startsIn.minutes < 10
                       ? "0" + roundTimer.startsIn.minutes
                       : roundTimer.startsIn.minutes
                     : "00"}
                 </div>
-                <span className={"text-center font-plexsans text-[0.625vw]"}>
+                <span
+                  className={
+                    "hidden lg:!inline-block text-center font-plexsans text-[0.625vw]"
+                  }
+                >
                   Minutes
                 </span>
               </div>
               <div className={"flex flex-col gap-0"}>
-                <div className="flex h-[5.469vw] w-[5.469vw] items-center justify-center rounded-[0.67vw] bg-white text-center font-museo text-[4.219vw] font-bold text-bg-dark">
+                <div className="flex h-[17.907vw] lg:!h-[5.469vw] w-[17.907vw] lg:!w-[5.469vw] items-center justify-center rounded-[1.628vw] lg:!rounded-[0.67vw] bg-white text-center font-museo text-[13.953vw] lg:!text-[4.219vw] font-bold text-bg-dark">
                   {!!roundTimer.startsIn.seconds
                     ? Math.trunc(roundTimer.startsIn.seconds) < 10
                       ? "0" + Math.trunc(roundTimer.startsIn.seconds)
                       : Math.trunc(roundTimer.startsIn.seconds)
                     : "00"}
                 </div>
-                <span className={"text-center font-plexsans text-[0.625vw]"}>
+                <span
+                  className={
+                    "hidden lg:!inline-block text-center font-plexsans text-[0.625vw]"
+                  }
+                >
                   Seconds
                 </span>
               </div>
@@ -159,7 +177,11 @@ export default function CenterConsole({
                 "justify-center": roundInfo.tickets.length == 0,
               })}
             >
-              <span className={"font-museo text-[1.042vw] font-bold"}>
+              <span
+                className={
+                  "font-museo text-[3.256vw] lg:!text-[1.042vw] font-bold"
+                }
+              >
                 {roundInfo.tickets.length != 0
                   ? "Top 3 winners in this round"
                   : "This round has no tickets"}
@@ -172,7 +194,7 @@ export default function CenterConsole({
                         <div
                           key={index}
                           className={
-                            "flex w-full flex-row items-center justify-start gap-[0.625vw] rounded-[0.26vw] bg-[#252525]"
+                            "flex w-full flex-row items-center justify-start gap-[1.163vw] lg:!gap-[0.625vw] rounded-[0.93vw] lg:!rounded-[0.26vw] bg-[#252525]"
                           }
                         >
                           {index == 0 ? (
@@ -182,7 +204,9 @@ export default function CenterConsole({
                               viewBox="0 0 18 24"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              className={"h-[1.25vw] w-[1.25vw]"}
+                              className={
+                                "h-[2.791vw] lg:!h-[1.25vw] w-[2.791vw] lg:!w-[1.25vw]"
+                              }
                             >
                               <path
                                 fillRule="evenodd"
@@ -198,7 +222,9 @@ export default function CenterConsole({
                               viewBox="0 0 18 24"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              className={"h-[1.25vw] w-[1.25vw]"}
+                              className={
+                                "h-[2.791vw] lg:!h-[1.25vw] w-[2.791vw] lg:!w-[1.25vw]"
+                              }
                             >
                               <path
                                 fillRule="evenodd"
@@ -214,7 +240,9 @@ export default function CenterConsole({
                               viewBox="0 0 18 24"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              className={"h-[1.25vw] w-[1.25vw]"}
+                              className={
+                                "h-[2.791vw] lg:!h-[1.25vw] w-[2.791vw] lg:!w-[1.25vw]"
+                              }
                             >
                               <path
                                 fillRule="evenodd"
@@ -226,16 +254,16 @@ export default function CenterConsole({
                           )}
                           <span
                             className={
-                              "py-[0.25vw] font-museo text-[0.833vw] font-medium text-foreground"
+                              "py-[0.25vw] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
                             }
                           >
                             {accounts.find(
-                              (account) => account.userAddress === item.owner
+                              (account) => account.userAddress === item.owner,
                             )?.name || formatAddress(item.owner)}
                           </span>
                           <span
                             className={
-                              "ml-auto py-[0.25vw] font-museo text-[0.833vw] font-medium text-foreground"
+                              "ml-auto py-[0.93vw] lg:!py-[0.25vw] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
                             }
                           >
                             {item.funds
@@ -260,7 +288,9 @@ export default function CenterConsole({
                                 viewBox="0 0 18 24"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className={"h-[1.25vw] w-[1.25vw]"}
+                                className={
+                                  "h-[2.791vw] lg:!h-[1.25vw] w-[2.791vw] lg:!w-[1.25vw]"
+                                }
                               >
                                 <path
                                   fillRule="evenodd"
@@ -276,7 +306,9 @@ export default function CenterConsole({
                                 viewBox="0 0 18 24"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className={"h-[1.25vw] w-[1.25vw]"}
+                                className={
+                                  "h-[2.791vw] lg:!h-[1.25vw] w-[2.791vw] lg:!w-[1.25vw]"
+                                }
                               >
                                 <path
                                   fillRule="evenodd"
@@ -292,7 +324,9 @@ export default function CenterConsole({
                                 viewBox="0 0 18 24"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className={"h-[1.25vw] w-[1.25vw]"}
+                                className={
+                                  "h-[2.791vw] lg:!h-[1.25vw] w-[2.791vw] lg:!w-[1.25vw]"
+                                }
                               >
                                 <path
                                   fillRule="evenodd"
@@ -304,14 +338,14 @@ export default function CenterConsole({
                             )}
                             <span
                               className={
-                                "py-[0.25vw] font-museo text-[0.833vw] font-medium text-foreground"
+                                "py-[0.93vw] lg:!py-[0.25vw] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
                               }
                             >
                               -
                             </span>
                             <span
                               className={
-                                "ml-auto py-[0.25vw] font-museo text-[0.833vw] font-medium text-foreground"
+                                "ml-auto py-[0.93vw] lg:!py-[0.25vw] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
                               }
                             >
                               0 {Currency.MINA}
@@ -333,11 +367,15 @@ export default function CenterConsole({
           ) : (
             <div
               className={
-                "flex h-[5.5vw] flex-col items-center justify-center gap-[0.729vw]"
+                "flex h-[20vw] lg:!h-[5.5vw] flex-col items-center justify-center gap-[0.729vw]"
               }
             >
               <BouncyLoader />
-              <span className={"font-plexsans text-[0.729vw] font-light"}>
+              <span
+                className={
+                  "font-plexsans text-[3vw] lg:!text-[0.729vw] font-light text-center lg:!text-left"
+                }
+              >
                 The process of calculating the winning number...
               </span>
             </div>
@@ -345,7 +383,7 @@ export default function CenterConsole({
         </div>
         <button
           className={cn(
-            "mt-[0.8vw] flex w-full cursor-pointer items-center justify-center rounded-[0.67vw] border-bg-dark px-[1vw] font-museo text-[1.6vw] font-bold uppercase text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60",
+            "mt-[0.8vw] flex w-full cursor-pointer items-center justify-center rounded-[1.628vw] lg:!rounded-[0.67vw] border-bg-dark lg:!px-[1vw] py-[1.395vw] lg:!py-0 font-museo text-[3.721vw] lg:!text-[1.6vw] font-bold uppercase text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60",
             {
               "bg-right-accent": roundToShow == lotteryStore.lotteryRoundId,
               "bg-left-accent": roundToShow != lotteryStore.lotteryRoundId,
@@ -355,7 +393,7 @@ export default function CenterConsole({
               "mt-[0.4vw]":
                 roundToShow != lotteryStore.lotteryRoundId &&
                 roundInfo?.winningCombination,
-            }
+            },
           )}
           disabled={
             roundToShow != lotteryStore.lotteryRoundId &&
