@@ -145,7 +145,7 @@ export default function Rules() {
                       "font-plexsans text-[3.256vw] lg:!text-[0.729vw] font-normal"
                     }
                   >
-                    A 3% fee is deducted from each ticket purchase.
+                    A 10% fee is deducted from each ticket purchase.
                   </span>
                 </div>
                 <div className={"flex flex-col gap-[0.26vw]"}>

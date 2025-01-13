@@ -88,7 +88,7 @@ export default function MobileRulesModal({
                   "font-plexsans text-[3.256vw] lg:!text-[0.729vw] font-normal"
                 }
               >
-                A 3% fee is deducted from each ticket purchase.
+                A 10% fee is deducted from each ticket purchase.
               </span>
             </div>
             <div className={"flex flex-col gap-[0.26vw]"}>
@@ -160,7 +160,7 @@ export default function MobileRulesModal({
         >
           <button
             className={
-              "w-full font-plexsans p-[1.163vw] rounded-[1.163vw] bg-middle-accent text-bg-grey text-[3.721vw] lg:!text-[0.833vw] font-semibold text-center lg:!hidden"
+              "w-full font-plexsans p-[1.163vw] rounded-[1.163vw] bg-bg-grey text-right-accent text-[3.721vw] lg:!text-[0.833vw] font-semibold text-center lg:!hidden"
             }
             onClick={() => setIsOpen(false)}
           >
