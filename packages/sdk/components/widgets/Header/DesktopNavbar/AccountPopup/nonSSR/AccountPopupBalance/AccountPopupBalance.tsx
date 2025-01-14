@@ -4,7 +4,6 @@ import {
 } from "../../../../../../../lib/stores/minaBalances";
 import { useNetworkStore } from "../../../../../../../lib/stores/network";
 import { useProtokitBalancesStore } from "../../../../../../../lib/stores/protokitBalances";
-import { usePollMinaBlockHeight } from "../../../../../../../lib/stores/minaChain";
 import Image from "next/image";
 import CoinImg from "../../../../../../../components/widgets/Header/assets/coin.svg";
 import MinaCoinImg from "../../../../../../../components/widgets/Header/assets/mina.png";
@@ -18,8 +17,6 @@ export default function AccountPopupBalance() {
   const networkStore = useNetworkStore();
   const bridgeStore = useBridgeStore();
   const { appchainSupported } = useContext(ZkNoidGameContext);
-  usePollMinaBlockHeight();
-  useObserveMinaBalance();
   const protokitBalancesStore = useProtokitBalancesStore();
 
   const deposit = (

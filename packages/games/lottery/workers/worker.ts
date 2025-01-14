@@ -83,10 +83,12 @@ const functions = {
   compileLotteryContracts: async (args: {}) => {
     console.log("[Worker] compiling lottery contracts");
 
-    await PLottery.compile({
+    const vk = await PLottery.compile({
       cache: WebFileSystem(state.lotteryCache!),
     });
+    
     console.log("Lottery provers", PLottery._provers);
+    console.log("Lottery vk", PLottery._verificationKey?.data);
 
     console.log("[Worker] compiling contracts ended");
   },
@@ -99,6 +101,7 @@ const functions = {
 
     console.log("[Worker] lottery instance init");
     const Network = Mina.Network({
+      networkId: NETWORKS[args.networkId.toString()].isMainnet ? 'mainnet' : 'testnet',
       mina: NETWORKS[args.networkId.toString()].graphql,
       archive: NETWORKS[args.networkId.toString()].archive,
     });
@@ -128,7 +131,7 @@ const functions = {
 
     console.log("BT args", args);
     const ticket = Ticket.from(args.ticketNums, senderAccount, args.amount);
-
+    
     let tx = await Mina.transaction(senderAccount, async () => {
       await state.lotteryGame!.buyTicket!(ticket);
     });
@@ -156,8 +159,10 @@ const functions = {
       amount: args.amount,
     });
 
+    const claimApiDomain = process.env.NEXT_PUBLIC_CLAIM_API_ENDPOINT || 'api2.zknoid.io';
+
     const claimData = await fetch(
-      "https://api2.zknoid.io/claim-api/get-claim-data",
+      `https://${claimApiDomain}/claim-api/get-claim-data`,
       {
         method: "POST",
         headers: {

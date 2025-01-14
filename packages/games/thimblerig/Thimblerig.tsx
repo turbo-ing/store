@@ -59,8 +59,13 @@ import {
 import GamePage from "@zknoid/sdk/components/framework/GamePage";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useRateGameStore } from "@zknoid/sdk/lib/stores/rateGameStore";
+import Chat from "@zknoid/sdk/components/shared/Chat";
 
-export default function Thimblerig({}: { params: { competitionId: string } }) {
+export default function Thimblerig({
+  params,
+}: {
+  params: { competitionId: string };
+}) {
   const [gameState, setGameState] = useState(GameState.NotStarted);
   const [revealedValue, setRevealedValue] = useState<
     undefined | { choice: 1 | 2 | 3; value: 1 | 2 | 3 }
@@ -583,6 +588,18 @@ export default function Thimblerig({}: { params: { competitionId: string } }) {
               className={"border-left-accent"}
             />
           )}
+          <div
+            className={"w-full flex flex-col justify-end items-end"}
+            style={{
+              height: "18.229vw",
+              marginBottom: "5.4vw",
+            }}
+          >
+            <Chat
+              roomId={`${thimblerigConfig.id}-${params.competitionId}`}
+              className={"w-full h-full"}
+            />
+          </div>
         </div>
         <GameWidget
           author={thimblerigConfig.author}

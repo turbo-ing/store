@@ -11,8 +11,7 @@ interface IAddedGiftCodes {
 interface IClaimRequest {
   userAddress: string;
   roundId: number;
-  ticketNumbers: number[];
-  ticketAmount: number;
+  ticketId: number;
 }
 export interface IGiftCodeCheckResult {
   code: string;

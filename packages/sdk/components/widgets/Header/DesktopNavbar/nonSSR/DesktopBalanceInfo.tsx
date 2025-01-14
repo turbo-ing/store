@@ -4,7 +4,6 @@ import {
   useObserveMinaBalance,
 } from '../../../../../lib/stores/minaBalances';
 import { useNetworkStore } from '../../../../../lib/stores/network';
-import { usePollMinaBlockHeight } from '../../../../../lib/stores/minaChain';
 import {
   useObserveProtokitBalance,
   useProtokitBalancesStore,
@@ -18,9 +17,6 @@ import DepositMenuItem from '../../nonSSR/DepositMenuItem/DepositMenuItems';
 export default function DesktopBalanceInfo() {
   const minaBalancesStore = useMinaBalancesStore();
   const networkStore = useNetworkStore();
-  usePollMinaBlockHeight();
-  useObserveMinaBalance();
-  useObserveProtokitBalance();
   const protokitBalancesStore = useProtokitBalancesStore();
 
   const deposit = (

@@ -32,8 +32,14 @@ import avatar20 from "../../../../../public/image/avatars/avatar-20.svg";
 import avatar21 from "../../../../../public/image/avatars/avatar-21.svg";
 import Image from "next/image";
 import SetupStoreContext from "../../../../../lib/contexts/SetupStoreContext";
+import { algoliasearch } from "algoliasearch";
 
-const avatars = [
+const client = algoliasearch(
+  process.env.NEXT_PUBLIC_ALGOLIA_PROJECT || "",
+  process.env.NEXT_PUBLIC_ALGOLIA_KEY || "",
+);
+
+const zknoidAvatars = [
   avatarUnset,
   avatar1,
   avatar2,
@@ -81,10 +87,33 @@ export default function AccountPopup({
   const [changeNameMode, setChangeNameMode] = useState<boolean>(false);
   const [avatarId, setAvatarId] = useState<number | undefined>(undefined);
   const [avatarMode, setAvatarMode] = useState<boolean>(false);
+  const [avatars, setAvatars] = useState(zknoidAvatars);
 
   // const getNameCheckQuery = api.accounts.checkNameUnique.useQuery({
   //   name: testName,
   // });
+
+  // TODO: add correct nft validation
+  // useEffect(() => {
+  //   const search = client
+  //     .searchSingleIndex({
+  //       indexName: "mainnet",
+  //       searchParams: {
+  //         facetFilters: [
+  //           "collection:Minaty",
+  //           "owner:B62qrf3EeALJmMN5Xc5JSz6jB7xZCnGnv2DhTfQKJsaFPChTSs3De3n",
+  //         ],
+  //       },
+  //     })
+  //     .then((resp) => {
+  //       console.log("Algolia response", resp);
+  //       setAvatars([...avatars, ...resp.hits.map((x) => (x as any).image)]);
+  //     })
+  //     .catch((error) => {
+  //       console.log("algolia error", error);
+  //     });
+  //   console.log("Search source", search);
+  // }, []);
 
   useEffect(() => {
     if (account.name != name) setName(account.name);
@@ -268,6 +297,8 @@ export default function AccountPopup({
                       className={cn("h-[3.125vw] w-[3.125vw]", {
                         "opacity-20": index == avatarId,
                       })}
+                      width={200}
+                      height={200}
                     />
                     {index == avatarId && (
                       <div
@@ -291,6 +322,8 @@ export default function AccountPopup({
               alt={"User Avatar"}
               className={"h-[5vw] w-[5vw] cursor-pointer hover:opacity-80"}
               onClick={() => (avatarMode ? undefined : setAvatarMode(true))}
+              width={200}
+              height={200}
             />
             <div className={"flex w-full flex-col gap-4"}>
               <Formik

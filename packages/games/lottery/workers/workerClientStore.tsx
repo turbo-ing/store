@@ -17,6 +17,7 @@ export interface ClientState {
   lotteryCompiled: boolean;
   lotteryCompilationStarted: boolean;
   isActiveTx: boolean;
+  isLocalProving: boolean;
   onchainState:
     | {
         ticketRoot: Field;
@@ -27,9 +28,8 @@ export interface ClientState {
       }
     | undefined;
   lotteryRoundId: number;
-  start: () => Promise<ZknoidWorkerClient>;
+  start: () => Promise<ZknoidWorkerClient | undefined>;
   lotteryGames: Record<number, PLottery> | undefined;
-
   compileLottery: () => Promise<ZknoidWorkerClient>;
   updateOnchainState: () => Promise<void>;
   initLotteryInstance: (
@@ -65,6 +65,7 @@ export const useWorkerClientStore = create<
     lotteryCompiled: false,
     lotteryCompilationStarted: false,
     isActiveTx: false,
+    isLocalProving: false,
     onchainState: undefined as
       | {
           ticketRoot: Field;
@@ -77,20 +78,26 @@ export const useWorkerClientStore = create<
     lotteryRoundId: 0,
     lotteryGames: undefined as Record<number, PLottery> | undefined,
     async start() {
+      const isLocalProving = (window as any).localStorage.getItem("localProving") == "true";
+      console.log('Starting', isLocalProving);
+      set((state) => {
+        state.isLocalProving = isLocalProving;
+      });
+
+      if (isLocalProving) {
+        const zkappWorkerClient = new ZknoidWorkerClient();
+
+        await zkappWorkerClient.waitFor();
+        console.log("Loading worker");
+        (window as any).lworker! = zkappWorkerClient;
+        set((state) => {
+          state.client = zkappWorkerClient;
+        });
+        return zkappWorkerClient;
+      }
       set((state) => {
         state.status = "Loading worker";
       });
-
-      const zkappWorkerClient = new ZknoidWorkerClient();
-
-      await zkappWorkerClient.waitFor();
-      console.log("Loading worker");
-      (window as any).lworker! = zkappWorkerClient;
-      set((state) => {
-        state.client = zkappWorkerClient;
-      });
-
-      return zkappWorkerClient;
     },
     async setOnchainState(onchainState) {
       set((state) => {
@@ -208,18 +215,45 @@ export const useWorkerClientStore = create<
         state.isActiveTx = true;
       });
 
-      await this.client?._call("buyTicket", {
-        senderAccount,
-        startBlock: this.onchainState?.startBlock,
-        ticketNums,
-        amount,
-      });
+      let txJson;
 
-      set((state) => {
-        state.status = "Ticket buy tx proving";
-      });
+      if (this.isLocalProving) {
+        await this.client?._call("buyTicket", {
+          senderAccount,
+          startBlock: this.onchainState?.startBlock,
+          ticketNums,
+          amount,
+        });
 
-      const txJson = await this.client?._call("proveBuyTicketTransaction", {});
+        set((state) => {
+          state.status = "Ticket buy tx proving";
+        });
+
+        txJson = await this.client?._call("proveBuyTicketTransaction", {});
+      } else {
+        const claimApiDomain =
+          process.env.NEXT_PUBLIC_CLAIM_API_ENDPOINT ||
+          "https://api2.zknoid.io";
+
+        const claimData = await fetch(
+          `${claimApiDomain}/buy-api/get-buy-data`,
+          {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              ticketNums,
+              senderAccount,
+              amount,
+            }),
+          }
+        );
+        const resp = await claimData.json();
+        txJson = JSON.parse(resp["txJson"]);
+      }
+
+      console.log("txJson", txJson);
 
       set((state) => {
         state.status = "Ticket buy tx proved";

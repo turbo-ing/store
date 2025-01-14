@@ -41,7 +41,7 @@ export const TicketItem = ({
     );
 
     console.log('txJson', txJson);
-    await sendTransaction(txJson)
+    await sendTransaction(JSON.stringify(txJson))
       .then(() => {
         notificationStore.create({
           type: 'success',

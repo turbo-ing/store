@@ -53,7 +53,7 @@ export default function OwnedTickets({
           ...x,
         })),
     );
-  }, [roundsStore.roundToShowId, roundInfo]);
+  }, [roundsStore.roundToShowId, roundInfo, roundInfo?.tickets]);
 
   useEffect(() => {
     if (tickets.length != 0 && !hasOwnedTickets) {
@@ -70,7 +70,7 @@ export default function OwnedTickets({
           "mb-[1.33vw] flex flex-row items-center justify-start gap-[1vw]"
         }
       >
-        <div className="text-[2.13vw]">Your tickets</div>
+        <div className="text-[7.442vw] lg:!text-[2.13vw]">Your tickets</div>
         {roundsStore.roundToShowId != workerStore.lotteryRoundId &&
           tickets.length > TICKETS_PER_PAGE && (
             <div className={"flex flex-row gap-[0.5vw]"}>
@@ -122,7 +122,7 @@ export default function OwnedTickets({
       </div>
 
       <div
-        className={cn("flex w-full flex-row gap-[0.3vw]", {
+        className={cn("flex w-full flex-col lg:!flex-row gap-[0.3vw]", {
           "flex-wrap gap-[1.042vw]":
             roundsStore.roundToShowId != workerStore.lotteryRoundId,
         })}
@@ -143,7 +143,7 @@ export default function OwnedTickets({
         {renderTickets.map((item, index) => (
           <MyTicket
             key={index}
-            plotteryAddress={roundInfo?.plotteryAddress || ''}
+            plotteryAddress={roundInfo?.plotteryAddress || ""}
             isOpen={
               roundsStore.roundToShowId != workerStore.lotteryRoundId ||
               item.id == currentTicket?.id ||
@@ -167,7 +167,7 @@ export default function OwnedTickets({
             claimed={item.claimed}
             funds={item.funds}
             roundId={roundsStore.roundToShowId}
-            hash={item.buyHash || ''}
+            hash={item.buyHash || ""}
           />
         ))}
         {tickets.length > TICKETS_PER_PAGE &&

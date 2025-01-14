@@ -1,21 +1,20 @@
-import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
-import {
-  ALL_NETWORKS,
-  Network,
-  NetworkIds,
-  NETWORKS,
-} from '@zknoid/sdk/constants/networks';
-import { requestAccounts, walletInstalled } from '@zknoid/sdk/lib/helpers';
-import { useEffect } from 'react';
+import { useNetworkStore } from "../../../../lib/stores/network";
+import { ALL_NETWORKS, Network } from "../../../../constants/networks";
+import { requestAccounts, walletInstalled } from "../../../../lib/helpers";
+import { useEffect } from "react";
 
-export default function NetworkSwitchButton() {
+export default function NetworkSwitchButton({
+  switchToNetwork,
+}: {
+  switchToNetwork: Network;
+}) {
   const networkStore = useNetworkStore();
 
   const switchNetwork = async (network: Network) => {
-    console.log('Switching to', network);
+    console.log("Switching to", network);
     if ((window as any).mina?.isPallad) {
       await (window as any).mina.request({
-        method: 'mina_switchChain',
+        method: "mina_switchChain",
         params: {
           chainId: network.palladNetworkID,
         },
@@ -48,12 +47,12 @@ export default function NetworkSwitchButton() {
         name: string;
       }) => {
         const minaNetwork = ALL_NETWORKS.find((x) =>
-          networkID != 'unknown' ? x.networkID == networkID : x.name == name
+          networkID != "unknown" ? x.networkID == networkID : x.name == name,
         );
         networkStore.setNetwork(minaNetwork);
       };
 
-      ((window as any).mina as any).on('chainChanged', listener);
+      ((window as any).mina as any).on("chainChanged", listener);
 
       return () => {
         ((window as any).mina as any).removeListener(listener);
@@ -66,14 +65,14 @@ export default function NetworkSwitchButton() {
 
     (async () => {
       const listener = (accounts: string[]) => {
-        console.log('Accounts changed', accounts);
+        console.log("Accounts changed", accounts);
         const [account] = accounts;
         if (networkStore.minaNetwork?.networkID)
           networkStore.setNetwork(networkStore.minaNetwork);
         networkStore.onWalletConnected(account);
       };
 
-      ((window as any).mina as any).on('accountsChanged', listener);
+      ((window as any).mina as any).on("accountsChanged", listener);
 
       return () => {
         ((window as any).mina as any).removeListener(listener);
@@ -82,12 +81,12 @@ export default function NetworkSwitchButton() {
   }, []);
   return (
     <button
-      onClick={() => switchNetwork(NETWORKS[NetworkIds.MINA_DEVNET])}
+      onClick={() => switchNetwork(switchToNetwork)}
       className={
-        'w-full rounded-[0.26vw] bg-left-accent p-[0.5vw] text-center font-museo text-[0.833vw] font-medium text-bg-dark hover:opacity-80'
+        "w-full rounded-[1.163vw] lg:!rounded-[0.26vw] bg-left-accent p-[0.5vw] text-center font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-bg-dark hover:opacity-80"
       }
     >
-      Switch to Devnet
+      Switch to {switchToNetwork.name}
     </button>
   );
 }

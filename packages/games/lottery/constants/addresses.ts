@@ -1,9 +1,10 @@
-import { NETWORKS, NetworkIds } from '@zknoid/sdk/constants/networks';
+import { NETWORKS, NetworkIds } from "@zknoid/sdk/constants/networks";
 
 export const FACTORY_ADDRESS: {
-  readonly [networkId: string]: string | 'not-deployed';
+  readonly [networkId: string]: string | "not-deployed";
 } = {
-  [NetworkIds.MINA_DEVNET]:
-    'B62qqBirm9eB7q53Ejg6fodYNoWVG2LHqp3uyvBe542cQEMUCoA9w6u',
-  [NetworkIds.ZEKO_TESTNET]: 'not-deployed',
+  [NetworkIds.MINA_DEVNET]: "",
+  [NetworkIds.MINA_MAINNET]:
+    "B62qjLYqvScLRUVHaxnpLqg2rJgmsbKTYNjWYGt2jLKvmdS8WnBxgv8",
+  [NetworkIds.ZEKO_TESTNET]: "not-deployed",
 };
