@@ -15,6 +15,14 @@ import * as crypto from "crypto";
 import { Poseidon, PublicKey, CircuitString } from "o1js";
 import LotteryContext from "../../../lib/contexts/LotteryContext";
 import { useGiftCodes } from "../../../stores/giftCodes";
+import BoughtModal from "../../Modals/BoughtModal";
+import { useBoughtModalStore } from "@zknoid/sdk/lib/stores/boughtModalStore";
+
+enum BoughtModalsVariants {
+  ticket = "ticket",
+  codeBuy = "codeBuy",
+  codeUse = "codeUse",
+}
 
 export default function BuyInfoCard({
   buttonActive,
@@ -43,6 +51,8 @@ export default function BuyInfoCard({
   const workerStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
   const notificationStore = useNotificationStore();
+  const boughtModalStore = useBoughtModalStore();
+
   const { addGiftCodesMutation, sendTicketQueueMutation, roundInfo } =
     useContext(LotteryContext);
 
@@ -75,6 +85,7 @@ export default function BuyInfoCard({
       .then((transaction: string | undefined) => {
         if (transaction) {
           clearTickets();
+          boughtModalStore.open(BoughtModalsVariants.ticket);
           notificationStore.create({
             type: "success",
             message: "Transaction sent",
@@ -150,6 +161,7 @@ export default function BuyInfoCard({
 
       setGiftCodeToBuyAmount(1);
       setVoucherMode(VoucherMode.List);
+      boughtModalStore.open(BoughtModalsVariants.codeBuy);
       notificationStore.create({
         type: "success",
         message: "Gift codes successfully bought",
@@ -195,13 +207,14 @@ export default function BuyInfoCard({
     });
     setVoucherMode(VoucherMode.Closed);
     clearTickets();
+    boughtModalStore.open(BoughtModalsVariants.codeUse);
     notificationStore.create({
       type: "success",
       message: "Transaction sent",
     });
   };
   return (
-    <div className="flex h-[46.512vw] lg:!h-[13.53vw] w-full lg:!w-[20vw] flex-col rounded-[2.326vw] lg:!rounded-[0.67vw] bg-[#252525] p-[4.651vw] lg:!p-[1.33vw] font-plexsans text-[3.721vw] lg:!text-[0.833vw] shadow-2xl">
+    <div className="relative flex h-[46.512vw] lg:!h-[13.53vw] w-full lg:!w-[20vw] flex-col rounded-[2.326vw] lg:!rounded-[0.67vw] bg-[#252525] p-[4.651vw] lg:!p-[1.33vw] font-plexsans text-[3.721vw] lg:!text-[0.833vw] shadow-2xl">
       <div className="flex flex-row">
         <div className="text-nowrap">
           Number of {voucherMode == VoucherMode.List ? "codes" : "tickets"}
@@ -231,7 +244,6 @@ export default function BuyInfoCard({
           </div>
         </div>
       )}
-
       <div className="mt-auto flex flex-row">
         <div className="text-nowrap font-medium">TOTAL AMOUNT</div>
         <div className="mx-1 mb-[0.3vw] w-full border-spacing-6 border-b border-dotted border-[#F9F8F4] opacity-50"></div>
@@ -310,6 +322,53 @@ export default function BuyInfoCard({
           </span>
         </div>
       </button>
+
+      {boughtModalStore.openModalId === BoughtModalsVariants.ticket &&
+        boughtModalStore.notShow.includes(BoughtModalsVariants.ticket) && (
+          <BoughtModal
+            title={"Ticket purchased"}
+            text={`You have successfully purchased a ticket! It may take from 2 to 15 minutes for your ticket to appear in your wallet, please wait`}
+            icon={"ok"}
+            onClose={({ isChecked }) => {
+              isChecked
+                ? boughtModalStore.addNotShow(BoughtModalsVariants.ticket)
+                : undefined;
+              boughtModalStore.close();
+            }}
+          />
+        )}
+      {boughtModalStore.openModalId === BoughtModalsVariants.codeBuy &&
+        boughtModalStore.notShow.includes(BoughtModalsVariants.codeBuy) && (
+          <BoughtModal
+            title={"Access code purchased"}
+            text={
+              "You have successfully purchased the access code! Please wait until it becomes available for use. It may take from 2 to 15 minutes."
+            }
+            icon={"ok"}
+            onClose={({ isChecked }) => {
+              isChecked
+                ? boughtModalStore.addNotShow(BoughtModalsVariants.codeBuy)
+                : undefined;
+              boughtModalStore.close();
+            }}
+          />
+        )}
+      {boughtModalStore.openModalId === BoughtModalsVariants.codeUse &&
+        boughtModalStore.notShow.includes(BoughtModalsVariants.codeUse) && (
+          <BoughtModal
+            title={"Access code used"}
+            text={
+              "You have successfully activate the access code. Soon it become available in your wallet. It may take from 2 to 15 minutes."
+            }
+            icon={"ticket"}
+            onClose={({ isChecked }) => {
+              isChecked
+                ? boughtModalStore.addNotShow(BoughtModalsVariants.codeUse)
+                : undefined;
+              boughtModalStore.close();
+            }}
+          />
+        )}
     </div>
   );
 }

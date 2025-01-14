@@ -6,8 +6,8 @@ import {
 } from "@zknoid/sdk/lib/platform/game_tags";
 import GameTemplate from "./GameTemplate";
 
-const description = "Template description";
-const rules = "Template rules";
+const description = "BoughtModal description";
+const rules = "BoughtModal rules";
 
 export const gameTemplateConfig = createZkNoidGameConfig({
   id: "game-template",
