@@ -1,5 +1,6 @@
 import { DateTime, DurationObjectUnits, Interval } from "luxon";
 import { useEffect, useState } from "react";
+import { SOCIALS_LINKS } from "../../constants/socials";
 
 export enum ZkNoidEventType {
   PAST_EVENTS = "Past events",
@@ -69,6 +70,27 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     link: "https://quest.zknoid.io",
     image:
       "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/icwduehzsvuguqgxb1g0",
+    textColor: "white",
+  },
+  {
+    name: "Lottery L1 Mainnet",
+    description: "Try your luck and win Jackpot!",
+    eventStarts: new Date("2025-01-15").getTime(),
+    eventEnds: new Date("2025-03-01T01:00:00.000+03:00").getTime(),
+    link: "/games/lottery/global",
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/c5gyuxt5ay7kmf9ibp9u",
+    textColor: "white",
+  },
+  {
+    name: "Free Lottery L1 Trial",
+    description:
+      "Follow us on social networks! There you can find free access codes for free participation in the lottery.",
+    eventStarts: new Date("2025-01-15").getTime(),
+    eventEnds: new Date("2025-03-01T01:00:00.000+03:00").getTime(),
+    link: SOCIALS_LINKS.twitter,
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/amnfxivmsobxov4ks4hy",
     textColor: "white",
   },
 ];
