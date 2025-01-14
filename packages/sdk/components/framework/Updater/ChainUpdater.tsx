@@ -1,3 +1,4 @@
+'use client';
 import { useChainStore } from "../../../lib/stores/minaChain";
 import { useNetworkStore } from "../../../lib/stores/network";
 import { useEffect, useRef } from "react";
@@ -21,7 +22,7 @@ export const usePollMinaBlockHeight = () => {
     const intervalId = setInterval(
       async () => {
         if (network.pollMinaBlocks) {
-          console.log('AAAAA');
+          console.log('Polling in loop');
           await chain.loadBlock(network.minaNetwork?.networkID!)
         }
         else {
@@ -30,7 +31,7 @@ export const usePollMinaBlockHeight = () => {
       },
       tickInterval
     );
-    console.log('AAA start');
+    console.log('Polling started');
 
     chain.loadBlock(network.minaNetwork?.networkID!);
 
