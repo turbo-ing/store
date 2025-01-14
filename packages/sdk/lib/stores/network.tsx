@@ -12,6 +12,10 @@ export interface NetworkState {
   address: string | undefined;
   walletConnected: boolean;
   protokitClientStarted: boolean;
+  pollMinaBlocks: boolean;
+  pollProtokitBlocks: boolean;
+  setPollMinaBlocks: (pollMinaBlocks: boolean) => void;
+  setPollProtokitBlocks: (pollProtokitBlocks: boolean) => void;
   onWalletConnected: (address: string | undefined) => Promise<void>;
   onProtokitClientStarted: () => void;
   connectWallet: (soft: boolean) => Promise<void>;
@@ -25,6 +29,18 @@ export const useNetworkStore = create<NetworkState, [["zustand/immer", never]]>(
   immer((set) => ({
     walletConnected: false,
     protokitClientStarted: false,
+    pollMinaBlocks: true,
+    pollProtokitBlocks: false,
+    setPollMinaBlocks(pollMinaBlocks) {
+      set({
+        pollMinaBlocks
+      });
+    },
+    setPollProtokitBlocks(pollProtokitBlocks) {
+      set({
+        pollProtokitBlocks
+      });
+    },
     minaNetwork: undefined,
     onProtokitClientStarted() {
       set({

@@ -1,18 +1,16 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Image from "next/image";
 import gameTitleTemplate from "../../public/image/game-page/game-title-template.svg";
 import Link from "next/link";
 import { cn } from "../../lib/helpers";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ZkNoidGameConfig } from "../../lib/createConfig";
-import { usePollMinaBlockHeight } from "../../lib/stores/minaChain";
-import { usePollProtokitBlockHeight } from "../../lib/stores/protokitChain";
-import { useObserveMinaBalance } from "../../lib/stores/minaBalances";
 import type { RuntimeModulesRecord } from "@proto-kit/module";
 import { useRateGameStore } from "../../lib/stores/rateGameStore";
 import RateGameModal from "../shared/RateGameModal";
+import { useNetworkStore } from "../../lib/stores/network";
 
 export function TabsSwitch({
   gameName,
@@ -327,16 +325,6 @@ export function TabsSwitch({
   );
 }
 
-const Updater = ({ updateProtokit }: { updateProtokit: boolean }) => {
-  usePollMinaBlockHeight();
-  useObserveMinaBalance();
-
-  if (updateProtokit) {
-    usePollProtokitBlockHeight();
-  }
-
-  return <></>;
-};
 
 export default function GamePage<RuntimeModules extends RuntimeModulesRecord>({
   children,
@@ -360,9 +348,14 @@ export default function GamePage<RuntimeModules extends RuntimeModulesRecord>({
   const rateGameStore = useRateGameStore();
   const searchParams = useSearchParams();
   const ratingParam = searchParams.get("rating");
+  const networkStore = useNetworkStore();
   const ratedGame = rateGameStore.ratedGames.find(
     (game) => game.gameId === gameConfig.id,
   );
+
+  useEffect(() => {
+      networkStore.setPollProtokitBlocks(Object.keys(gameConfig.runtimeModules).length > 0)
+  }, [gameConfig.runtimeModules])
 
   const isMonthPassed = (dateString: string) => {
     const inputDate = new Date(dateString);
@@ -415,9 +408,6 @@ export default function GamePage<RuntimeModules extends RuntimeModulesRecord>({
       ) : (
         <>{children}</>
       )}
-      <Updater
-        updateProtokit={Object.keys(gameConfig.runtimeModules).length > 0}
-      />
       {(!ratedGame
         ? ratingParam === "forceModal"
         : isMonthPassed(ratedGame.updatedAt) ||

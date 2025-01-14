@@ -2,7 +2,6 @@ import {
   useMinaBalancesStore,
   useObserveMinaBalance,
 } from '../../../../../lib/stores/minaBalances';
-import { usePollMinaBlockHeight } from '../../../../../lib/stores/minaChain';
 import { useNetworkStore } from '../../../../../lib/stores/network';
 import { useProtokitBalancesStore } from '../../../../../lib/stores/protokitBalances';
 import CoinImg from '../../../../../components/widgets/Header/assets/coin.svg';
@@ -13,8 +12,6 @@ import DepositMenuItem from '../../nonSSR/DepositMenuItem/DepositMenuItems';
 export default function MobileBalanceInfo() {
   const minaBalancesStore = useMinaBalancesStore();
   const networkStore = useNetworkStore();
-  usePollMinaBlockHeight();
-  useObserveMinaBalance();
   const protokitBalancesStore = useProtokitBalancesStore();
 
   const deposit = (

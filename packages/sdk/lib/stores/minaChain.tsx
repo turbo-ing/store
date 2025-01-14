@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 import { ALL_NETWORKS } from "../../constants/networks";
-
-import { useNetworkStore } from "./network";
 
 export interface ComputedTransactionJSON {
   argsFields: string[];
@@ -102,23 +99,3 @@ export const useChainStore = create<ChainState, [["zustand/immer", never]]>(
     },
   }))
 );
-
-export const tickInterval = 20000;
-export const usePollMinaBlockHeight = () => {
-  const chain = useChainStore();
-  const network = useNetworkStore();
-
-  useEffect(() => {
-    console.log("Poll chain id", network.minaNetwork?.networkID);
-
-    if (!network.minaNetwork?.networkID) return;
-
-    const intervalId = setInterval(
-      () => chain.loadBlock(network.minaNetwork?.networkID!),
-      tickInterval
-    );
-    chain.loadBlock(network.minaNetwork?.networkID!);
-
-    return () => clearInterval(intervalId);
-  }, [network.minaNetwork?.networkID]);
-};

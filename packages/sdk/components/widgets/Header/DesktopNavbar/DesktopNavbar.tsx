@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { formatAddress, walletInstalled } from "../../../../lib/helpers";
 import { useNetworkStore } from "../../../../lib/stores/network";
+import Updater from "../../../framework/Updater/ChainUpdater";
+
 import HeaderCard from "../entities/HeaderCard/HeaderCard";
 import AccountCard from "./ui/AccountCard";
 import AccountPopup from "./AccountPopup";
@@ -31,7 +33,7 @@ const NetworkPicker = dynamic(
   () => import("../nonSSR/NetworkPicker/NetworkPicker"),
   {
     ssr: false,
-  },
+  }
 );
 
 export default function DesktopNavbar({
@@ -205,7 +207,7 @@ export default function DesktopNavbar({
                 ),
                 link: item.link,
                 text: item.name,
-              })),
+              }))
             )}
           />
           <Tab title={"Quest"} link={"https://quest.zknoid.io"} />
