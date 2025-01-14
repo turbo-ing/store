@@ -25,7 +25,7 @@ export default function BoughtGiftCodes() {
       .then((giftCodes) => {
         if (giftCodes) codesStore.updateGiftCodes(giftCodes);
       });
-  }, [codesStore.giftCodes]);
+  }, []);
 
   return (
     <div
