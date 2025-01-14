@@ -3,10 +3,6 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import {withSentryConfig} from '@sentry/nextjs';
-import TerserPlugin from 'terser-webpack-plugin';
-import path from 'path';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 // import ImageMinimizerPlugin from "image-minimizer-webpack-plugin";
 
 const __filename = fileURLToPath(import.meta.url);
