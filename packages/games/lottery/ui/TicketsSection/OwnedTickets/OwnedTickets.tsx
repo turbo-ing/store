@@ -122,10 +122,13 @@ export default function OwnedTickets({
       </div>
 
       <div
-        className={cn("flex w-full flex-col lg:!flex-row gap-[0.3vw]", {
-          "flex-wrap gap-[1.042vw]":
-            roundsStore.roundToShowId != workerStore.lotteryRoundId,
-        })}
+        className={cn(
+          "flex w-full flex-col lg:!flex-row gap-[1.176vw] lg:!gap-[0.3vw]",
+          {
+            "flex-wrap gap-[1.176vw] lg:!gap-[1.042vw]":
+              roundsStore.roundToShowId != workerStore.lotteryRoundId,
+          },
+        )}
       >
         {tickets.length > TICKETS_PER_PAGE &&
           page != 1 &&
