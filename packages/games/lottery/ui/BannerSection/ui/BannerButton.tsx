@@ -1,5 +1,5 @@
-import { MouseEventHandler, ReactNode } from 'react';
-import { cn } from '@zknoid/sdk/lib/helpers';
+import { MouseEventHandler, ReactNode } from "react";
+import { cn } from "@zknoid/sdk/lib/helpers";
 
 export default function BannerButton({
   children,
@@ -15,8 +15,8 @@ export default function BannerButton({
   return (
     <button
       className={cn(
-        'cursor-pointer rounded-[0.33vw] border hover:opacity-80 disabled:opacity-60',
-        className
+        "cursor-pointer rounded-[0.33vw] border hover:opacity-80 disabled:opacity-60",
+        className,
       )}
       onClick={onClick}
       disabled={disabled}

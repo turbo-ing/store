@@ -6,10 +6,9 @@ import { useContext, useEffect, useState } from "react";
 import { ILotteryRound } from "../../../lib/types";
 import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
 import LotteryContext from "../../../lib/contexts/LotteryContext";
+import { cn } from "@zknoid/sdk/lib/helpers";
 
 export default function PreviousRounds() {
-  const ROUNDS_PER_PAGE = 2;
-
   const workerClientStore = useWorkerClientStore();
   const lotteryStore = useWorkerClientStore();
   const chainStore = useChainStore();
@@ -19,7 +18,10 @@ export default function PreviousRounds() {
   const [roundInfos, setRoundInfos] = useState<ILotteryRound[] | undefined>(
     undefined,
   );
-  
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  const ROUNDS_PER_PAGE = isMobile ? 1 : 2;
+
   const roundsToShow = Array.from(
     { length: ROUNDS_PER_PAGE },
     (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE,
@@ -27,17 +29,101 @@ export default function PreviousRounds() {
   const roundInfosData = getRoundsInfosQuery(roundsToShow, {
     refetchInterval: 5000,
   });
-  
+
   useEffect(() => {
     if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
-  
+
     const roundInfos = roundInfosData!;
     setRoundInfos(Object.values(roundInfos));
   }, [roundInfosData, chainStore.block?.slotSinceGenesis]);
 
+  useEffect(() => {
+    const checkWidth = () => {
+      if (window.innerWidth <= 1024) setIsMobile(true);
+      else setIsMobile(false);
+    };
+
+    checkWidth();
+    window.addEventListener("resize", checkWidth);
+
+    return () => {
+      window.removeEventListener("resize", checkWidth);
+    };
+  }, []);
+
   return (
-    <div className="">
-      <div className="mb-[1.33vw] text-[2.13vw]">Previous Lotteries</div>
+    <div className="mt-[16.279vw] lg:!mt-0">
+      <div className="mb-[1.33vw] text-[7.442vw] lg:!text-[2.13vw]">
+        Previous Lotteries
+      </div>
+      <div className={"lg:!hidden flex flex-row gap-[3.488vw] mb-[3.488vw]"}>
+        <button
+          onClick={() => setPage(page + 1)}
+          disabled={
+            page + 1 > workerClientStore.lotteryRoundId / ROUNDS_PER_PAGE
+          }
+          className={cn(
+            "w-full flex flex-row items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
+            page + 1 > workerClientStore.lotteryRoundId / ROUNDS_PER_PAGE
+              ? "opacity-0"
+              : "opacity-100",
+          )}
+        >
+          <svg
+            width="10"
+            height="16"
+            viewBox="0 0 10 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={"w-[1.628vw] h-[3.256vw]"}
+          >
+            <path
+              d="M9 1L2 8L9 15"
+              stroke="#F9F8F4"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span
+            className={
+              "uppercase text-[3.256vw] font-bold font-museo text-foreground leading-[100%]"
+            }
+          >
+            Previous round
+          </span>
+        </button>
+        <button
+          onClick={() => setPage(page - 1)}
+          disabled={page - 1 < 0}
+          className={cn(
+            "w-full flex flex-row-reverse items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
+            page - 1 < 0 ? "opacity-0" : "opacity-100",
+          )}
+        >
+          <svg
+            width="10"
+            height="16"
+            viewBox="0 0 10 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={"w-[1.628vw] h-[3.256vw] rotate-180"}
+          >
+            <path
+              d="M9 1L2 8L9 15"
+              stroke="#F9F8F4"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span
+            className={
+              "uppercase text-[3.256vw] font-bold font-museo text-foreground leading-[100%]"
+            }
+          >
+            Next round
+          </span>
+        </button>
+      </div>
       <div
         className={"flex w-full flex-row gap-[1.042vw]"}
         id={"previousLotteries"}
@@ -46,7 +132,7 @@ export default function PreviousRounds() {
           <div className={"flex w-full flex-row gap-[1.042vw]"}>
             <button
               className={
-                "flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.521vw] border border-left-accent hover:opacity-80 disabled:opacity-60"
+                "hidden lg:!flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.521vw] border border-left-accent hover:opacity-80 disabled:opacity-60"
               }
               onClick={() => setPage(page + 1)}
               disabled={
@@ -63,7 +149,11 @@ export default function PreviousRounds() {
                 <path d="M26 46L4 24L26 2" stroke="#D2FF00" strokeWidth="5" />
               </svg>
             </button>
-            <div className={"grid w-full grid-cols-2 gap-[1.042vw]"}>
+            <div
+              className={
+                "grid w-full grid-cols-1 lg:!grid-cols-2 gap-[1.042vw]"
+              }
+            >
               {chainStore.block &&
                 chainStore.block?.slotSinceGenesis > 0 &&
                 lotteryStore.onchainState?.startBlock &&
@@ -100,7 +190,7 @@ export default function PreviousRounds() {
             </div>
             <button
               className={
-                "flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.521vw] border border-left-accent hover:opacity-80 disabled:opacity-60"
+                "hidden lg:!flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.521vw] border border-left-accent hover:opacity-80 disabled:opacity-60"
               }
               onClick={() => setPage(page - 1)}
               disabled={page - 1 < 0}
@@ -121,16 +211,22 @@ export default function PreviousRounds() {
             </button>
           </div>
         ) : (
-          <div className={"grid w-full grid-cols-2 gap-[1.042vw] p-4"}>
+          <div
+            className={
+              "grid w-full grid-cols-1 lg:!grid-cols-2 gap-[1.042vw] lg:!p-4"
+            }
+          >
             <Skeleton
               isLoading={true}
-              className={"h-[15vw] w-full rounded-[0.67vw]"}
+              className={
+                "h-[58.14vw] lg:!h-[15vw] w-full rounded-[2.326vw] lg:!rounded-[0.67vw]"
+              }
             >
               <div />
             </Skeleton>
             <Skeleton
               isLoading={true}
-              className={"h-[15vw] w-full rounded-[0.67vw]"}
+              className={"lg:!block hidden h-[15vw] w-full rounded-[0.67vw]"}
             >
               <div />
             </Skeleton>

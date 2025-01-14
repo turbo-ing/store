@@ -83,7 +83,7 @@ export default function NetworkSwitchButton({
     <button
       onClick={() => switchNetwork(switchToNetwork)}
       className={
-        "w-full rounded-[0.26vw] bg-left-accent p-[0.5vw] text-center font-museo text-[0.833vw] font-medium text-bg-dark hover:opacity-80"
+        "w-full rounded-[1.163vw] lg:!rounded-[0.26vw] bg-left-accent p-[0.5vw] text-center font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-bg-dark hover:opacity-80"
       }
     >
       Switch to {switchToNetwork.name}

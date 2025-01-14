@@ -15,7 +15,7 @@ export default function Notification({
   if (notification.dismissAfterDelay) {
     setTimeout(
       () => notificationStore.remove(notification.id),
-      notification.dismissDelay
+      notification.dismissDelay,
     );
   }
 
@@ -26,8 +26,8 @@ export default function Notification({
       exit={{ opacity: 0, x: 1000 }}
       layout={"position"}
       className={cn(
-        "relative flex items-center justify-center rounded-[0.521vw] bg-[#323232] p-[1.042vw] shadow-2xl",
-        { "cursor-pointer hover:bg-[#3f3f3f]": notification.isDismissible }
+        "relative flex items-center justify-center rounded-[2.326vw] lg:!rounded-[0.521vw] bg-[#323232] p-[4.651vw] lg:!p-[1.042vw] shadow-2xl",
+        { "cursor-pointer hover:bg-[#3f3f3f]": notification.isDismissible },
       )}
       onClick={() => {
         notification.isDismissible
@@ -35,12 +35,16 @@ export default function Notification({
           : undefined;
       }}
     >
-      <span className={"flex w-full flex-row items-center gap-[0.521vw]"}>
+      <span
+        className={
+          "flex w-full flex-row items-center gap-[2.326vw] lg:!gap-[0.521vw]"
+        }
+      >
         {notification.customIcon ? (
           <Image
             src={notification.customIcon}
             alt={"notificationIcon"}
-            className={"h-[1vw] w-[1vw]"}
+            className={"h-[4.651vw] lg:!h-[1vw] w-[4.651vw] lg:!w-[1vw]"}
           />
         ) : (
           <>
@@ -70,7 +74,9 @@ export default function Notification({
                   aria-hidden="true"
                   role="presentation"
                   viewBox="0 0 17 18"
-                  className={"h-[0.729vw] w-[0.729vw]"}
+                  className={
+                    "h-[3.488vw] lg:!h-[0.729vw] w-[3.488vw] lg:!w-[0.729vw]"
+                  }
                 >
                   <polyline
                     fill="none"
@@ -110,7 +116,9 @@ export default function Notification({
                   viewBox="0 0 12 12"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className={"h-[0.729vw] w-[0.729vw]"}
+                  className={
+                    "h-[3.488vw] lg:!h-[0.729vw] w-[3.488vw] lg:!w-[0.729vw]"
+                  }
                 >
                   <path
                     fillRule="evenodd"
@@ -125,7 +133,7 @@ export default function Notification({
         )}
         <div
           className={
-            "h-full w-full font-plexsans text-[0.938vw] font-medium text-foreground"
+            "h-full w-full font-plexsans text-[4.186vw] lg:!text-[0.938vw] font-medium text-foreground"
           }
         >
           {notification.message}
@@ -138,7 +146,9 @@ export default function Notification({
           viewBox="0 0 12 12"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={"absolute right-[3%] top-[10%] h-[0.625vw] w-[0.625vw]"}
+          className={
+            "absolute right-[3%] top-[10%] h-[2.791vw] lg:!h-[0.625vw] w-[2.791vw] lg:!w-[0.625vw]"
+          }
         >
           <path
             fillRule="evenodd"

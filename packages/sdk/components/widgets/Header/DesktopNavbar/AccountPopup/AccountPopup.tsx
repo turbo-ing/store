@@ -93,26 +93,27 @@ export default function AccountPopup({
   //   name: testName,
   // });
 
-  useEffect(() => {
-    const search = client
-      .searchSingleIndex({
-        indexName: "mainnet",
-        searchParams: {
-          facetFilters: [
-            "collection:Minaty",
-            "owner:B62qrf3EeALJmMN5Xc5JSz6jB7xZCnGnv2DhTfQKJsaFPChTSs3De3n",
-          ],
-        },
-      })
-      .then((resp) => {
-        console.log("Algolia response", resp);
-        setAvatars([...avatars, ...resp.hits.map((x) => (x as any).image)]);
-      })
-      .catch((error) => {
-        console.log("algolia error", error);
-      });
-    console.log("Search source", search);
-  }, []);
+  // TODO: add correct nft validation
+  // useEffect(() => {
+  //   const search = client
+  //     .searchSingleIndex({
+  //       indexName: "mainnet",
+  //       searchParams: {
+  //         facetFilters: [
+  //           "collection:Minaty",
+  //           "owner:B62qrf3EeALJmMN5Xc5JSz6jB7xZCnGnv2DhTfQKJsaFPChTSs3De3n",
+  //         ],
+  //       },
+  //     })
+  //     .then((resp) => {
+  //       console.log("Algolia response", resp);
+  //       setAvatars([...avatars, ...resp.hits.map((x) => (x as any).image)]);
+  //     })
+  //     .catch((error) => {
+  //       console.log("algolia error", error);
+  //     });
+  //   console.log("Search source", search);
+  // }, []);
 
   useEffect(() => {
     if (account.name != name) setName(account.name);

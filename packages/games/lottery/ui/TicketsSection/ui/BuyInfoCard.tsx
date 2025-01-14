@@ -43,11 +43,8 @@ export default function BuyInfoCard({
   const workerStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
   const notificationStore = useNotificationStore();
-  const {
-    addGiftCodesMutation,
-    sendTicketQueueMutation,
-    roundInfo,
-  } = useContext(LotteryContext);
+  const { addGiftCodesMutation, sendTicketQueueMutation, roundInfo } =
+    useContext(LotteryContext);
 
   const numberOfTickets =
     voucherMode == VoucherMode.List
@@ -111,9 +108,9 @@ export default function BuyInfoCard({
 
       const addedCodes = {
         userAddress: networkStore.address,
-        paymentHash: '',
-        signature: '',
-        codes
+        paymentHash: "",
+        signature: "",
+        codes,
       };
 
       const dataToSign = codes
@@ -141,13 +138,15 @@ export default function BuyInfoCard({
       addedCodes.paymentHash = tx.hash;
 
       addGiftCodesMutation(addedCodes);
-      giftCodesStore.addGiftCodes(addedCodes.codes.map(x => ({
-        code: x,
-        used: false,
-        approved: false,
-        deleted: false,
-        createdAt: Date.now()      
-      })));
+      giftCodesStore.addGiftCodes(
+        addedCodes.codes.map((x) => ({
+          code: x,
+          used: false,
+          approved: false,
+          deleted: false,
+          createdAt: Date.now(),
+        })),
+      );
 
       setGiftCodeToBuyAmount(1);
       setVoucherMode(VoucherMode.List);
@@ -170,8 +169,11 @@ export default function BuyInfoCard({
   };
 
   const sendTicketQueue = async () => {
-    const dataToSign = Poseidon.hashPacked(CircuitString, CircuitString.fromString(giftCode)); 
-    let response; 
+    const dataToSign = Poseidon.hashPacked(
+      CircuitString,
+      CircuitString.fromString(giftCode),
+    );
+    let response;
 
     try {
       response = await (window as any).mina.signFields({
@@ -189,7 +191,7 @@ export default function BuyInfoCard({
       giftCode: giftCode,
       roundId: workerStore.lotteryRoundId,
       ticket: { numbers: ticketsInfo[0].numbers },
-      signature: response.signature
+      signature: response.signature,
     });
     setVoucherMode(VoucherMode.Closed);
     clearTickets();
@@ -199,7 +201,7 @@ export default function BuyInfoCard({
     });
   };
   return (
-    <div className="flex h-[13.53vw] w-[20vw] flex-col rounded-[0.67vw] bg-[#252525] p-[1.33vw] font-plexsans text-[0.833vw] shadow-2xl">
+    <div className="flex h-[46.512vw] lg:!h-[13.53vw] w-full lg:!w-[20vw] flex-col rounded-[2.326vw] lg:!rounded-[0.67vw] bg-[#252525] p-[4.651vw] lg:!p-[1.33vw] font-plexsans text-[3.721vw] lg:!text-[0.833vw] shadow-2xl">
       <div className="flex flex-row">
         <div className="text-nowrap">
           Number of {voucherMode == VoucherMode.List ? "codes" : "tickets"}
@@ -273,11 +275,13 @@ export default function BuyInfoCard({
         )}
       <button
         className={cn(
-          "mb-0 mt-auto flex h-[2.13vw] cursor-pointer items-center justify-center rounded-[0.33vw] border-bg-dark bg-right-accent px-[1vw] text-[1.07vw] text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:opacity-60",
+          "mb-0 mt-auto flex lg:!h-[2.13vw] cursor-pointer items-center justify-center rounded-[1.163vw] lg:!rounded-[0.33vw] border-bg-dark bg-right-accent px-[1vw] py-[1.86vw] lg:!py-0 text-[3.721vw] lg:!text-[1.07vw] text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:opacity-60",
           {
             "cursor-progress": loaderActive,
-            "mt-[0.25vw]": Number(balance) < Number(formatUnits(totalPrice)),
-            "mt-[1vw]": Number(balance) > Number(formatUnits(totalPrice)),
+            "mt-[9.302vw] lg:!mt-[0.25vw]":
+              Number(balance) < Number(formatUnits(totalPrice)),
+            "mt-[9.302vw] lg:!mt-[1vw]":
+              Number(balance) > Number(formatUnits(totalPrice)),
           },
         )}
         disabled={

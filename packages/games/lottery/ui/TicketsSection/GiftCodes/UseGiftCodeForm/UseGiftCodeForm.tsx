@@ -17,17 +17,21 @@ export default function UseGiftCodeForm({
       .test(
         "Check giftCode validity",
         "Gift code invalid",
-        () => true === true
+        () => true === true,
       ),
   });
 
   return (
     <div
       className={
-        "flex w-[22.5vw] flex-col gap-[0.521vw] rounded-b-[0.521vw] bg-[#252525] p-[0.521vw]"
+        "flex w-full lg:!w-[22.5vw] flex-col gap-[2.326vw] lg:!gap-[0.521vw] rounded-b-[4.651vw] lg:!rounded-b-[0.521vw] bg-[#252525] p-[2.326vw] lg:!p-[0.521vw]"
       }
     >
-      <span className={"font-plexsans text-[0.729vw] text-foreground"}>
+      <span
+        className={
+          "font-plexsans text-[3.256vw] lg:!text-[0.729vw] text-foreground"
+        }
+      >
         Enter your gift code here
       </span>
       <Formik
@@ -45,14 +49,14 @@ export default function UseGiftCodeForm({
           } else if (!resp[0].approved) {
             errors.giftCode = "Not approved";
           }
-          
+
           return errors;
         }}
       >
         {({ errors, values }) => (
           <Form
             className={
-              "flex w-[80%] flex-row items-center justify-start gap-[0.521vw]"
+              "flex w-full lg:!w-[80%] flex-row items-center justify-start gap-[3.488vw] lg:!gap-[0.521vw]"
             }
           >
             <div className={"flex w-full flex-col gap-[0.521vw]"}>
@@ -60,7 +64,7 @@ export default function UseGiftCodeForm({
                 name={"giftCode"}
                 type={"text"}
                 className={
-                  "w-full rounded-[0.26vw] border border-foreground bg-[#252525] p-[0.208vw] font-plexsans text-[0.729vw] text-foreground placeholder:opacity-60"
+                  "w-full rounded-[1.163vw] lg:!rounded-[0.26vw] border border-foreground bg-[#252525] p-[1.163vw] lg:!p-[0.208vw] font-plexsans text-[3.256vw] lg:!text-[0.729vw] text-foreground placeholder:opacity-60"
                 }
                 placeholder={"Type your gift code..."}
               />
@@ -100,7 +104,9 @@ export default function UseGiftCodeForm({
                       />
                     </svg>
                     <span
-                      className={"font-plexsans text-[0.729vw] text-[#FF0000]"}
+                      className={
+                        "font-plexsans text-[3.256vw] lg:!text-[0.729vw] text-[#FF0000]"
+                      }
                     >
                       {errors.giftCode}
                     </span>
@@ -141,7 +147,9 @@ export default function UseGiftCodeForm({
                       />
                     </svg>
                     <span
-                      className={"font-plexsans text-[0.729vw] text-[#22c55e]"}
+                      className={
+                        "font-plexsans text-[3.256vw] lg:!text-[0.729vw] text-[#22c55e]"
+                      }
                     >
                       Gift code valid!
                     </span>
@@ -152,7 +160,7 @@ export default function UseGiftCodeForm({
             <button
               type={"submit"}
               className={
-                "mb-auto w-[3.646vw] rounded-[0.26vw] bg-middle-accent p-[0.313vw] text-center font-museo text-[0.729vw] font-medium hover:opacity-80"
+                "mb-auto w-full lg:!w-[3.646vw] rounded-[1.163vw] lg:!rounded-[0.26vw] bg-middle-accent p-[1.163vw] lg:!p-[0.313vw] text-center font-museo text-[3.256vw] lg:!text-[0.729vw] font-medium hover:opacity-80"
               }
             >
               Submit
