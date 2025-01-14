@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { formatAddress, walletInstalled } from "../../../../lib/helpers";
 import { useNetworkStore } from "../../../../lib/stores/network";
-import Updater from "../../../framework/Updater/ChainUpdater";
 
 import HeaderCard from "../entities/HeaderCard/HeaderCard";
 import AccountCard from "./ui/AccountCard";
