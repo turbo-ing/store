@@ -89,7 +89,7 @@ export default function GenresFilter({
   setSortBy: (sortBy: GameComparisonType) => void;
 }) {
   return (
-    <div className={"flex w-full flex-col gap-[0.781vw] lg:flex-row"}>
+    <div className={"flex w-full flex-col gap-[0.781vw] lg:!flex-row"}>
       <GenresFilterItem
         animation={GamepadIllustration}
         genre={ZkNoidGameGenre.Arcade}
