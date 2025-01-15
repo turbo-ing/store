@@ -37,6 +37,7 @@ export default function TicketsSection() {
   const [giftCode, setGiftCode] = useState<string>("");
   const [giftCodeToBuyAmount, setGiftCodeToBuyAmount] = useState<number>(1);
   const [hasOwnedTickets, setHasOwnedTickets] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     setTickets([]);
@@ -52,6 +53,20 @@ export default function TicketsSection() {
     setGiftCode(giftCode);
     setVoucherMode(VoucherMode.UseValid);
   };
+
+  useEffect(() => {
+    const checkWidth = () => {
+      if (window.innerWidth <= 1024) setIsMobile(true);
+      else setIsMobile(false);
+    };
+
+    checkWidth();
+    window.addEventListener("resize", checkWidth);
+
+    return () => {
+      window.removeEventListener("resize", checkWidth);
+    };
+  }, []);
 
   return (
     <div
@@ -170,7 +185,15 @@ export default function TicketsSection() {
                           className={
                             "lg:!hidden w-full cursor-pointer flex flex-row items-center justify-center gap-[4.651vw] lg:!gap-[0.781vw] rounded-[2.326vw] lg:!rounded-[0.521vw] bg-[#252525] py-[1.628vw] lg:!py-[0.365vw] hover:opacity-80"
                           }
-                          onClick={() => setVoucherMode(VoucherMode.List)}
+                          onClick={() => {
+                            isMobile
+                              ? notificationStore.create({
+                                  type: "error",
+                                  message:
+                                    "Gift code generation currently supported only on desktop",
+                                })
+                              : setVoucherMode(VoucherMode.List);
+                          }}
                         >
                           <svg
                             width="25"
@@ -302,7 +325,15 @@ export default function TicketsSection() {
                       className={
                         "hidden lg:!flex w-full cursor-pointer flex-row items-center justify-center gap-[0.781vw] rounded-[0.521vw] bg-[#252525] py-[0.365vw] hover:opacity-80"
                       }
-                      onClick={() => setVoucherMode(VoucherMode.List)}
+                      onClick={() => {
+                        isMobile
+                          ? notificationStore.create({
+                              type: "error",
+                              message:
+                                "Gift code generation currently supported only on desktop",
+                            })
+                          : setVoucherMode(VoucherMode.List);
+                      }}
                     >
                       <svg
                         width="25"
