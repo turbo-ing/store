@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ALL_NETWORKS, Network } from "../../../../../constants/networks";
 import { requestAccounts, walletInstalled } from "../../../../../lib/helpers";
 import { useNetworkStore } from "../../../../../lib/stores/network";
@@ -57,7 +57,7 @@ export default function NetworkPicker({
         name: string;
       }) => {
         const minaNetwork = ALL_NETWORKS.find((x) =>
-          networkID != "unknown" ? x!.networkID == networkID : x!.name == name
+          networkID != "unknown" ? x!.networkID == networkID : x!.name == name,
         );
         networkStore.setNetwork(minaNetwork);
       };
@@ -117,7 +117,7 @@ export default function NetworkPicker({
             {ALL_NETWORKS.map((network) => (
               <div
                 key={(window as any).networkID}
-                className="group flex h-full w-full cursor-pointer flex-row items-center gap-[0.417vw] py-[0.625vw] pl-[0.417vw] last:rounded-b"
+                className="group flex h-full w-full cursor-pointer flex-row items-center gap-[1.882vw] lg:!gap-[0.417vw] py-[2.824vw] lg:!py-[0.625vw] pl-[1.882vw] lg:!pl-[0.417vw] last:rounded-b"
                 onClick={() => switchNetwork(network!)}
               >
                 <Image
@@ -129,13 +129,13 @@ export default function NetworkPicker({
                         : minaLogo
                   }
                   className={
-                    "h-[1.25vw] w-[1.25vw] rounded-[0.26vw] border border-foreground group-hover:border-left-accent"
+                    "h-[5.647vw] lg:!h-[1.25vw] w-[5.647vw] lg:!w-[1.25vw] rounded-[1.176vw] lg:!rounded-[0.26vw] border border-foreground group-hover:border-left-accent"
                   }
                   alt={""}
                 />
                 <span
                   className={
-                    "font-museo text-[0.833vw] font-medium text-foreground group-hover:text-left-accent"
+                    "font-museo text-[3.765vw] lg:!text-[0.833vw] font-medium text-foreground group-hover:text-left-accent"
                   }
                 >
                   {network!.name}

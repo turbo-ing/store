@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function NetworkPickerCard({
   text,
@@ -17,14 +17,16 @@ export default function NetworkPickerCard({
   return (
     <div
       className={
-        'group relative z-10 flex cursor-pointer items-center justify-center gap-[0.521vw] rounded border border-left-accent bg-left-accent px-[0.417vw] py-[0.208vw] font-museo text-[0.833vw] font-medium text-bg-dark hover:bg-bg-dark hover:text-left-accent'
+        "group relative z-10 flex cursor-pointer items-center justify-center gap-[0.521vw] rounded border border-left-accent bg-left-accent px-[0.417vw] py-[1.176vw] lg:!py-[0.208vw] font-museo text-[3.765vw] lg:!text-[0.833vw] font-medium text-bg-dark hover:bg-bg-dark hover:text-left-accent"
       }
       onClick={() => onClick?.()}
     >
       <Image
         src={image}
         alt=""
-        className={'h-[1.354vw] w-[1.354vw] rounded-[0.26vw]'}
+        className={
+          "h-[6.118vw] lg:!h-[1.354vw] w-[6.118vw] lg:!w-[1.354vw] rounded-[1.176vw] lg:!rounded-[0.26vw]"
+        }
       />
       {text}
       {toggle && (
@@ -38,9 +40,9 @@ export default function NetworkPickerCard({
             open: { rotate: 180 },
             closed: { rotate: 0 },
           }}
-          transition={{ type: 'spring', duration: 0.4, bounce: 0 }}
-          animate={expanded ? 'open' : 'closed'}
-          className={'h-[0.521vw] w-[0.833vw]'}
+          transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+          animate={expanded ? "open" : "closed"}
+          className={"h-[2.353vw] lg:!h-[0.521vw] w-[3.765vw] lg:!w-[0.833vw]"}
         >
           <path
             d="M15 1.5L8 8.5L1 1.5"
@@ -48,7 +50,7 @@ export default function NetworkPickerCard({
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={'stroke-bg-dark group-hover:stroke-left-accent'}
+            className={"stroke-bg-dark group-hover:stroke-left-accent"}
           />
         </motion.svg>
       )}
