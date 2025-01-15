@@ -100,7 +100,7 @@ export default function Swiper() {
                 <div className="relative flex h-full w-full items-center justify-center">
                   <Link href={"/games/lottery/global"}>
                     <Image
-                      width={1600}
+                      width={3200}
                       height={1000}
                       src={
                         "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/rtr6icdamjmh2kndh6q7"
