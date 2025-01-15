@@ -102,8 +102,8 @@ export default function CenterConsole({
           }
         >
           {roundToShow != lotteryStore.lotteryRoundId
-            ? `Round ${roundToShow} finished`
-            : `Lottery Round ${roundToShow}`}
+            ? `Round ${roundToShow} finished`:
+            roundToShow < 0 ? 'LOTTERY STARTS IN': `Lottery Round ${roundToShow}`}
         </div>
         <div
           className={cn(
