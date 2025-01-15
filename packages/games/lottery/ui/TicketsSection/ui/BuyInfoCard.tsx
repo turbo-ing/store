@@ -324,7 +324,7 @@ export default function BuyInfoCard({
       </button>
 
       {boughtModalStore.openModalId === BoughtModalsVariants.ticket &&
-        boughtModalStore.notShow.includes(BoughtModalsVariants.ticket) && (
+        !boughtModalStore.notShow.includes(BoughtModalsVariants.ticket) && (
           <BoughtModal
             title={"Ticket purchased"}
             text={`You have successfully purchased a ticket! It may take from 2 to 15 minutes for your ticket to appear in your wallet, please wait`}
@@ -338,7 +338,7 @@ export default function BuyInfoCard({
           />
         )}
       {boughtModalStore.openModalId === BoughtModalsVariants.codeBuy &&
-        boughtModalStore.notShow.includes(BoughtModalsVariants.codeBuy) && (
+        !boughtModalStore.notShow.includes(BoughtModalsVariants.codeBuy) && (
           <BoughtModal
             title={"Access code purchased"}
             text={
@@ -354,7 +354,7 @@ export default function BuyInfoCard({
           />
         )}
       {boughtModalStore.openModalId === BoughtModalsVariants.codeUse &&
-        boughtModalStore.notShow.includes(BoughtModalsVariants.codeUse) && (
+        !boughtModalStore.notShow.includes(BoughtModalsVariants.codeUse) && (
           <BoughtModal
             title={"Access code used"}
             text={
