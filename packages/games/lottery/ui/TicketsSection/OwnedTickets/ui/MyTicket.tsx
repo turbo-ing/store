@@ -13,13 +13,14 @@ import TicketBG8 from "../assets/ticket-bg-8.svg";
 import TicketBG9 from "../assets/ticket-bg-9.svg";
 import TicketBG10 from "../assets/ticket-bg-10.svg";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { useWorkerClientStore } from "../../../../workers/workerClientStore";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 import Link from "next/link";
 import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
+import LotteryContext from "@/lottery/lib/contexts/LotteryContext";
 
 const network =
   NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET];
@@ -237,6 +238,7 @@ export default function MyTicket({
   claimed,
   roundId,
   hash,
+  ticketId
 }: {
   plotteryAddress: string;
   isOpen: boolean;
@@ -249,6 +251,7 @@ export default function MyTicket({
   claimed: boolean;
   roundId: number;
   hash: string;
+  ticketId: number;
 }) {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const workerStore = useWorkerClientStore();
@@ -256,6 +259,8 @@ export default function MyTicket({
   const notificationStore = useNotificationStore();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isMobile, setMobile] = useState(false);
+
+  const { addClaimRequestMutation } = useContext(LotteryContext);
 
   // console.log('PENDING::::', isPending);
 
@@ -267,37 +272,37 @@ export default function MyTicket({
   //   getPendingState();
   // }, []);
 
-  const claimTicket = async (numbers: number[], amount: number) => {
-    let txJson = await workerStore.getReward(
-      plotteryAddress,
-      networkStore.address!,
-      networkStore.minaNetwork!.networkID,
-      roundId,
-      numbers,
-      amount,
-    );
+  // const claimTicket = async (numbers: number[], amount: number) => {
+  //   let txJson = await workerStore.getReward(
+  //     plotteryAddress,
+  //     networkStore.address!,
+  //     networkStore.minaNetwork!.networkID,
+  //     roundId,
+  //     numbers,
+  //     amount,
+  //   );
 
-    console.log("txJson", txJson);
-    await sendTransaction(JSON.stringify(txJson))
-      .then(() => {
-        notificationStore.create({
-          type: "success",
-          message: "Transaction sent",
-          isDismissible: true,
-          dismissAfterDelay: true,
-        });
-      })
-      .catch((error) => {
-        console.log("Error while sending transaction", error);
-        notificationStore.create({
-          type: "error",
-          message: "Error while sending transaction",
-          isDismissible: true,
-          dismissAfterDelay: true,
-          dismissDelay: 10000,
-        });
-      });
-  };
+  //   console.log("txJson", txJson);
+  //   await sendTransaction(JSON.stringify(txJson))
+  //     .then(() => {
+  //       notificationStore.create({
+  //         type: "success",
+  //         message: "Transaction sent",
+  //         isDismissible: true,
+  //         dismissAfterDelay: true,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error while sending transaction", error);
+  //       notificationStore.create({
+  //         type: "error",
+  //         message: "Error while sending transaction",
+  //         isDismissible: true,
+  //         dismissAfterDelay: true,
+  //         dismissDelay: 10000,
+  //       });
+  //     });
+  // };
 
   useEffect(() => {
     const checkWidth = () => {
@@ -350,23 +355,37 @@ export default function MyTicket({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => {
-                if (!workerStore.lotteryCompiled) {
-                  notificationStore.create({
-                    type: "error",
-                    message:
-                      "Lottery is not compiled yet, please wait a few seconds",
-                  });
-                  return;
-                }
-                const id = notificationStore.create({
-                  type: "loader",
-                  message: "Generating transaction...",
-                  isDismissible: false,
-                  dismissAfterDelay: false,
+                // if (!workerStore.lotteryCompiled) {
+                //   notificationStore.create({
+                //     type: "error",
+                //     message:
+                //       "Lottery is not compiled yet, please wait a few seconds",
+                //   });
+                //   return;
+                // }
+                // const id = notificationStore.create({
+                //   type: "loader",
+                //   message: "Generating transaction...",
+                //   isDismissible: false,
+                //   dismissAfterDelay: false,
+                // });
+                // claimTicket(combination, amount).then(() =>
+                //   notificationStore.remove(id),
+                // );
+
+                const claimRequest = {
+                  userAddress: networkStore.address!,
+                  roundId,
+                  ticketId,
+                };
+                addClaimRequestMutation(claimRequest);
+
+                notificationStore.create({
+                  type: "success",
+                  message: "Claim request sent",
+                  isDismissible: true,
+                  dismissAfterDelay: true,
                 });
-                claimTicket(combination, amount).then(() =>
-                  notificationStore.remove(id),
-                );
               }}
               disabled={workerStore.isActiveTx}
               className={
@@ -400,15 +419,28 @@ export default function MyTicket({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => {
-                const id = notificationStore.create({
-                  type: "loader",
-                  message: "Generating transaction...",
-                  isDismissible: false,
-                  dismissAfterDelay: false,
+                // const id = notificationStore.create({
+                //   type: "loader",
+                //   message: "Generating transaction...",
+                //   isDismissible: false,
+                //   dismissAfterDelay: false,
+                // });
+                // claimTicket(combination, amount).then(() =>
+                //   notificationStore.remove(id),
+                // );
+                const claimRequest = {
+                  userAddress: networkStore.address!,
+                  roundId,
+                  ticketId,
+                };
+                addClaimRequestMutation(claimRequest);
+
+                notificationStore.create({
+                  type: "success",
+                  message: "Claim request sent",
+                  isDismissible: true,
+                  dismissAfterDelay: true,
                 });
-                claimTicket(combination, amount).then(() =>
-                  notificationStore.remove(id),
-                );
               }}
               disabled={workerStore.isActiveTx}
               className={

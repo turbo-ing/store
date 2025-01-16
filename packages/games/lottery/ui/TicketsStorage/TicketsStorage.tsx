@@ -306,6 +306,7 @@ export default function TicketsStorage({
                     reward={Number(formatUnits(ticket.funds)).toFixed(2)}
                     claimed={ticket.claimed}
                     hash={ticket.hash}
+                    ticketId={ticketIndex}
                   />
                 )),
               )

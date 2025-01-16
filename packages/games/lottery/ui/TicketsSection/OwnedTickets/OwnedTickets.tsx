@@ -12,6 +12,7 @@ import LotteryContext from "../../../lib/contexts/LotteryContext";
 
 interface ITicket extends ILotteryTicket {
   id: string;
+  ticketId: number;
 }
 
 export default function OwnedTickets({
@@ -45,6 +46,7 @@ export default function OwnedTickets({
 
     setTickets(
       roundInfo.tickets
+        .map((x, i) => ({ ...x, ticketId: i }))
         .filter(
           (x: { owner: string | undefined }) => x.owner == networkStore.address,
         )
@@ -171,6 +173,7 @@ export default function OwnedTickets({
             funds={item.funds}
             roundId={roundsStore.roundToShowId}
             hash={item.buyHash || ""}
+            ticketId={item.ticketId}
           />
         ))}
         {tickets.length > TICKETS_PER_PAGE &&
