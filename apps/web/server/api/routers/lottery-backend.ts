@@ -19,7 +19,7 @@ export const lotteryBackendRouter = createTRPCRouter({
     .input(
       z.object({
         roundIds: z.array(z.number()),
-      }),
+      })
     )
     .query(async ({ input }) => {
       if (!db) return;
@@ -52,6 +52,7 @@ export const lotteryBackendRouter = createTRPCRouter({
           winningCombination: number[] | undefined;
           plotteryAddress: string;
           randomManagerAddress: string;
+          lastReducedTicket: number | undefined;
         }
       >;
 
@@ -69,6 +70,7 @@ export const lotteryBackendRouter = createTRPCRouter({
           total: roundInfo?.total as number,
           plotteryAddress: roundInfo?.plotteryAddress,
           randomManagerAddress: roundInfo?.randomManagerAddress,
+          lastReducedTicket: roundInfo?.lastReducedTicket,
         } as any;
       }
 
