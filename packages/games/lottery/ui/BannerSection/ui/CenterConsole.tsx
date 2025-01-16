@@ -11,6 +11,7 @@ import { Pages } from "../../Lottery";
 import { useEffect, useState } from "react";
 import { ILotteryRound } from "../../../lib/types";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
+import { Progress } from "@zknoid/sdk/components/shared/Progress";
 
 export default function CenterConsole({
   roundToShow,
@@ -30,6 +31,7 @@ export default function CenterConsole({
   const [accounts, setAccounts] = useState<
     { userAddress: string; name: string | undefined }[]
   >([]);
+  const [combinationGenProgress, setCombinationGenProgress] = useState(0);
 
   // const getAccountsQuery = api.accounts.getAccounts.useQuery({
   //   userAddresses: userAddresses,
@@ -83,6 +85,18 @@ export default function CenterConsole({
     }
   }, [leaderboard?.length]);
 
+  useEffect(() => {
+    if (!roundInfo) return;
+    if (!roundInfo?.tickets || roundInfo?.tickets?.length == 0) return;
+    if (!roundInfo?.lastReducedTicket || roundInfo.lastReducedTicket == 0)
+      return;
+    else {
+      const value =
+        (roundInfo.lastReducedTicket / roundInfo.tickets.length) * 100;
+      setCombinationGenProgress(value);
+    }
+  }, [roundInfo?.lastReducedTicket]);
+
   return (
     <div className="absolute bottom-0 left-0 right-0 top-0 mx-auto h-[41.86vw] lg:!h-[13vw] w-[59.302vw] lg:!w-[19.4vw]">
       <div
@@ -102,8 +116,10 @@ export default function CenterConsole({
           }
         >
           {roundToShow != lotteryStore.lotteryRoundId
-            ? `Round ${roundToShow} finished`:
-            roundToShow < 0 ? 'LOTTERY STARTS IN': `Lottery Round ${roundToShow}`}
+            ? `Round ${roundToShow} finished`
+            : roundToShow < 0
+              ? "LOTTERY STARTS IN"
+              : `Lottery Round ${roundToShow}`}
         </div>
         <div
           className={cn(
@@ -378,6 +394,7 @@ export default function CenterConsole({
               >
                 The process of calculating the winning number...
               </span>
+              <Progress value={combinationGenProgress} />
             </div>
           )}
         </div>

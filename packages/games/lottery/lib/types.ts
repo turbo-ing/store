@@ -18,4 +18,5 @@ export interface ILotteryRound {
   winningCombination: number[] | undefined;
   plotteryAddress: string;
   randomManagerAddress: string;
+  lastReducedTicket?: number | undefined;
 }
