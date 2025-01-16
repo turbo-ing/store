@@ -2,6 +2,8 @@ import { useWorkerClientStore } from '../../../workers/workerClientStore';
 import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
 import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
 import { cn, sendTransaction } from '@zknoid/sdk/lib/helpers';
+import { useContext } from 'react';
+import LotteryContext from "../../../lib/contexts/LotteryContext";
 
 export const TicketItem = ({
   plotteryAddress,
@@ -14,6 +16,7 @@ export const TicketItem = ({
   reward,
   claimed,
   hash,
+  ticketId
 }: {
   plotteryAddress: string,
   roundId: number;
@@ -25,42 +28,45 @@ export const TicketItem = ({
   reward: string;
   claimed: boolean;
   hash: string;
+  ticketId: number;
 }) => {
   const workerStore = useWorkerClientStore();
   const networkStore = useNetworkStore();
   const notificationStore = useNotificationStore();
 
-  const claimTicket = async (numbers: number[], amount: number) => {
-    let txJson = await workerStore.getReward(
-      plotteryAddress,
-      networkStore.address!,
-      networkStore.minaNetwork!.networkID,
-      roundId,
-      numbers,
-      amount
-    );
+  const { addClaimRequestMutation } = useContext(LotteryContext);
 
-    console.log('txJson', txJson);
-    await sendTransaction(JSON.stringify(txJson))
-      .then(() => {
-        notificationStore.create({
-          type: 'success',
-          message: 'Transaction sent',
-          isDismissible: true,
-          dismissAfterDelay: true,
-        });
-      })
-      .catch((error) => {
-        console.log('Error while sending transaction', error);
-        notificationStore.create({
-          type: 'error',
-          message: 'Error while sending transaction',
-          isDismissible: true,
-          dismissAfterDelay: true,
-          dismissDelay: 10000,
-        });
-      });
-  };
+  // const claimTicket = async (numbers: number[], amount: number) => {
+  //   let txJson = await workerStore.getReward(
+  //     plotteryAddress,
+  //     networkStore.address!,
+  //     networkStore.minaNetwork!.networkID,
+  //     roundId,
+  //     numbers,
+  //     amount
+  //   );
+
+  //   console.log('txJson', txJson);
+  //   await sendTransaction(JSON.stringify(txJson))
+  //     .then(() => {
+  //       notificationStore.create({
+  //         type: 'success',
+  //         message: 'Transaction sent',
+  //         isDismissible: true,
+  //         dismissAfterDelay: true,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log('Error while sending transaction', error);
+  //       notificationStore.create({
+  //         type: 'error',
+  //         message: 'Error while sending transaction',
+  //         isDismissible: true,
+  //         dismissAfterDelay: true,
+  //         dismissDelay: 10000,
+  //       });
+  //     });
+  // };
 
   return (
     <div
@@ -131,7 +137,14 @@ export const TicketItem = ({
             className={
               'w-1/2 rounded-[0.26vw] bg-left-accent px-[1.51vw] py-[0.26vw] font-museo text-[0.833vw] font-medium text-bg-dark hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-60'
             }
-            onClick={() => claimTicket(combination, Number(quantity))}
+            onClick={() => {
+              const claimRequest = {
+                userAddress: networkStore.address!,
+                roundId,
+                ticketId,
+              };
+              addClaimRequestMutation(claimRequest);
+            }}
             disabled={claimed || !hasReward || !workerStore.lotteryCompiled}
           >
             Claim
