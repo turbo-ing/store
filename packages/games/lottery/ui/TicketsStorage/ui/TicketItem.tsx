@@ -3,7 +3,7 @@ import { useNetworkStore } from '@zknoid/sdk/lib/stores/network';
 import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
 import { cn, sendTransaction } from '@zknoid/sdk/lib/helpers';
 import { useContext } from 'react';
-import LotteryContext from '@/lottery/lib/contexts/LotteryContext';
+import LotteryContext from "../../../lib/contexts/LotteryContext";
 
 export const TicketItem = ({
   plotteryAddress,

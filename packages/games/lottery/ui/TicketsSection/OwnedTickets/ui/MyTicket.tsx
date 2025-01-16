@@ -20,7 +20,7 @@ import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification
 import Link from "next/link";
 import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
-import LotteryContext from "@/lottery/lib/contexts/LotteryContext";
+import LotteryContext from "../../../../lib/contexts/LotteryContext";
 
 const network =
   NETWORKS[process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_DEVNET];
