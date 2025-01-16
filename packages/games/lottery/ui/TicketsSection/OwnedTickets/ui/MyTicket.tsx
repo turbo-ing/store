@@ -350,7 +350,7 @@ export default function MyTicket({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => {
-                if (!workerStore.lotteryCompiled) {
+                if (workerStore.isLocalProving && !workerStore.lotteryCompiled) {
                   notificationStore.create({
                     type: "error",
                     message:
