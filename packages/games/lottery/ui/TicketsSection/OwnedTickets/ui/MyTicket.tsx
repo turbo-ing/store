@@ -324,7 +324,7 @@ export default function MyTicket({
         <div
           className={cn("relative flex flex-row", {
             "cursor-progress lg:!hover:opacity-80":
-              !!funds && !claimed && !workerStore.lotteryCompiled,
+              !!funds && !claimed && (!workerStore.lotteryCompiled && workerStore.isLocalProving),
           })}
           onClick={() => (!funds ? onClick() : undefined)}
           onMouseEnter={() =>
@@ -413,7 +413,7 @@ export default function MyTicket({
               </svg>
             </motion.button>
           )}
-          {isHovered && !claimed && workerStore.lotteryCompiled && (
+          {isHovered && !claimed && (workerStore.lotteryCompiled || !workerStore.isLocalProving) && (
             <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
