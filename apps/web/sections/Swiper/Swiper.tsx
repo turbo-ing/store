@@ -63,39 +63,6 @@ export default function Swiper() {
         <div className="absolute left-0 top-0 hidden h-full w-full lg:block">
           <div className="h-full w-full overflow-hidden" ref={emblaRef}>
             <div className="flex h-full w-full">
-              {slides.map((slide, index) =>
-                slide.link ? (
-                  <Link
-                    key={index}
-                    href={slide.link}
-                    target={slide.openAsNewTab ? "_blank" : undefined}
-                    rel={slide.openAsNewTab ? "noopener noreferrer" : undefined}
-                    className="min-w-0 flex-[0_0_100%]"
-                  >
-                    <div className="flex h-full w-full items-center justify-center">
-                      <Image
-                        width={1600}
-                        height={1000}
-                        src={slide.image}
-                        alt="Slide"
-                        className="w-full"
-                      />
-                    </div>
-                  </Link>
-                ) : (
-                  <div key={index} className="min-w-0 flex-[0_0_100%]">
-                    <div className="flex h-full w-full items-center justify-center">
-                      <Image
-                        width={1600}
-                        height={1000}
-                        src={slide.image}
-                        alt="Slide"
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
-                ),
-              )}
               <div key={"custom-lottery"} className="min-w-0 flex-[0_0_100%]">
                 <div className="relative flex h-full w-full items-center justify-center">
                   <Link href={"/games/lottery/global"}>
@@ -193,6 +160,39 @@ export default function Swiper() {
               </div>
             </div>
           </div>
+          {slides.map((slide, index) =>
+            slide.link ? (
+              <Link
+                key={index}
+                href={slide.link}
+                target={slide.openAsNewTab ? "_blank" : undefined}
+                rel={slide.openAsNewTab ? "noopener noreferrer" : undefined}
+                className="min-w-0 flex-[0_0_100%]"
+              >
+                <div className="flex h-full w-full items-center justify-center">
+                  <Image
+                    width={1600}
+                    height={1000}
+                    src={slide.image}
+                    alt="Slide"
+                    className="w-full"
+                  />
+                </div>
+              </Link>
+            ) : (
+              <div key={index} className="min-w-0 flex-[0_0_100%]">
+                <div className="flex h-full w-full items-center justify-center">
+                  <Image
+                    width={1600}
+                    height={1000}
+                    src={slide.image}
+                    alt="Slide"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            ),
+          )}
         </div>
 
         <div
