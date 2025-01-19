@@ -18,13 +18,22 @@ export const claimRequestRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       if (!db) return;
 
-      await db.collection("claim_requests").insertOne({
-        userAddress: input.userAddress,
-        roundId: input.roundId,
-        ticketId: input.ticketId,
-        status: "pending",
-        createdAt: new Date().toISOString(),
-      });
+      await db.collection("claim_requests").updateOne(
+        {
+          roundId: input.roundId,
+          ticketId: input.ticketId,
+        },
+        {
+          $setOnInsert: {
+            userAddress: input.userAddress,
+            status: "pending",
+            createdAt: new Date().toISOString(),
+          },
+        },
+        {
+          upsert: true,
+        }
+      );
     }),
 
   getIndexInClaimRequestQueue: publicProcedure
