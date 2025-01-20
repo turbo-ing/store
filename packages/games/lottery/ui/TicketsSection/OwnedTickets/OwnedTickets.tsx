@@ -174,6 +174,8 @@ export default function OwnedTickets({
             roundId={roundsStore.roundToShowId}
             hash={item.buyHash || ""}
             ticketId={item.ticketId}
+            claimRequested={item.claimRequested}
+            claimQueue={item.claimQueue}
           />
         ))}
         {tickets.length > TICKETS_PER_PAGE &&
