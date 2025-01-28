@@ -83,6 +83,17 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     textColor: "white",
   },
   {
+    name: "Lottery L1 Festival",
+    description:
+        "Join daily events, complete tasks and get prizes!",
+    eventStarts: new Date("2025-01-27").getTime(),
+    eventEnds: new Date("2025-02-07T01:00:00.000+03:00").getTime(),
+    link: "/games/lottery/global",
+    image:
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/tlekt2gampj4htfp3zhk",
+    textColor: "white",
+  },
+  {
     name: "Free Lottery L1 Trial",
     description:
       "Follow us on social networks! There you can find free access codes for free participation in the lottery.",
