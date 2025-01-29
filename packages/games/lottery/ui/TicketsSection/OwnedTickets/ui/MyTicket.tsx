@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, sendTransaction } from "@zknoid/sdk/lib/helpers";
+import { cn } from "@zknoid/sdk/lib/helpers";
 import Image from "next/image";
 import TicketBG1 from "../assets/ticket-bg-1.svg";
 import TicketBG2 from "../assets/ticket-bg-2.svg";
@@ -432,9 +432,22 @@ export default function MyTicket({
                     "font-museo text-[1.667vw] font-bold uppercase text-middle-accent"
                   }
                 >
-                  {claimRequested
-                    ? `Claim requested, Queue ${claimQueue}`
-                    : "Click to claim ticket"}
+                  {claimRequested ? (
+                      <div className={'flex flex-col gap-[0.521vw] items-center justify-center'}>
+                        <div className={'relative w-[2.396vw] h-[2.396vw]'}>
+                          <motion.span
+                            className={'w-[2.396vw] h-[2.396vw] absolute left-0 top-0 box-border block rounded-[50%] border-[0.365vw] border-solid border-middle-accent border-t-foreground'}
+                            animate={{ rotate: 360 }}
+                            transition={{
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                              duration: 1,
+                            }}
+                          />
+                        </div>
+                        <span>Claim in the process</span>
+                      </div>
+                  ) : 'Click to claim ticket'}
                 </span>
               </motion.button>
             )}
