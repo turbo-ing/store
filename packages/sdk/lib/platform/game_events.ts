@@ -76,7 +76,7 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     name: "Lottery L1 Mainnet",
     description: "Try your luck and win Jackpot!",
     eventStarts: new Date("2025-01-15").getTime(),
-    eventEnds: new Date("2025-03-01T01:00:00.000+03:00").getTime(),
+    eventEnds: new Date("2025-01-30T01:00:00.000+03:00").getTime(),
     link: "/games/lottery/global",
     image:
       "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/c5gyuxt5ay7kmf9ibp9u",
@@ -84,13 +84,12 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
   },
   {
     name: "Lottery L1 Festival",
-    description:
-        "Join daily events, complete tasks and get prizes!",
+    description: "Join daily events, complete tasks and get prizes!",
     eventStarts: new Date("2025-01-27").getTime(),
-    eventEnds: new Date("2025-02-07T01:00:00.000+03:00").getTime(),
+    eventEnds: new Date("2025-02-07T00:00:00.000+03:00").getTime(),
     link: "/games/lottery/global",
     image:
-        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/tlekt2gampj4htfp3zhk",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/tlekt2gampj4htfp3zhk",
     textColor: "white",
   },
   {
@@ -98,11 +97,20 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     description:
       "Follow us on social networks! There you can find free access codes for free participation in the lottery.",
     eventStarts: new Date("2025-01-15").getTime(),
-    eventEnds: new Date("2025-03-01T01:00:00.000+03:00").getTime(),
+    eventEnds: new Date("2025-01-30T00:00:00.000+03:00").getTime(),
     link: SOCIALS_LINKS.twitter,
     image:
       "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/amnfxivmsobxov4ks4hy",
     textColor: "white",
+  },
+  {
+    name: "",
+    description: "",
+    eventStarts: new Date("2025-01-30T16:30:00.000+03:00").getTime(),
+    eventEnds: new Date("2025-01-31T01:00:00.000+03:00").getTime(),
+    link: SOCIALS_LINKS.twitter,
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1738162839/AMA_cca37f7c3a",
   },
 ];
 
