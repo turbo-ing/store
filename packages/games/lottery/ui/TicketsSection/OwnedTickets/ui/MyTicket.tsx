@@ -417,7 +417,7 @@ export default function MyTicket({
 
                   notificationStore.create({
                     type: "success",
-                    message: `Claim request sent, Queue ${claimQueue}`,
+                    message: `Claim request sent`,
                     isDismissible: true,
                     dismissAfterDelay: true,
                   });
@@ -433,21 +433,29 @@ export default function MyTicket({
                   }
                 >
                   {claimRequested ? (
-                      <div className={'flex flex-col gap-[0.521vw] items-center justify-center'}>
-                        <div className={'relative w-[2.396vw] h-[2.396vw]'}>
-                          <motion.span
-                            className={'w-[2.396vw] h-[2.396vw] absolute left-0 top-0 box-border block rounded-[50%] border-[0.365vw] border-solid border-middle-accent border-t-foreground'}
-                            animate={{ rotate: 360 }}
-                            transition={{
-                              repeat: Infinity,
-                              ease: 'easeInOut',
-                              duration: 1,
-                            }}
-                          />
-                        </div>
-                        <span>Claim in the process</span>
+                    <div
+                      className={
+                        "flex flex-col gap-[0.521vw] items-center justify-center"
+                      }
+                    >
+                      <div className={"relative w-[2.396vw] h-[2.396vw]"}>
+                        <motion.span
+                          className={
+                            "w-[2.396vw] h-[2.396vw] absolute left-0 top-0 box-border block rounded-[50%] border-[0.365vw] border-solid border-middle-accent border-t-foreground"
+                          }
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            duration: 1,
+                          }}
+                        />
                       </div>
-                  ) : 'Click to claim ticket'}
+                      <span>Claim in the process</span>
+                    </div>
+                  ) : (
+                    "Click to claim ticket"
+                  )}
                 </span>
               </motion.button>
             )}
