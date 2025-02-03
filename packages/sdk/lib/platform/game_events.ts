@@ -34,7 +34,7 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventEnds: new Date("2024-09-13").getTime(),
     link: "https://ethglobal.com/events/ethonline2024",
     image:
-      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/etiuiudpxcjdeu6kqt8r",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/etiuiudpxcjdeu6kqt8r",
     textColor: "black",
   },
   {
@@ -45,7 +45,7 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventEnds: new Date("2024-09-22").getTime(),
     link: "https://ethglobal.com/events/singapore2024",
     image:
-      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/vwr9hbzkuruf68nxxih0",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/vwr9hbzkuruf68nxxih0",
     textColor: "black",
   },
   {
@@ -57,7 +57,7 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventEnds: new Date("2024-10-04").getTime(),
     link: "https://github.com/ZkNoid/zknoid/issues/13",
     image:
-      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/zwx9etjctw3xjoigdfbt",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/zwx9etjctw3xjoigdfbt",
     textColor: "white",
   },
   {
@@ -69,7 +69,7 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventEnds: new Date("2024-10-28T19:00:00.000+03:00").getTime(),
     link: "https://quest.zknoid.io",
     image:
-      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/icwduehzsvuguqgxb1g0",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/icwduehzsvuguqgxb1g0",
     textColor: "white",
   },
   {
@@ -79,7 +79,7 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventEnds: new Date("2025-01-30T01:00:00.000+03:00").getTime(),
     link: "/games/lottery/global",
     image:
-      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/c5gyuxt5ay7kmf9ibp9u",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/c5gyuxt5ay7kmf9ibp9u",
     textColor: "white",
   },
   {
@@ -89,7 +89,7 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventEnds: new Date("2025-02-07T00:00:00.000+03:00").getTime(),
     link: "/games/lottery/global",
     image:
-      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/tlekt2gampj4htfp3zhk",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/tlekt2gampj4htfp3zhk",
     textColor: "white",
   },
   {
@@ -100,17 +100,44 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     eventEnds: new Date("2025-01-30T00:00:00.000+03:00").getTime(),
     link: SOCIALS_LINKS.twitter,
     image:
-      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1/store/events/amnfxivmsobxov4ks4hy",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/amnfxivmsobxov4ks4hy",
     textColor: "white",
   },
   {
     name: "",
     description: "",
-    eventStarts: new Date("2025-01-30T16:30:00.000+03:00").getTime(),
-    eventEnds: new Date("2025-01-31T01:00:00.000+03:00").getTime(),
+    eventStarts: new Date("2025-02-03T15:00:00.000+03:00").getTime(),
+    eventEnds: new Date("2025-02-07T15:00:00.000+03:00").getTime(),
     link: SOCIALS_LINKS.twitter,
     image:
-      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_1600,f_auto,q_auto:best/v1738162839/AMA_cca37f7c3a",
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/fbllffrkuzwrlckmkrlk",
+  },
+  {
+    name: "",
+    description: "",
+    eventStarts: new Date("2025-02-06T15:00:00.000+03:00").getTime(),
+    eventEnds: new Date("2025-02-06T16:00:00.000+03:00").getTime(),
+    link: "https://x.com/minacryptocom",
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/w7cngpqm2ikulqwi1tkk",
+  },
+  {
+    name: "",
+    description: "",
+    eventStarts: new Date("2025-02-04T15:00:00.000+03:00").getTime(),
+    eventEnds: new Date("2025-02-07T15:00:00.000+03:00").getTime(),
+    link: "https://www.tileville.xyz/competitions",
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/wcusrtvzkqyilrnl9nzf",
+  },
+  {
+    name: "",
+    description: "",
+    eventStarts: new Date("2025-02-05T15:00:00.000+03:00").getTime(),
+    eventEnds: new Date("2025-02-06T15:00:00.000+03:00").getTime(),
+    link: SOCIALS_LINKS.twitter,
+    image:
+      "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/d1xghz6od0etqweelpvm",
   },
 ];
 

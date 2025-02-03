@@ -227,9 +227,9 @@ export default function Events({
       {filteredEvents.length > 0 && (
         <div className="w-full overflow-hidden" ref={emblaRef}>
           <div className={"flex flex-row w-full"}>
-            {filteredEvents.map((event) => (
+            {filteredEvents.map((event, index) => (
               <EventItem
-                key={event.name}
+                key={index}
                 headText={event.name}
                 description={event.description}
                 prizePool={event.prizePool}
