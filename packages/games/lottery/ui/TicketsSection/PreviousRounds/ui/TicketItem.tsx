@@ -8,6 +8,7 @@ import { useContext, useState } from "react";
 import Link from "next/link";
 import LotteryContext from "../../../../lib/contexts/LotteryContext";
 import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
+import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 
 type Number = {
   number: number;
@@ -44,6 +45,7 @@ export function TicketItem({
 }) {
   const workerClient = useWorkerClientStore();
   const networkStore = useNetworkStore();
+  const notificationStore = useNotificationStore();
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const { addClaimRequestMutation } = useContext(LotteryContext);
 
@@ -102,24 +104,16 @@ export function TicketItem({
           }
           disabled={workerClient.isActiveTx}
           onClick={async () => {
-            // let txJson = await workerClient.getReward(
-            //   plotteryAddress,
-            //   networkStore.address!,
-            //   networkStore.minaNetwork!.networkID,
-            //   roundId,
-            //   numbers.map((x) => x.number),
-            //   amount
-            // );
             const claimRequest = {
               userAddress: networkStore.address!,
               roundId,
               ticketId,
             };
             addClaimRequestMutation(claimRequest);
-
-            // console.log('txJson', txJson);
-            // setIsLoader(true);
-            // await sendTransaction(txJson).finally(() => setIsLoader(false));
+            notificationStore.create({
+              type: "success",
+              message: "Claim requested!",
+            });
           }}
         >
           <div
