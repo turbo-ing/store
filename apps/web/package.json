@@ -46,7 +46,7 @@
     "l1-lottery-contracts": "=2.8.19",
     "ldrs": "^1.0.2",
     "lottie-react": "^2.4.0",
-    "luxon": "^3.4.4",
+    "luxon": "^3.5.0",
     "mongodb": "^6.5.0",
     "next": "14.2.13",
     "node-telegram-bot-api": "^0.65.1",
