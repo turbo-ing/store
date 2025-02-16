@@ -43,8 +43,10 @@ function TimerItem({ time, text }: { time: number; text: string }) {
 
 function Banner({
   eventEndsIn,
+  openRules,
 }: {
   eventEndsIn: DurationObjectUnits | undefined;
+  openRules: () => void;
 }) {
   return (
     <div
@@ -98,6 +100,7 @@ function Banner({
         className={
           "absolute right-[0.781vw] top-[0.781vw] hover:opacity-80 rounded-[0.26vw] border border-middle-accent flex flex-col justify-center items-center bg-foreground"
         }
+        onClick={openRules}
       >
         <span
           className={
@@ -215,6 +218,7 @@ function CoinBock({
   leaderboard,
   image,
   link,
+  btnColor,
 }: {
   label: string;
   price: number;
@@ -222,6 +226,7 @@ function CoinBock({
   leaderboard: { userAddress: string; amount: number }[];
   image: any;
   link: string;
+  btnColor: string;
 }) {
   const networkStore = useNetworkStore();
   const sortedLeaderboard = leaderboard.sort((a, b) => b.amount - a.amount);
@@ -323,51 +328,80 @@ function CoinBock({
             {!sortedLeaderboard
               .slice(0, 5)
               .find((item) => item.userAddress === networkStore.address) &&
-              userPlace && (
-                <>
-                  <div
+            userPlace ? (
+              <>
+                <div
+                  className={
+                    "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
+                  }
+                >
+                  <span
                     className={
-                      "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
+                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
                     }
                   >
-                    <span
-                      className={
-                        "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
-                      }
-                    >
-                      ...
-                    </span>
-                  </div>
-                  <div
-                    key={"userPlace"}
+                    ...
+                  </span>
+                </div>
+                <div
+                  key={"userPlace"}
+                  className={
+                    "grid grid-cols-3 rounded-[0.521vw] bg-[#252525] items-center p-[0.521vw]"
+                  }
+                >
+                  <span
                     className={
-                      "grid grid-cols-3 rounded-[0.521vw] bg-[#252525] items-center p-[0.521vw]"
+                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
                     }
                   >
-                    <span
-                      className={
-                        "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
-                      }
-                    >
-                      {userPlace.index + 1}
-                    </span>
-                    <span
-                      className={
-                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
-                      }
-                    >
-                      {formatAddress(userPlace.userAddress)}
-                    </span>
-                    <span
-                      className={
-                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
-                      }
-                    >
-                      {userPlace.amount}
-                    </span>
-                  </div>
-                </>
-              )}
+                    {userPlace.index + 1}
+                  </span>
+                  <span
+                    className={
+                      "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
+                    }
+                  >
+                    {formatAddress(userPlace.userAddress)}
+                  </span>
+                  <span
+                    className={
+                      "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
+                    }
+                  >
+                    {userPlace.amount}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  className={
+                    "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
+                  }
+                >
+                  <span
+                    className={
+                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                    }
+                  >
+                    ...
+                  </span>
+                </div>
+                <div
+                  className={
+                    "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
+                  }
+                >
+                  <span
+                    className={
+                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                    }
+                  >
+                    ...
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -410,8 +444,9 @@ function CoinBock({
           </div>
           <button
             className={
-              "hover:opacity-80 rounded-[0.26vw] bg-[#3A39FF] flex flex-col justify-center items-center w-full py-[0.26vw] mt-[0.26vw]"
+              "hover:opacity-80 rounded-[0.26vw] flex flex-col justify-center items-center w-full py-[0.26vw] mt-[0.26vw]"
             }
+            style={{ backgroundColor: btnColor }}
           >
             <span
               className={"text-[1.25vw] font-museo font-medium text-foreground"}
@@ -425,6 +460,167 @@ function CoinBock({
   );
 }
 
+function RulesModal({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ type: "spring", duration: 0.4, bounce: 0 }}
+      className={
+        "fixed left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center backdrop-blur-md p-[10vw] lg:!p-0"
+      }
+      onClick={onClose}
+    >
+      <div
+        className={
+          "min-h-[20.833vw] relative flex flex-col rounded-[0.781vw] bg-bg-dark p-[1.563vw]"
+        }
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div
+          className={
+            "absolute cursor-pointer top-[0.26vw] hover:opacity-80 -right-[1.563vw] flex flex-col justify-center items-center"
+          }
+          onClick={onClose}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={"w-[1.042vw] h-[1.042vw]"}
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M11.8174 10.0043L20 1.81818L18.1826 0L9.99994 8.18609L1.81742 0.000150223L0 1.81833L8.18252 10.0043L0.00836661 18.1818L1.82579 20L9.99994 11.8225L18.1742 20.0002L19.9917 18.182L11.8174 10.0043Z"
+              fill="#141414"
+            />
+          </svg>
+        </div>
+        <div className={"flex flex-col gap-[0.521vw] w-full"}>
+          <span
+            className={"text-[1.667vw] font-museo font-bold text-foreground"}
+          >
+            How to take a part in competition?
+          </span>
+          <span
+            className={"text-[1.042vw] font-museo font-bold text-foreground"}
+          >
+            Rules
+          </span>
+          <span
+            className={
+              "text-[0.833vw] font-plexsans leading-[110%] text-foreground"
+            }
+          >
+            [rules]
+          </span>
+        </div>
+        <div className={"mt-auto flex flex-col gap-[0.521vw]"}>
+          <span
+            className={"text-[1.042vw] font-museo font-bold text-foreground"}
+          >
+            Rewards
+          </span>
+          <div className={"flex flex-row w-full gap-[0.521vw] items-center"}>
+            <span
+              className={
+                "text-[0.833vw] font-plexsans leading-[110%] text-foreground"
+              }
+            >
+              1
+            </span>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              Golden ZkNoid NFT
+            </div>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              10 Gift codes for Lottery game
+            </div>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              100 $MINA
+            </div>
+          </div>
+          <div className={"flex flex-row w-full gap-[0.521vw] items-center"}>
+            <span
+              className={
+                "text-[0.833vw] font-plexsans leading-[110%] text-foreground"
+              }
+            >
+              2
+            </span>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              Silver ZkNoid NFT
+            </div>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              5 Gift codes for Lottery game
+            </div>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              50 $MINA
+            </div>
+          </div>
+          <div className={"flex flex-row w-full gap-[0.521vw] items-center"}>
+            <span
+              className={
+                "text-[0.833vw] font-plexsans leading-[110%] text-foreground"
+              }
+            >
+              3
+            </span>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              Bronze ZkNoid NFT
+            </div>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              3 Gift codes for Lottery game
+            </div>
+            <div
+              className={
+                "rounded-[0.26vw] bg-[#252525] text-[0.833vw] font-plexsans leading-[110%] text-foreground p-[0.26vw]"
+              }
+            >
+              30 $MINA
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function MemecoinsBanner() {
   const event = {
     date: {
@@ -435,6 +631,7 @@ export default function MemecoinsBanner() {
 
   const frozenCoinAmount = 1200;
   const hotCoinAmount = 994;
+  const [isRulesOpen, setIsRulesOpen] = useState<boolean>(false);
 
   const getTimeLeft = () => {
     return Interval.fromDateTimes(
@@ -539,7 +736,12 @@ export default function MemecoinsBanner() {
       >
         Meme Token Competition
       </div>
-      <Banner eventEndsIn={eventEndsIn} />
+      <Banner
+        eventEndsIn={eventEndsIn}
+        openRules={() => {
+          setIsRulesOpen(true);
+        }}
+      />
       <Slider frozenAmount={frozenCoinAmount} hotAmount={hotCoinAmount} />
       <div className={"flex flex-row gap-[0.781vw]"}>
         <CoinBock
@@ -549,6 +751,7 @@ export default function MemecoinsBanner() {
           leaderboard={frozenLeaderboard}
           image={coinFrogIMG}
           link={"#"}
+          btnColor={"#3A39FF"}
         />
         <CoinBock
           label={"Fire Dragon"}
@@ -557,8 +760,16 @@ export default function MemecoinsBanner() {
           leaderboard={hotLeaderboard}
           image={coinDragonIMG}
           link={"#"}
+          btnColor={"#FF5B23"}
         />
       </div>
+      {isRulesOpen && (
+        <RulesModal
+          onClose={() => {
+            setIsRulesOpen(false);
+          }}
+        />
+      )}
     </section>
   );
 }
