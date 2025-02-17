@@ -75,15 +75,15 @@ export default function CenterConsole({
 
   const aggregateTickets = (
     tickets: ILotteryTicket[] | undefined,
-  ): { owner: string; tickets: number; funds: bigint }[] => {
+  ): { owner: string; tickets: bigint; funds: bigint }[] => {
     if (!tickets) return [];
-    const leaderboard: Record<string, { tickets: number; funds: bigint }> = {};
+    const leaderboard: Record<string, { tickets: bigint; funds: bigint }> = {};
 
-    for (const { owner, funds } of tickets) {
+    for (const { owner, amount, funds } of tickets) {
       if (!leaderboard[owner]) {
-        leaderboard[owner] = { tickets: 0, funds: 0n };
+        leaderboard[owner] = { tickets: 0n, funds: 0n };
       }
-      leaderboard[owner].tickets += 1;
+      leaderboard[owner].tickets += amount;
       leaderboard[owner].funds += funds;
     }
 
@@ -94,9 +94,8 @@ export default function CenterConsole({
     }));
   };
 
-  const leaderboard = aggregateTickets(
-    roundInfo?.tickets.filter((ticket) => !!ticket.funds),
-  )
+  const leaderboard = aggregateTickets(roundInfo?.tickets)
+    .filter((ticket) => !!ticket.funds)
     .sort((a, b) => (b.funds! > a.funds! ? 1 : -1))
     .slice(0, 3);
 
@@ -343,7 +342,7 @@ export default function CenterConsole({
                                   "lg:!mt-[0.26vw] leading-[90%] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
                                 }
                               >
-                                {item.tickets}
+                                {item.tickets ? Number(item.tickets) : 0}
                               </span>
                             </div>
                           </div>
