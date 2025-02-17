@@ -5,13 +5,16 @@ import { DateTime } from "luxon";
 import BouncyLoader from "@zknoid/sdk/components/shared/BouncyLoader";
 import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
 import { formatUnits } from "@zknoid/sdk/lib/unit";
-import { Currency } from "@zknoid/sdk/constants/currency";
 import { Pages } from "../../Lottery";
 // import { api } from '@zknoid/sdk/trpc/react';
 import { useEffect, useState } from "react";
-import { ILotteryRound } from "../../../lib/types";
+import { ILotteryRound, ILotteryTicket } from "../../../lib/types";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import { Progress } from "@zknoid/sdk/components/shared/Progress";
+import Image from "next/image";
+import ticketICON from "../../../images/ticket.svg";
+import minaICON from "../../../images/mina.svg";
+import Link from "next/link";
 
 export default function CenterConsole({
   roundToShow,
@@ -70,14 +73,32 @@ export default function CenterConsole({
     workerStore.client,
   ]);
 
-  const leaderboard = roundInfo?.tickets
-    .filter((ticket) => !!ticket.funds)
-    .sort((a, b) => (b.funds! > a.funds! ? 1 : -1))
-    .slice(0, 3)
-    .map((ticket) => ({
-      owner: ticket.owner,
-      funds: ticket.funds,
+  const aggregateTickets = (
+    tickets: ILotteryTicket[] | undefined,
+  ): { owner: string; tickets: number; funds: bigint }[] => {
+    if (!tickets) return [];
+    const leaderboard: Record<string, { tickets: number; funds: bigint }> = {};
+
+    for (const { owner, funds } of tickets) {
+      if (!leaderboard[owner]) {
+        leaderboard[owner] = { tickets: 0, funds: 0n };
+      }
+      leaderboard[owner].tickets += 1;
+      leaderboard[owner].funds += funds;
+    }
+
+    return Object.entries(leaderboard).map(([owner, { tickets, funds }]) => ({
+      owner,
+      tickets,
+      funds,
     }));
+  };
+
+  const leaderboard = aggregateTickets(
+    roundInfo?.tickets.filter((ticket) => !!ticket.funds),
+  )
+    .sort((a, b) => (b.funds! > a.funds! ? 1 : -1))
+    .slice(0, 3);
 
   useEffect(() => {
     if (leaderboard && leaderboard.length != 0) {
@@ -112,7 +133,7 @@ export default function CenterConsole({
       >
         <div
           className={
-            "w-full text-center font-museo text-[5.814vw] lg:!text-[1.45vw] font-bold uppercase"
+            "w-full text-center font-museo text-[5vw] lg:!text-[1.45vw] font-bold uppercase"
           }
         >
           {roundToShow != lotteryStore.lotteryRoundId
@@ -268,25 +289,64 @@ export default function CenterConsole({
                               />
                             </svg>
                           )}
-                          <span
+                          <Link
+                            href={`https://minascan.io/mainnet/account/${item.owner}/txs`}
                             className={
-                              "py-[0.25vw] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
+                              "hover:opacity-80 hover:underline py-[0.25vw] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
                             }
                           >
                             {accounts.find(
                               (account) => account.userAddress === item.owner,
                             )?.name || formatAddress(item.owner)}
-                          </span>
-                          <span
+                          </Link>
+                          <div
                             className={
-                              "ml-auto py-[0.93vw] lg:!py-[0.25vw] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
+                              "ml-auto py-[0.93vw] lg:!py-[0.25vw] flex flex-row items-center gap-[7.059vw] lg:!gap-[1.563vw]"
                             }
                           >
-                            {item.funds
-                              ? Number(formatUnits(item.funds)).toFixed(2)
-                              : 0}{" "}
-                            {Currency.MINA}
-                          </span>
+                            <div
+                              className={
+                                "flex flex-row items-center gap-[1.176vw] lg:!gap-[0.26vw]"
+                              }
+                            >
+                              <Image
+                                src={minaICON}
+                                alt={"Mina icon"}
+                                className={
+                                  "w-[5.176vw] h-[5.176vw] lg:!w-[1.146vw] lg:!h-[1.146vw]"
+                                }
+                              />
+                              <span
+                                className={
+                                  "lg:!mt-[0.26vw] leading-[90%] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
+                                }
+                              >
+                                {item.funds
+                                  ? Number(formatUnits(item.funds)).toFixed(2)
+                                  : 0}
+                              </span>
+                            </div>
+                            <div
+                              className={
+                                "flex flex-row items-center gap-[1.176vw] lg:!gap-[0.26vw] mr-[1.176vw] lg:!mr-[0.26vw]"
+                              }
+                            >
+                              <Image
+                                src={ticketICON}
+                                alt={"Ticket icon"}
+                                className={
+                                  "w-[5.176vw] h-[5.176vw] lg:!w-[1.146vw] lg:!h-[1.146vw]"
+                                }
+                              />
+                              <span
+                                className={
+                                  "lg:!mt-[0.26vw] leading-[90%] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
+                                }
+                              >
+                                {item.tickets}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       ))}
                       {leaderboard.length != 3 &&
@@ -359,13 +419,52 @@ export default function CenterConsole({
                             >
                               -
                             </span>
-                            <span
+                            <div
                               className={
-                                "ml-auto py-[0.93vw] lg:!py-[0.25vw] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
+                                "ml-auto py-[0.93vw] lg:!py-[0.25vw] flex flex-row items-center gap-[7.059vw] lg:!gap-[1.563vw]"
                               }
                             >
-                              0 {Currency.MINA}
-                            </span>
+                              <div
+                                className={
+                                  "flex flex-row items-center gap-[1.176vw] lg:!gap-[0.26vw]"
+                                }
+                              >
+                                <Image
+                                  src={minaICON}
+                                  alt={"Mina icon"}
+                                  className={
+                                    "w-[5.176vw] h-[5.176vw] lg:!w-[1.146vw] lg:!h-[1.146vw]"
+                                  }
+                                />
+                                <span
+                                  className={
+                                    "lg:!mt-[0.26vw] leading-[90%] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
+                                  }
+                                >
+                                  0
+                                </span>
+                              </div>
+                              <div
+                                className={
+                                  "flex flex-row items-center gap-[1.176vw] lg:!gap-[0.26vw] mr-[1.176vw] lg:!mr-[0.26vw]"
+                                }
+                              >
+                                <Image
+                                  src={ticketICON}
+                                  alt={"Ticket icon"}
+                                  className={
+                                    "w-[5.176vw] h-[5.176vw] lg:!w-[1.146vw] lg:!h-[1.146vw]"
+                                  }
+                                />
+                                <span
+                                  className={
+                                    "lg:!mt-[0.26vw] leading-[90%] font-museo text-[3.256vw] lg:!text-[0.833vw] font-medium text-foreground"
+                                  }
+                                >
+                                  0
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         ))}
                     </>
