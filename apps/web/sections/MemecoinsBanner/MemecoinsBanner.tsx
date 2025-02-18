@@ -24,6 +24,7 @@ import {
 } from "../../../../packages/sdk/components/shared/Select/Select";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 
 function TimerItem({ time, text }: { time: number; text: string }) {
   return (
@@ -647,14 +648,23 @@ function BuyModal({
   const frogPrice = 1;
   const dragonPrice = 1;
 
+  const notificationStore = useNotificationStore();
   const [choosenCoin, setChoosenCoin] = useState<"frog" | "dragon">(
     defaultValue,
   );
   const [buyAmount, setBuyAmount] = useState<number>(1);
 
   const validationSchema = Yup.object().shape({
-    amount: Yup.number().min(1).required("Amount is required"),
+    amount: Yup.number().min(1, "Min amount: 1").required("Amount is required"),
   });
+
+  const onFormSubmit = () => {
+    notificationStore.create({
+      type: "success",
+      message: "form submitted",
+    });
+    onClose();
+  };
 
   return (
     <motion.div
@@ -698,9 +708,9 @@ function BuyModal({
         <Formik
           initialValues={{ amount: buyAmount }}
           validationSchema={validationSchema}
-          onSubmit={() => {}}
+          onSubmit={() => onFormSubmit()}
         >
-          {({ errors, touched }) => (
+          {({ errors, touched, setFieldValue }) => (
             <Form className={"flex flex-col"}>
               <div
                 className={
@@ -746,13 +756,28 @@ function BuyModal({
                   </span>
                 </div>
                 <div className={"w-full h-px my-[1.042vw] bg-[#252525]"} />
-                <span
+                <div
                   className={
-                    "text-[0.833vw] font-plexsans text-foreground leading-[110%]"
+                    "flex flex-row items-center justify-between w-full"
                   }
                 >
-                  To
-                </span>
+                  <span
+                    className={
+                      "text-[0.833vw] font-plexsans text-foreground leading-[110%]"
+                    }
+                  >
+                    To
+                  </span>
+                  {touched.amount && errors.amount && (
+                    <span
+                      className={
+                        "text-[0.833vw] font-plexsans text-[#FF5B23] leading-[110%]"
+                      }
+                    >
+                      {errors.amount}
+                    </span>
+                  )}
+                </div>
                 <div
                   className={
                     "rounded-[0.521vw] bg-[#252525] p-[0.781vw] flex flex-row items-center"
@@ -782,9 +807,9 @@ function BuyModal({
                   </Select>
                   <Field
                     name={"amount"}
-                    value={buyAmount}
                     type={"number"}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    onChange={async (e: ChangeEvent<HTMLInputElement>) => {
+                      await setFieldValue("amount", e.target.value);
                       setBuyAmount(Number(e.target.value));
                     }}
                     className={
