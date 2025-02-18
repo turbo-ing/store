@@ -645,17 +645,26 @@ function BuyModal({
   defaultValue: "frog" | "dragon";
   onClose: () => void;
 }) {
-  const frogPrice = 1;
-  const dragonPrice = 1;
+  const frogPrice = 5;
+  const dragonPrice = 5;
 
   const notificationStore = useNotificationStore();
   const [choosenCoin, setChoosenCoin] = useState<"frog" | "dragon">(
     defaultValue,
   );
   const [buyAmount, setBuyAmount] = useState<number>(1);
+  const [minaAmount, setMinaAmount] = useState<number>(
+    choosenCoin === "frog" ? frogPrice : dragonPrice,
+  );
 
   const validationSchema = Yup.object().shape({
     amount: Yup.number().min(1, "Min amount: 1").required("Amount is required"),
+    minaAmount: Yup.number()
+      .min(
+        choosenCoin === "frog" ? frogPrice : dragonPrice,
+        `Min amount: ${choosenCoin === "frog" ? frogPrice : dragonPrice}`,
+      )
+      .required("Amount is required"),
   });
 
   const onFormSubmit = () => {
@@ -664,6 +673,15 @@ function BuyModal({
       message: "form submitted",
     });
     onClose();
+  };
+
+  const removeLeadingZero = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const num = parseFloat(value);
+
+    if (Number.isInteger(num) && value.startsWith("0") && value.length > 1) {
+      event.target.value = num.toString();
+    }
   };
 
   return (
@@ -706,7 +724,7 @@ function BuyModal({
           </svg>
         </div>
         <Formik
-          initialValues={{ amount: buyAmount }}
+          initialValues={{ amount: buyAmount, minaAmount: minaAmount }}
           validationSchema={validationSchema}
           onSubmit={() => onFormSubmit()}
         >
@@ -721,13 +739,28 @@ function BuyModal({
                 Token
               </div>
               <div className={"flex flex-col gap-[0.26vw] mb-[1.042vw]"}>
-                <span
+                <div
                   className={
-                    "text-[0.833vw] font-plexsans text-foreground leading-[110%]"
+                    "flex flex-row items-center justify-between w-full"
                   }
                 >
-                  From
-                </span>
+                  <span
+                    className={
+                      "text-[0.833vw] font-plexsans text-foreground leading-[110%]"
+                    }
+                  >
+                    From
+                  </span>
+                  {touched.minaAmount && errors.minaAmount && (
+                    <span
+                      className={
+                        "text-[0.833vw] font-plexsans text-[#FF5B23] leading-[110%]"
+                      }
+                    >
+                      {errors.minaAmount}
+                    </span>
+                  )}
+                </div>
                 <div
                   className={
                     "rounded-[0.521vw] bg-[#252525] p-[0.781vw] flex flex-row items-center"
@@ -745,15 +778,25 @@ function BuyModal({
                   >
                     MINA
                   </span>
-                  <span
+                  <Field
+                    name={"minaAmount"}
+                    type={"number"}
+                    onChange={async (e: ChangeEvent<HTMLInputElement>) => {
+                      removeLeadingZero(e);
+                      const value = Number(e.target.value);
+                      const toBuyAmount =
+                        choosenCoin === "frog"
+                          ? value / frogPrice
+                          : value / dragonPrice;
+                      await setFieldValue("minaAmount", value);
+                      await setFieldValue("amount", toBuyAmount);
+                      setMinaAmount(value);
+                      setBuyAmount(toBuyAmount);
+                    }}
                     className={
-                      "ml-auto mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
+                      "text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
                     }
-                  >
-                    {choosenCoin === "frog"
-                      ? buyAmount * frogPrice
-                      : buyAmount * dragonPrice}
-                  </span>
+                  />
                 </div>
                 <div className={"w-full h-px my-[1.042vw] bg-[#252525]"} />
                 <div
@@ -793,6 +836,7 @@ function BuyModal({
                     onValueChange={(value: "frog" | "dragon") => {
                       setChoosenCoin(value);
                       setBuyAmount(1);
+                      setMinaAmount(1);
                     }}
                   >
                     <SelectTriggerChevron className="ml-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase">
@@ -809,8 +853,16 @@ function BuyModal({
                     name={"amount"}
                     type={"number"}
                     onChange={async (e: ChangeEvent<HTMLInputElement>) => {
-                      await setFieldValue("amount", e.target.value);
-                      setBuyAmount(Number(e.target.value));
+                      removeLeadingZero(e);
+                      const value = Number(e.target.value);
+                      const toMinaAmount =
+                        choosenCoin === "frog"
+                          ? value * frogPrice
+                          : value * dragonPrice;
+                      await setFieldValue("amount", value);
+                      await setFieldValue("minaAmount", toMinaAmount);
+                      setBuyAmount(value);
+                      setMinaAmount(toMinaAmount);
                     }}
                     className={
                       "text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
