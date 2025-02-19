@@ -26,6 +26,8 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 
+import * as Silvana from "@silvana-one/api";
+
 function TimerItem({ time, text }: { time: number; text: string }) {
   return (
     <div className={"flex flex-col gap-[0.26vw]"}>
@@ -792,8 +794,7 @@ function BuyModal({
                           ? frogTotalSupply
                           : dragonTotalSupply;
                       const tokenAmount =
-                        value /
-                        (10000 + Math.ceil(Number(supply) / 10_000_000_000));
+                        value / (0.00001 + supply / 10_000_000_000);
 
                       await setFieldValue("minaAmount", value);
                       await setFieldValue("amount", tokenAmount);
@@ -868,8 +869,7 @@ function BuyModal({
                           ? frogTotalSupply
                           : dragonTotalSupply;
                       const mintPrice =
-                        (10000 + Math.ceil(Number(supply) / 10_000_000_000)) *
-                        value;
+                        value * (0.00001 + supply / 10_000_000_000);
 
                       await setFieldValue("amount", value);
                       await setFieldValue("minaAmount", mintPrice);
@@ -913,13 +913,13 @@ export default function MemecoinsBanner() {
     },
   };
 
-  const frozenCoinAmount = 1200;
-  const hotCoinAmount = 994;
   const [isRulesOpen, setIsRulesOpen] = useState<boolean>(false);
   const [isBuyModalOpen, setIsBuyModalOpen] = useState<boolean>(false);
   const [touchedCoin, setTouchedCoin] = useState<"frog" | "dragon" | undefined>(
     undefined
   );
+  const [frogTotalSupply, setFrogTotalSupply] = useState<number>(0);
+  const [dragonTotalSupply, setDragonTotalSupply] = useState<number>(0);
 
   const getTimeLeft = () => {
     return Interval.fromDateTimes(
@@ -943,6 +943,44 @@ export default function MemecoinsBanner() {
       setEventEndsIn(getTimeLeft());
     }, 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  const frogTokenAddress =
+    "B62qqEnkkDnJVibzwswgAKax9sEFNVFYMjHN99mvJFUWkS3PFayETsw"; // #TODO move to env
+  const dragonTokenAddress =
+    "B62qnAcaUEPCdxN2VF7Q1SiT9JrXs8ecNxi153RLaMWPXZtaMFdbwRG"; //
+
+  useEffect(() => {
+    Silvana.config({
+      apiKey: process.env.NEXT_PUBLIC_SILVANA_PUBLIC_KEY!, // #TODO move to server side
+      chain: "devnet",
+    });
+
+    (async () => {
+      console.log("Running requests");
+      let balance1 = (
+        await Silvana.getTokenBalance({
+          body: {
+            tokenAddress: frogTokenAddress,
+            address: frogTokenAddress,
+          },
+        })
+      ).data?.balance;
+
+      let balance2 = (
+        await Silvana.getTokenBalance({
+          body: {
+            tokenAddress: dragonTokenAddress,
+            address: dragonTokenAddress,
+          },
+        })
+      ).data?.balance;
+
+      console.log(`Initial balances of tokens ${balance1} ${balance2}`);
+
+      setFrogTotalSupply((balance1 || 0) / 1e9);
+      setDragonTotalSupply((balance2 || 0) / 1e9);
+    })();
   }, []);
 
   const frozenLeaderboard = [
@@ -1030,12 +1068,12 @@ export default function MemecoinsBanner() {
           setIsRulesOpen(true);
         }}
       />
-      <Slider frozenAmount={frozenCoinAmount} hotAmount={hotCoinAmount} />
+      <Slider frozenAmount={frogTotalSupply} hotAmount={dragonTotalSupply} />
       <div className={"flex flex-row gap-[0.781vw]"}>
         <CoinBock
           label={"Frozen Frog"}
           price={100}
-          amount={frozenCoinAmount}
+          amount={frogTotalSupply}
           leaderboard={frozenLeaderboard}
           image={coinFrogIMG}
           link={"#"}
@@ -1048,7 +1086,7 @@ export default function MemecoinsBanner() {
         <CoinBock
           label={"Fire Dragon"}
           price={200}
-          amount={hotCoinAmount}
+          amount={dragonTotalSupply}
           leaderboard={hotLeaderboard}
           image={coinDragonIMG}
           link={"#"}
@@ -1073,8 +1111,8 @@ export default function MemecoinsBanner() {
             setIsBuyModalOpen(false);
             setTouchedCoin(undefined);
           }}
-          frogTotalSupply={10000}
-          dragonTotalSupply={10000}
+          frogTotalSupply={frogTotalSupply}
+          dragonTotalSupply={dragonTotalSupply}
         />
       )}
     </section>
