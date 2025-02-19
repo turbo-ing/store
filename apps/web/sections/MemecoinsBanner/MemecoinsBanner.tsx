@@ -138,7 +138,7 @@ function Slider({
   const [frozenPercent, setFrozenPercent] = useState<number>(0);
   const [hotPercent, setHotPercent] = useState<number>(0);
   const [winning, setWinning] = useState<"neutral" | "hot" | "frozen">(
-    "neutral",
+    "neutral"
   );
 
   useEffect(() => {
@@ -253,10 +253,10 @@ function CoinBock({
 
   const getUserInfo = () => {
     const userInfo = sortedLeaderboard.find(
-      (leaderboardItem) => leaderboardItem.userAddress === networkStore.address,
+      (leaderboardItem) => leaderboardItem.userAddress === networkStore.address
     );
     const userIndex = sortedLeaderboard.findIndex(
-      (item) => item.userAddress === networkStore.address,
+      (item) => item.userAddress === networkStore.address
     );
 
     if (userInfo && userIndex != -1 && userPlace?.amount != userInfo.amount) {
@@ -309,7 +309,7 @@ function CoinBock({
                     ? "bg-gradient-to-l from-[#FFE75F] to-[#252525]"
                     : index + 1 <= 3
                       ? "bg-gradient-to-l from-[#A8A6A6] to-[#252525]"
-                      : "bg-gradient-to-l from-[#E3A54F] to-[#252525]",
+                      : "bg-gradient-to-l from-[#E3A54F] to-[#252525]"
                 )}
               >
                 <div
@@ -639,30 +639,32 @@ function RulesModal({ onClose }: { onClose: () => void }) {
 }
 
 function BuyModal({
-  defaultValue,
+  token,
   onClose,
+  frogTotalSupply,
+  dragonTotalSupply,
 }: {
-  defaultValue: "frog" | "dragon";
+  token: "frog" | "dragon";
   onClose: () => void;
+  frogTotalSupply: number;
+  dragonTotalSupply: number;
 }) {
   const frogPrice = 5;
   const dragonPrice = 5;
 
   const notificationStore = useNotificationStore();
-  const [choosenCoin, setChoosenCoin] = useState<"frog" | "dragon">(
-    defaultValue,
-  );
+  const [chosenCoin, setChosenCoin] = useState<"frog" | "dragon">(token);
   const [buyAmount, setBuyAmount] = useState<number>(1);
   const [minaAmount, setMinaAmount] = useState<number>(
-    choosenCoin === "frog" ? frogPrice : dragonPrice,
+    chosenCoin === "frog" ? frogPrice : dragonPrice
   );
 
   const validationSchema = Yup.object().shape({
     amount: Yup.number().min(1, "Min amount: 1").required("Amount is required"),
     minaAmount: Yup.number()
       .min(
-        choosenCoin === "frog" ? frogPrice : dragonPrice,
-        `Min amount: ${choosenCoin === "frog" ? frogPrice : dragonPrice}`,
+        chosenCoin === "frog" ? frogPrice : dragonPrice,
+        `Min amount: ${chosenCoin === "frog" ? frogPrice : dragonPrice}`
       )
       .required("Amount is required"),
   });
@@ -735,7 +737,7 @@ function BuyModal({
                   "w-full text-center mb-[0.521vw] text-[1.667vw] font-museo font-bold text-foreground"
                 }
               >
-                Mint {choosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}{" "}
+                Mint {chosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}{" "}
                 Token
               </div>
               <div className={"flex flex-col gap-[0.26vw] mb-[1.042vw]"}>
@@ -784,14 +786,19 @@ function BuyModal({
                     onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                       removeLeadingZero(e);
                       const value = Number(e.target.value);
-                      const toBuyAmount =
-                        choosenCoin === "frog"
-                          ? value / frogPrice
-                          : value / dragonPrice;
+
+                      const supply =
+                        chosenCoin === "frog"
+                          ? frogTotalSupply
+                          : dragonTotalSupply;
+                      const tokenAmount =
+                        value /
+                        (10000 + Math.ceil(Number(supply) / 10_000_000_000));
+
                       await setFieldValue("minaAmount", value);
-                      await setFieldValue("amount", toBuyAmount);
+                      await setFieldValue("amount", tokenAmount);
                       setMinaAmount(value);
-                      setBuyAmount(toBuyAmount);
+                      setBuyAmount(tokenAmount);
                     }}
                     className={
                       "text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
@@ -827,14 +834,14 @@ function BuyModal({
                   }
                 >
                   <Image
-                    src={choosenCoin === "frog" ? frogICON : dragonICON}
+                    src={chosenCoin === "frog" ? frogICON : dragonICON}
                     alt={"Coin icon"}
                     className={"w-[1.771vw] h-[1.771vw]"}
                   />
                   <Select
-                    value={choosenCoin}
+                    value={chosenCoin}
                     onValueChange={(value: "frog" | "dragon") => {
-                      setChoosenCoin(value);
+                      setChosenCoin(value);
                       setBuyAmount(1);
                       setMinaAmount(1);
                     }}
@@ -855,14 +862,19 @@ function BuyModal({
                     onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                       removeLeadingZero(e);
                       const value = Number(e.target.value);
-                      const toMinaAmount =
-                        choosenCoin === "frog"
-                          ? value * frogPrice
-                          : value * dragonPrice;
+
+                      const supply =
+                        chosenCoin === "frog"
+                          ? frogTotalSupply
+                          : dragonTotalSupply;
+                      const mintPrice =
+                        (10000 + Math.ceil(Number(supply) / 10_000_000_000)) *
+                        value;
+
                       await setFieldValue("amount", value);
-                      await setFieldValue("minaAmount", toMinaAmount);
+                      await setFieldValue("minaAmount", mintPrice);
                       setBuyAmount(value);
-                      setMinaAmount(toMinaAmount);
+                      setMinaAmount(mintPrice);
                     }}
                     className={
                       "text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
@@ -874,7 +886,7 @@ function BuyModal({
                 type={"submit"}
                 className={cn(
                   "rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
-                  choosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]",
+                  chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]"
                 )}
               >
                 <span
@@ -882,7 +894,7 @@ function BuyModal({
                     "text-[1.25vw] font-museo font-medium text-foreground"
                   }
                 >
-                  Mint {choosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}
+                  Mint {chosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}
                 </span>
               </button>
             </Form>
@@ -906,7 +918,7 @@ export default function MemecoinsBanner() {
   const [isRulesOpen, setIsRulesOpen] = useState<boolean>(false);
   const [isBuyModalOpen, setIsBuyModalOpen] = useState<boolean>(false);
   const [touchedCoin, setTouchedCoin] = useState<"frog" | "dragon" | undefined>(
-    undefined,
+    undefined
   );
 
   const getTimeLeft = () => {
@@ -915,8 +927,8 @@ export default function MemecoinsBanner() {
       DateTime.fromJSDate(
         event.date.start.getTime() >= Date.now()
           ? event.date.start
-          : event.date.end,
-      ),
+          : event.date.end
+      )
     )
       .toDuration(["days", "hours", "minutes", "seconds"])
       .toObject();
@@ -1056,11 +1068,13 @@ export default function MemecoinsBanner() {
       )}
       {isBuyModalOpen && touchedCoin && (
         <BuyModal
-          defaultValue={touchedCoin}
+          token={touchedCoin}
           onClose={() => {
             setIsBuyModalOpen(false);
             setTouchedCoin(undefined);
           }}
+          frogTotalSupply={10000}
+          dragonTotalSupply={10000}
         />
       )}
     </section>
