@@ -26,8 +26,8 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 
-import * as Silvana from "@silvana-one/api";
 import { totalSupplyFormatDecimals } from "./constants";
+import { api } from "../../trpc/react";
 
 const frogTokenAddress =
   "B62qqEnkkDnJVibzwswgAKax9sEFNVFYMjHN99mvJFUWkS3PFayETsw"; // #TODO move to env
@@ -47,6 +47,13 @@ export function MemecoinBuyModal({
 }) {
   const networkStore = useNetworkStore();
 
+  const mintTokensMutation = api.http.memetokens.mintTokens.useMutation();
+  const proveTxMutation = api.http.memetokens.proveTx.useMutation();
+  const checkProofStatusMutation =
+    api.http.memetokens.checkProofStatus.useMutation();
+  const checkTransactionStatusMutation =
+    api.http.memetokens.checkTransactionStatus.useMutation();
+
   const notificationStore = useNotificationStore();
   const [chosenCoin, setChosenCoin] = useState<"frog" | "dragon">(token);
   const [buyAmount, setBuyAmount] = useState<number>(
@@ -65,80 +72,99 @@ export function MemecoinBuyModal({
     const tokenAddress =
       chosenCoin === "frog" ? frogTokenAddress : dragonTokenAddress;
     const sender = networkStore.address!;
-
     const adaptiveAmount = Math.floor(amount * 1e9);
     const adaptivePrice = Math.floor(price * 1e9);
 
     setTxStatus("Generating transaction");
-    setStatusArray((statusArray) => [...statusArray, "Generating transaction"]);
-    const tx = (
-      await Silvana.mintTokens({
-        body: {
-          sender,
-          tokenAddress,
-          to: sender,
-          amount: adaptiveAmount,
-          price: adaptivePrice,
-        },
-      })
-    ).data;
-    if (!tx) throw new Error("No tx");
-    setStatusArray((statusArray) => [
-      ...statusArray,
-      "Waiting for user to sign transaction",
-    ]);
-    setTxStatus("Waiting for user to sign transaction");
+    setStatusArray((old) => [...old, "Generating transaction"]);
 
-    console.log("Waiting for user to sign transaction");
-    console.log(tx);
+    const txData = await mintTokensMutation.mutateAsync({
+      sender,
+      tokenAddress,
+      to: sender,
+      amount: adaptiveAmount,
+      price: adaptivePrice,
+    });
+    if (!txData) throw new Error("No tx data returned from server");
+
+    setTxStatus("Waiting for user to sign transaction");
+    setStatusArray((old) => [...old, "Waiting for user to sign transaction"]);
 
     const txResult = await (window as any).mina?.sendTransaction(
-      tx.walletPayload
+      txData.walletPayload
     );
 
-    setStatusArray((statusArray) => [
-      ...statusArray,
+    setTxStatus("Waiting for transaction to be proved on server");
+    setStatusArray((old) => [
+      ...old,
       "Waiting for transaction to be proved on server",
     ]);
 
-    const proveTx = (
-      await Silvana.prove({
-        body: {
-          tx,
-          signedData: txResult.signedData,
-        },
-      })
-    ).data;
+    const proveData = await proveTxMutation.mutateAsync({
+      tx: txData,
+      signedData: txResult.signedData,
+    });
+    if (!proveData?.jobId) throw new Error("No jobId returned from server");
 
-    if (!proveTx?.jobId) throw new Error("No jobId");
+    let foundProof = false;
+    let numOfAttempts = 0;
+    const MAX_NUM_OF_ATTEMPTS = 100;
 
-    console.log("Prove tx");
-    console.log(proveTx);
+    let proofs;
 
-    const proofs = await Silvana.waitForProofs(proveTx.jobId);
+    while (!foundProof && numOfAttempts < MAX_NUM_OF_ATTEMPTS) {
+      proofs = (
+        await checkProofStatusMutation.mutateAsync({
+          jobId: proveData.jobId,
+        })
+      ).data;
 
-    if (!proofs) throw new Error("No proofs");
+      if (
+        proofs?.success === true &&
+        (proofs?.jobStatus === "finished" || proofs.jobStatus === "used")
+      ) {
+        foundProof = true;
+      } else {
+        numOfAttempts++;
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+      }
+    }
+
+    if (!foundProof) throw new Error("Proof not found");
+
+    if (!proofs || proofs.results?.length === 0)
+      throw new Error("No proofs returned");
+
+    const hash = proofs.results![0].hash;
 
     setTxStatus("Proof generated. Waiting for transaction to be mined");
-    console.log("Proof generated ", proofs[0]);
-
-    const hash = proofs[0];
-
-    setStatusArray((statusArray) => [
-      ...statusArray,
-      `Proof generated. Waiting for transaction(${hash}) to be mined`,
+    setStatusArray((old) => [
+      ...old,
+      `Proof generated. Waiting for transaction (${hash}) to be mined`,
     ]);
 
     if (!hash) return;
-    await Silvana.waitForTransaction(hash);
-    const tokenInfo = await Silvana.getTokenInfo({
-      body: { tokenAddress },
-    });
-    console.log(tokenInfo?.data);
+
+    let txFound = false;
+    let txNumOfAttempts = 0;
+
+    while (!txFound && txNumOfAttempts < MAX_NUM_OF_ATTEMPTS) {
+      const txStatus = await checkTransactionStatusMutation.mutateAsync({
+        txHash: hash,
+      });
+
+      if (txStatus.success && !txStatus.pending) {
+        txFound = true;
+      } else {
+        txNumOfAttempts++;
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+      }
+    }
+
+    if (!txFound) throw new Error("Tx not found");
 
     setTxStatus("Mined");
-    console.log("Tx mined ", hash);
-    setStatusArray((statusArray) => [...statusArray, `Tx ${hash} mined`]);
+    setStatusArray((old) => [...old, `Tx ${hash} mined`]);
   };
 
   const validationSchema = Yup.object().shape({
