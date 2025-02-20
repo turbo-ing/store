@@ -2,16 +2,15 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";
 import * as Silvana from "@silvana-one/api";
 
-const frogTokenAddress =
-  "B62qqEnkkDnJVibzwswgAKax9sEFNVFYMjHN99mvJFUWkS3PFayETsw"; // #TODO move to env
-const dragonTokenAddress =
-  "B62qnAcaUEPCdxN2VF7Q1SiT9JrXs8ecNxi153RLaMWPXZtaMFdbwRG"; //
+const frogTokenAddress = process.env.FROG_TOKEN_ADDRESS!;
+const dragonTokenAddress = process.env.DRAGON_TOKEN_ADDRESS!;
+const chain = process.env.MEMETOKENS_CHAIN!;
 
 export const memetokensRouter = createTRPCRouter({
   getBalances: publicProcedure.query(async () => {
     Silvana.config({
-      apiKey: process.env.SILVANA_API_KEY!, // move your real key to SILVANA_API_KEY
-      chain: "devnet",
+      apiKey: process.env.SILVANA_API_KEY!,
+      chain: chain as any,
     });
 
     const frogTotalSupply = (
@@ -48,7 +47,7 @@ export const memetokensRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       Silvana.config({
         apiKey: process.env.SILVANA_API_KEY!,
-        chain: "devnet",
+        chain: chain as any,
       });
 
       const { sender, tokenAddress, to, amount, price } = input;
@@ -69,7 +68,7 @@ export const memetokensRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       Silvana.config({
         apiKey: process.env.SILVANA_API_KEY!,
-        chain: "devnet",
+        chain: chain as any,
       });
 
       const { tx, signedData } = input;
@@ -92,7 +91,7 @@ export const memetokensRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       Silvana.config({
         apiKey: process.env.SILVANA_API_KEY!,
-        chain: "devnet",
+        chain: chain as any,
       });
 
       const proofs = await Silvana.getProof({ body: { jobId: input.jobId } });
@@ -108,7 +107,7 @@ export const memetokensRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       Silvana.config({
         apiKey: process.env.SILVANA_API_KEY!,
-        chain: "devnet",
+        chain: chain as any,
       });
 
       let txStatusData = (

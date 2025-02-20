@@ -29,10 +29,8 @@ import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification
 import { totalSupplyFormatDecimals } from "./constants";
 import { api } from "../../trpc/react";
 
-const frogTokenAddress =
-  "B62qqEnkkDnJVibzwswgAKax9sEFNVFYMjHN99mvJFUWkS3PFayETsw"; // #TODO move to env
-const dragonTokenAddress =
-  "B62qnAcaUEPCdxN2VF7Q1SiT9JrXs8ecNxi153RLaMWPXZtaMFdbwRG"; //
+const frogTokenAddress = process.env.FROG_TOKEN_ADDRESS!;
+const dragonTokenAddress = process.env.DRAGON_TOKEN_ADDRESS!;
 
 export function MemecoinBuyModal({
   token,
@@ -113,18 +111,24 @@ export function MemecoinBuyModal({
     let proofs;
 
     while (!foundProof && numOfAttempts < MAX_NUM_OF_ATTEMPTS) {
-      proofs = (
-        await checkProofStatusMutation.mutateAsync({
-          jobId: proveData.jobId,
-        })
-      ).data;
+      try {
+        proofs = (
+          await checkProofStatusMutation.mutateAsync({
+            jobId: proveData.jobId,
+          })
+        ).data;
 
-      if (
-        proofs?.success === true &&
-        (proofs?.jobStatus === "finished" || proofs.jobStatus === "used")
-      ) {
-        foundProof = true;
-      } else {
+        if (
+          proofs?.success === true &&
+          (proofs?.jobStatus === "finished" || proofs.jobStatus === "used")
+        ) {
+          foundProof = true;
+        } else {
+          numOfAttempts++;
+          await new Promise((resolve) => setTimeout(resolve, 10000));
+        }
+      } catch (e) {
+        console.log(`Error checking proof status: ${e}`);
         numOfAttempts++;
         await new Promise((resolve) => setTimeout(resolve, 10000));
       }
@@ -149,15 +153,21 @@ export function MemecoinBuyModal({
     let txNumOfAttempts = 0;
 
     while (!txFound && txNumOfAttempts < MAX_NUM_OF_ATTEMPTS) {
-      const txStatus = await checkTransactionStatusMutation.mutateAsync({
-        txHash: hash,
-      });
+      try {
+        const txStatus = await checkTransactionStatusMutation.mutateAsync({
+          txHash: hash,
+        });
 
-      if (txStatus.success && !txStatus.pending) {
-        txFound = true;
-      } else {
-        txNumOfAttempts++;
-        await new Promise((resolve) => setTimeout(resolve, 10000));
+        if (txStatus.success && !txStatus.pending) {
+          txFound = true;
+        } else {
+          txNumOfAttempts++;
+          await new Promise((resolve) => setTimeout(resolve, 20000));
+        }
+      } catch (e) {
+        console.log(`Error checking transaction status: ${e}`);
+        numOfAttempts++;
+        await new Promise((resolve) => setTimeout(resolve, 20000));
       }
     }
 
