@@ -26,10 +26,10 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 
-import * as Silvana from "@silvana-one/api";
 import { MemecoinBuyModal } from "./MemecoinBuyModal";
 import { RulesModal } from "./RulesModal";
 import { Banner, CoinBock, Slider } from "./ContestInfo";
+import { api } from "../../trpc/react";
 
 const mockFrozenLeaderboard = [
   {
@@ -109,6 +109,10 @@ const calculatePrice = (totalSupply: number): number => {
 };
 
 export default function MemecoinsBanner() {
+  const balances = api.http.memetokens.getBalances.useQuery(undefined, {
+    refetchInterval: 30000,
+  });
+
   const event = {
     date: {
       start: new Date("2025-02-22T00:00:00.000+03:00"),
@@ -145,31 +149,6 @@ export default function MemecoinsBanner() {
       .toObject();
   };
 
-  const updateTotalSupply = async () => {
-    let balance1 = (
-      await Silvana.getTokenBalance({
-        body: {
-          tokenAddress: frogTokenAddress,
-          address: frogTokenAddress,
-        },
-      })
-    ).data?.balance;
-
-    let balance2 = (
-      await Silvana.getTokenBalance({
-        body: {
-          tokenAddress: dragonTokenAddress,
-          address: dragonTokenAddress,
-        },
-      })
-    ).data?.balance;
-
-    console.log(`Initial balances of tokens ${balance1} ${balance2}`);
-
-    setFrogTotalSupply((balance1 || 0) / 1e9);
-    setDragonTotalSupply((balance2 || 0) / 1e9);
-  };
-
   const [eventEndsIn, setEventEndsIn] = useState<
     DurationObjectUnits | undefined
   >(undefined);
@@ -182,23 +161,12 @@ export default function MemecoinsBanner() {
     return () => clearInterval(interval);
   }, []);
 
-  const frogTokenAddress =
-    "B62qqEnkkDnJVibzwswgAKax9sEFNVFYMjHN99mvJFUWkS3PFayETsw"; // #TODO move to env
-  const dragonTokenAddress =
-    "B62qnAcaUEPCdxN2VF7Q1SiT9JrXs8ecNxi153RLaMWPXZtaMFdbwRG"; //
-
   useEffect(() => {
-    Silvana.config({
-      apiKey: process.env.NEXT_PUBLIC_SILVANA_PUBLIC_KEY!, // #TODO move to server side
-      chain: "devnet",
-    });
-
-    updateTotalSupply();
-    const interval = setInterval(() => {
-      updateTotalSupply();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    if (balances.data) {
+      setFrogTotalSupply((balances.data.frogTotalSupply || 0) / 1e9);
+      setDragonTotalSupply((balances.data.dragonTokenSupply || 0) / 1e9);
+    }
+  }, [balances.data]);
 
   useEffect(() => {
     if (frogTotalSupply) {

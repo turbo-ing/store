@@ -8,6 +8,7 @@ import { giftCodesRouter } from "./routers/gift-codes";
 import { leaderboardRouter } from "./routers/leaderboard";
 import { lotteryBackendRouter } from "./routers/lottery-backend";
 import { claimRequestRouter } from "./routers/claim-requests";
+import { memetokensRouter } from "./routers/memetokens";
 
 /**
  * This is the primary router for your server.
@@ -24,6 +25,7 @@ export const httpRouter = createTRPCRouter({
   claimRequests: claimRequestRouter,
   leaderboard: leaderboardRouter,
   lotteryBackend: lotteryBackendRouter,
+  memetokens: memetokensRouter,
 });
 
 // export type definition of API
