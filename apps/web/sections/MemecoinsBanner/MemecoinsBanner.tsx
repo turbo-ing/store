@@ -104,8 +104,8 @@ const mockHotLeaderboard = [
 const calculatePrice = (totalSupply: number): number => {
   const initialPrice = 0.00001;
   const boundingCurveIncrease = totalSupply / 10_000_000_000;
-  const slipage = 1.1;
-  return (initialPrice + boundingCurveIncrease) * slipage;
+  const slippage = 1.1;
+  return (initialPrice + boundingCurveIncrease) * slippage;
 };
 
 export default function MemecoinsBanner() {

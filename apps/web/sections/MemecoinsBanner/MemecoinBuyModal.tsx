@@ -28,6 +28,11 @@ import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification
 
 import * as Silvana from "@silvana-one/api";
 
+const frogTokenAddress =
+  "B62qqEnkkDnJVibzwswgAKax9sEFNVFYMjHN99mvJFUWkS3PFayETsw"; // #TODO move to env
+const dragonTokenAddress =
+  "B62qnAcaUEPCdxN2VF7Q1SiT9JrXs8ecNxi153RLaMWPXZtaMFdbwRG"; //
+
 export function MemecoinBuyModal({
   token,
   onClose,
@@ -39,6 +44,8 @@ export function MemecoinBuyModal({
   frogPrice: number;
   dragonPrice: number;
 }) {
+  const networkStore = useNetworkStore();
+
   const notificationStore = useNotificationStore();
   const [chosenCoin, setChosenCoin] = useState<"frog" | "dragon">(token);
   const [buyAmount, setBuyAmount] = useState<number>(
@@ -50,6 +57,89 @@ export function MemecoinBuyModal({
     token === "frog" ? frogPrice : dragonPrice
   );
 
+  const [statusArray, setStatusArray] = useState<string[]>([]);
+  const [txStatus, setTxStatus] = useState<string | null>(null);
+
+  const mintTokens = async (amount: number) => {
+    const tokenAddress =
+      chosenCoin === "frog" ? frogTokenAddress : dragonTokenAddress;
+    const sender = networkStore.address!;
+
+    const adaptiveAmount = Math.floor(amount * 1e9);
+    const adaptivePrice = Math.floor(price * 1e9);
+
+    setTxStatus("Generating transaction");
+    setStatusArray((statusArray) => [...statusArray, "Generating transaction"]);
+    const tx = (
+      await Silvana.mintTokens({
+        body: {
+          sender,
+          tokenAddress,
+          to: sender,
+          amount: adaptiveAmount,
+          price: adaptivePrice,
+        },
+      })
+    ).data;
+    if (!tx) throw new Error("No tx");
+    setStatusArray((statusArray) => [
+      ...statusArray,
+      "Waiting for user to sign transaction",
+    ]);
+    setTxStatus("Waiting for user to sign transaction");
+
+    console.log("Waiting for user to sign transaction");
+    console.log(tx);
+
+    const txResult = await (window as any).mina?.sendTransaction(
+      tx.walletPayload
+    );
+
+    setStatusArray((statusArray) => [
+      ...statusArray,
+      "Waiting for transaction to be proved on server",
+    ]);
+
+    const proveTx = (
+      await Silvana.prove({
+        body: {
+          tx,
+          signedData: txResult.signedData,
+        },
+      })
+    ).data;
+
+    if (!proveTx?.jobId) throw new Error("No jobId");
+
+    console.log("Prove tx");
+    console.log(proveTx);
+
+    const proofs = await Silvana.waitForProofs(proveTx.jobId);
+
+    if (!proofs) throw new Error("No proofs");
+
+    setTxStatus("Proof generated. Waiting for transaction to be mined");
+    console.log("Proof generated ", proofs[0]);
+
+    const hash = proofs[0];
+
+    setStatusArray((statusArray) => [
+      ...statusArray,
+      `Proof generated. Waiting for transaction(${hash}) to be mined`,
+    ]);
+
+    if (!hash) return;
+    await Silvana.waitForTransaction(hash);
+    const tokenInfo = await Silvana.getTokenInfo({
+      body: { tokenAddress },
+    });
+    console.log(tokenInfo?.data);
+
+    setTxStatus("Mined");
+    console.log("Tx mined ", hash);
+    setStatusArray((statusArray) => [...statusArray, `Tx ${hash} mined`]);
+  };
+
   const validationSchema = Yup.object().shape({
     amount: Yup.number().min(1, "Min amount: 1").required("Amount is required"),
     minaAmount: Yup.number()
@@ -60,12 +150,14 @@ export function MemecoinBuyModal({
       .required("Amount is required"),
   });
 
-  const onFormSubmit = () => {
-    notificationStore.create({
-      type: "success",
-      message: "form submitted",
-    });
-    onClose();
+  const onFormSubmit = async () => {
+    // notificationStore.create({
+    //   type: "success",
+    //   message: "form submitted",
+    // });
+    // onClose();
+
+    await mintTokens(buyAmount);
   };
 
   useEffect(() => {
@@ -278,6 +370,9 @@ export function MemecoinBuyModal({
                   Mint {chosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}
                 </span>
               </button>
+              {statusArray.map((status) => {
+                return <div>{status}</div>;
+              })}
             </Form>
           )}
         </Formik>
