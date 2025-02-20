@@ -27,6 +27,7 @@ import * as Yup from "yup";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 
 import * as Silvana from "@silvana-one/api";
+import { totalSupplyFormatDecimals } from "./constants";
 
 const frogTokenAddress =
   "B62qqEnkkDnJVibzwswgAKax9sEFNVFYMjHN99mvJFUWkS3PFayETsw"; // #TODO move to env
@@ -49,7 +50,7 @@ export function MemecoinBuyModal({
   const notificationStore = useNotificationStore();
   const [chosenCoin, setChosenCoin] = useState<"frog" | "dragon">(token);
   const [buyAmount, setBuyAmount] = useState<number>(
-    1 / (token === "frog" ? frogPrice : dragonPrice)
+    Number((1 / (token === "frog" ? frogPrice : dragonPrice)).toFixed(4))
   );
   const [minaAmount, setMinaAmount] = useState<number>(1);
 
@@ -273,7 +274,7 @@ export function MemecoinBuyModal({
                     onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                       removeLeadingZero(e);
                       const value = Number(e.target.value);
-                      const tokenAmount = value / price;
+                      const tokenAmount = Number((value / price).toFixed(4));
 
                       await setFieldValue("minaAmount", value);
                       await setFieldValue("amount", tokenAmount);
@@ -342,7 +343,7 @@ export function MemecoinBuyModal({
                     onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                       removeLeadingZero(e);
                       const value = Number(e.target.value);
-                      const mintPrice = value * price;
+                      const mintPrice = Number((value * price).toFixed(4));
 
                       await setFieldValue("amount", value);
                       await setFieldValue("minaAmount", mintPrice);

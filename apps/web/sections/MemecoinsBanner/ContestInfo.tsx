@@ -27,6 +27,7 @@ import * as Yup from "yup";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 
 import * as Silvana from "@silvana-one/api";
+import { priceFormatDecimals, totalSupplyFormatDecimals } from "./constants";
 
 export function TimerItem({ time, text }: { time: number; text: string }) {
   return (
@@ -213,14 +214,14 @@ export function Slider({
             "text-[0.833vw] font-plexsans font-semibold leading-[110%] text-foreground uppercase"
           }
         >
-          {frozenAmount} Frozen Frog
+          {frozenAmount.toFixed(totalSupplyFormatDecimals)} Frozen Frog
         </span>
         <span
           className={
             "text-[0.833vw] font-plexsans font-semibold leading-[110%] text-foreground uppercase"
           }
         >
-          {hotAmount} fire dragon
+          {hotAmount.toFixed(totalSupplyFormatDecimals)} fire dragon
         </span>
       </div>
     </div>
@@ -454,10 +455,10 @@ export function CoinBock({
                 "text-[1.25vw] font-semibold font-plexsans leading-[110%] uppercase"
               }
             >
-              Total Supply: {amount}
+              Total Supply: {amount.toFixed(totalSupplyFormatDecimals)}
             </span>
             <span className={"text-[0.833vw] font-plexsans leading-[110%]"}>
-              Current Price: {price} MINA
+              Current Price: {price.toFixed(priceFormatDecimals)} MINA
             </span>
           </div>
           <button

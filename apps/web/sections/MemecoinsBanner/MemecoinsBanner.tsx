@@ -144,6 +144,32 @@ export default function MemecoinsBanner() {
       .toDuration(["days", "hours", "minutes", "seconds"])
       .toObject();
   };
+
+  const updateTotalSupply = async () => {
+    let balance1 = (
+      await Silvana.getTokenBalance({
+        body: {
+          tokenAddress: frogTokenAddress,
+          address: frogTokenAddress,
+        },
+      })
+    ).data?.balance;
+
+    let balance2 = (
+      await Silvana.getTokenBalance({
+        body: {
+          tokenAddress: dragonTokenAddress,
+          address: dragonTokenAddress,
+        },
+      })
+    ).data?.balance;
+
+    console.log(`Initial balances of tokens ${balance1} ${balance2}`);
+
+    setFrogTotalSupply((balance1 || 0) / 1e9);
+    setDragonTotalSupply((balance2 || 0) / 1e9);
+  };
+
   const [eventEndsIn, setEventEndsIn] = useState<
     DurationObjectUnits | undefined
   >(undefined);
@@ -167,31 +193,11 @@ export default function MemecoinsBanner() {
       chain: "devnet",
     });
 
-    (async () => {
-      console.log("Running requests");
-      let balance1 = (
-        await Silvana.getTokenBalance({
-          body: {
-            tokenAddress: frogTokenAddress,
-            address: frogTokenAddress,
-          },
-        })
-      ).data?.balance;
-
-      let balance2 = (
-        await Silvana.getTokenBalance({
-          body: {
-            tokenAddress: dragonTokenAddress,
-            address: dragonTokenAddress,
-          },
-        })
-      ).data?.balance;
-
-      console.log(`Initial balances of tokens ${balance1} ${balance2}`);
-
-      setFrogTotalSupply((balance1 || 0) / 1e9);
-      setDragonTotalSupply((balance2 || 0) / 1e9);
-    })();
+    updateTotalSupply();
+    const interval = setInterval(() => {
+      updateTotalSupply();
+    }, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
