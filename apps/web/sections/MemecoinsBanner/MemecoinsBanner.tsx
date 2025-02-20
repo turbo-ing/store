@@ -101,6 +101,13 @@ const mockHotLeaderboard = [
   },
 ];
 
+const calculatePrice = (totalSupply: number): number => {
+  const initialPrice = 0.00001;
+  const boundingCurveIncrease = totalSupply / 10_000_000_000;
+  const slipage = 1.1;
+  return (initialPrice + boundingCurveIncrease) * slipage;
+};
+
 export default function MemecoinsBanner() {
   const event = {
     date: {
@@ -116,6 +123,9 @@ export default function MemecoinsBanner() {
   );
   const [frogTotalSupply, setFrogTotalSupply] = useState<number>(0);
   const [dragonTotalSupply, setDragonTotalSupply] = useState<number>(0);
+
+  const [frogPrice, setFrogPrice] = useState<number>(0);
+  const [dragonPrice, setDragonPrice] = useState<number>(0);
 
   const [frozenLeaderboard, setFrozenLeaderboard] = useState(
     mockFrozenLeaderboard
@@ -184,6 +194,18 @@ export default function MemecoinsBanner() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (frogTotalSupply) {
+      setFrogPrice(calculatePrice(frogTotalSupply));
+    }
+  }, [frogTotalSupply]);
+
+  useEffect(() => {
+    if (dragonTotalSupply) {
+      setDragonPrice(calculatePrice(dragonTotalSupply));
+    }
+  }, [dragonTotalSupply]);
+
   return (
     <section className={"flex flex-col gap-[1.042vw] mb-[5.208vw]"}>
       <div
@@ -203,7 +225,7 @@ export default function MemecoinsBanner() {
       <div className={"flex flex-row gap-[0.781vw]"}>
         <CoinBock
           label={"Frozen Frog"}
-          price={100}
+          price={frogPrice}
           amount={frogTotalSupply}
           leaderboard={frozenLeaderboard}
           image={coinFrogIMG}
@@ -216,7 +238,7 @@ export default function MemecoinsBanner() {
         />
         <CoinBock
           label={"Fire Dragon"}
-          price={200}
+          price={dragonPrice}
           amount={dragonTotalSupply}
           leaderboard={hotLeaderboard}
           image={coinDragonIMG}
@@ -242,8 +264,8 @@ export default function MemecoinsBanner() {
             setIsBuyModalOpen(false);
             setTouchedCoin(undefined);
           }}
-          frogTotalSupply={frogTotalSupply}
-          dragonTotalSupply={dragonTotalSupply}
+          frogPrice={frogPrice}
+          dragonPrice={dragonPrice}
         />
       )}
     </section>

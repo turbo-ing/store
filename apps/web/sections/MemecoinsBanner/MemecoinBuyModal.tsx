@@ -31,22 +31,23 @@ import * as Silvana from "@silvana-one/api";
 export function MemecoinBuyModal({
   token,
   onClose,
-  frogTotalSupply,
-  dragonTotalSupply,
+  frogPrice,
+  dragonPrice,
 }: {
   token: "frog" | "dragon";
   onClose: () => void;
-  frogTotalSupply: number;
-  dragonTotalSupply: number;
+  frogPrice: number;
+  dragonPrice: number;
 }) {
-  const frogPrice = 5;
-  const dragonPrice = 5;
-
   const notificationStore = useNotificationStore();
   const [chosenCoin, setChosenCoin] = useState<"frog" | "dragon">(token);
-  const [buyAmount, setBuyAmount] = useState<number>(1);
-  const [minaAmount, setMinaAmount] = useState<number>(
-    chosenCoin === "frog" ? frogPrice : dragonPrice
+  const [buyAmount, setBuyAmount] = useState<number>(
+    1 / (token === "frog" ? frogPrice : dragonPrice)
+  );
+  const [minaAmount, setMinaAmount] = useState<number>(1);
+
+  const [price, setPrice] = useState<number>(
+    token === "frog" ? frogPrice : dragonPrice
   );
 
   const validationSchema = Yup.object().shape({
@@ -66,6 +67,10 @@ export function MemecoinBuyModal({
     });
     onClose();
   };
+
+  useEffect(() => {
+    setPrice(chosenCoin === "frog" ? frogPrice : dragonPrice);
+  }, [chosenCoin, frogPrice, dragonPrice]);
 
   const removeLeadingZero = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -176,13 +181,7 @@ export function MemecoinBuyModal({
                     onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                       removeLeadingZero(e);
                       const value = Number(e.target.value);
-
-                      const supply =
-                        chosenCoin === "frog"
-                          ? frogTotalSupply
-                          : dragonTotalSupply;
-                      const tokenAmount =
-                        value / (0.00001 + supply / 10_000_000_000);
+                      const tokenAmount = value / price;
 
                       await setFieldValue("minaAmount", value);
                       await setFieldValue("amount", tokenAmount);
@@ -251,13 +250,7 @@ export function MemecoinBuyModal({
                     onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                       removeLeadingZero(e);
                       const value = Number(e.target.value);
-
-                      const supply =
-                        chosenCoin === "frog"
-                          ? frogTotalSupply
-                          : dragonTotalSupply;
-                      const mintPrice =
-                        value * (0.00001 + supply / 10_000_000_000);
+                      const mintPrice = value * price;
 
                       await setFieldValue("amount", value);
                       await setFieldValue("minaAmount", mintPrice);
