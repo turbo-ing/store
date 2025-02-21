@@ -23,23 +23,25 @@ export const memetokensRouter = createTRPCRouter({
         chain: chain as any,
       });
 
-      const frogBalance = (
-        await Silvana.getTokenBalance({
-          body: {
-            tokenAddress: frogTokenAddress,
-            address: input.address,
-          },
-        })
-      ).data?.balance;
+      const frogBalance =
+        (
+          await Silvana.getTokenBalance({
+            body: {
+              tokenAddress: frogTokenAddress,
+              address: input.address,
+            },
+          })
+        ).data?.balance || 0;
 
-      const dragonBalance = (
-        await Silvana.getTokenBalance({
-          body: {
-            tokenAddress: dragonTokenAddress,
-            address: dragonTokenAddress,
-          },
-        })
-      ).data?.balance;
+      const dragonBalance =
+        (
+          await Silvana.getTokenBalance({
+            body: {
+              tokenAddress: dragonTokenAddress,
+              address: input.address,
+            },
+          })
+        ).data?.balance || 0;
 
       // Update score on database
       await db?.collection("leaderboard").updateOne(
