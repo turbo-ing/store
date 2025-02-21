@@ -109,9 +109,13 @@ const calculatePrice = (totalSupply: number): number => {
 };
 
 export default function MemecoinsBanner() {
+  const networkStore = useNetworkStore();
+
   const balances = api.http.memetokens.getBalances.useQuery(undefined, {
     refetchInterval: 30000,
   });
+  const getUserTokensMutation =
+    api.http.memetokens.getUserBalance.useMutation();
 
   const event = {
     date: {
@@ -130,6 +134,9 @@ export default function MemecoinsBanner() {
 
   const [frogPrice, setFrogPrice] = useState<number>(0);
   const [dragonPrice, setDragonPrice] = useState<number>(0);
+
+  const [userFrogTokens, setUserFrogTokens] = useState<number>(0);
+  const [userDragonTokens, setUserDragonTokens] = useState<number>(0);
 
   const [frozenLeaderboard, setFrozenLeaderboard] = useState(
     mockFrozenLeaderboard
@@ -179,6 +186,24 @@ export default function MemecoinsBanner() {
       setDragonPrice(calculatePrice(dragonTotalSupply));
     }
   }, [dragonTotalSupply]);
+
+  useEffect(() => {
+    const fetchUserTokens = async () => {
+      if (networkStore.address) {
+        const userTokens = await getUserTokensMutation.mutateAsync({
+          address: networkStore.address,
+        });
+        setUserFrogTokens(userTokens.frogBalance || 0);
+        setUserDragonTokens(userTokens.dragonBalance || 0);
+      }
+    };
+
+    fetchUserTokens();
+
+    const intervalId = setInterval(fetchUserTokens, 30000);
+
+    return () => clearInterval(intervalId);
+  }, [networkStore.address]);
 
   return (
     <section className={"flex flex-col gap-[1.042vw] mb-[5.208vw]"}>

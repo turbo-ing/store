@@ -1,12 +1,65 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";
 import * as Silvana from "@silvana-one/api";
+import clientPromise from "@/app/lib/mongodb";
 
 const frogTokenAddress = process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS!;
 const dragonTokenAddress = process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS!;
 const chain = process.env.MEMETOKENS_CHAIN!;
 
+const client = await clientPromise;
+const db = client?.db(process.env.MEMETOKENS_DATABASE);
+
 export const memetokensRouter = createTRPCRouter({
+  getUserBalance: publicProcedure
+    .input(
+      z.object({
+        address: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      Silvana.config({
+        apiKey: process.env.SILVANA_API_KEY!,
+        chain: chain as any,
+      });
+
+      const frogBalance = (
+        await Silvana.getTokenBalance({
+          body: {
+            tokenAddress: frogTokenAddress,
+            address: input.address,
+          },
+        })
+      ).data?.balance;
+
+      const dragonBalance = (
+        await Silvana.getTokenBalance({
+          body: {
+            tokenAddress: dragonTokenAddress,
+            address: dragonTokenAddress,
+          },
+        })
+      ).data?.balance;
+
+      // Update score on database
+      await db?.collection("leaderboard").updateOne(
+        {
+          address: input.address,
+        },
+        {
+          $set: {
+            address: input.address,
+            frogBalance,
+            dragonBalance,
+          },
+        },
+        {
+          upsert: true,
+        }
+      );
+
+      return { frogBalance, dragonBalance };
+    }),
   getBalances: publicProcedure.query(async () => {
     Silvana.config({
       apiKey: process.env.SILVANA_API_KEY!,
