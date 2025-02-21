@@ -11,7 +11,7 @@ import frogICON from "@/public/image/memecoins/frog.svg";
 import { DateTime, DurationObjectUnits, Interval } from "luxon";
 import { ChangeEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { cn, formatAddress } from "@zknoid/sdk/lib/helpers";
+import { abbreviateNumber, cn, formatAddress } from "@zknoid/sdk/lib/helpers";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import Link from "next/link";
 import {
@@ -142,7 +142,7 @@ export function Slider({
   const [frozenPercent, setFrozenPercent] = useState<number>(0);
   const [hotPercent, setHotPercent] = useState<number>(0);
   const [winning, setWinning] = useState<"neutral" | "hot" | "frozen">(
-    "neutral",
+    "neutral"
   );
 
   useEffect(() => {
@@ -221,7 +221,7 @@ export function Slider({
               "text-[0.833vw] font-plexsans font-semibold leading-[110%] text-foreground uppercase"
             }
           >
-            {frozenAmount.toFixed(totalSupplyFormatDecimals)} Frozen Frog
+            {abbreviateNumber(frozenAmount)} Frozen Frog
           </span>
         </Skeleton>
         <Skeleton
@@ -233,7 +233,7 @@ export function Slider({
               "text-[0.833vw] font-plexsans font-semibold leading-[110%] text-foreground uppercase"
             }
           >
-            {hotAmount.toFixed(totalSupplyFormatDecimals)} fire dragon
+            {abbreviateNumber(hotAmount)} Fire dragon
           </span>
         </Skeleton>
       </div>
@@ -269,10 +269,10 @@ export function CoinBock({
 
   const getUserInfo = () => {
     const userInfo = sortedLeaderboard.find(
-      (leaderboardItem) => leaderboardItem.userAddress === networkStore.address,
+      (leaderboardItem) => leaderboardItem.userAddress === networkStore.address
     );
     const userIndex = sortedLeaderboard.findIndex(
-      (item) => item.userAddress === networkStore.address,
+      (item) => item.userAddress === networkStore.address
     );
 
     if (userInfo && userIndex != -1 && userPlace?.amount != userInfo.amount) {
@@ -329,7 +329,7 @@ export function CoinBock({
                       ? "bg-gradient-to-l from-[#FFE75F] to-[#252525]"
                       : index + 1 <= 3
                         ? "bg-gradient-to-l from-[#A8A6A6] to-[#252525]"
-                        : "bg-gradient-to-l from-[#E3A54F] to-[#252525]",
+                        : "bg-gradient-to-l from-[#E3A54F] to-[#252525]"
                   )}
                 >
                   <div
@@ -356,7 +356,7 @@ export function CoinBock({
                         "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
                       }
                     >
-                      {item.amount}
+                      {abbreviateNumber(item.amount)}
                     </span>
                   </div>
                 </div>
@@ -494,7 +494,7 @@ export function CoinBock({
                   "text-[1.25vw] font-semibold font-plexsans leading-[110%] uppercase"
                 }
               >
-                Total Supply: {amount.toFixed(totalSupplyFormatDecimals)}
+                Total Supply: {abbreviateNumber(amount)}
               </span>
             </Skeleton>
             <Skeleton

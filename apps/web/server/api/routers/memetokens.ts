@@ -201,7 +201,7 @@ export const memetokensRouter = createTRPCRouter({
     ).map((v) => {
       return {
         userAddress: v.address,
-        amount: v.frogBalance,
+        amount: v.frogBalance / 1e9,
       };
     });
 
@@ -214,7 +214,7 @@ export const memetokensRouter = createTRPCRouter({
     ).map((v) => {
       return {
         userAddress: v.address,
-        amount: v.dragonBalance,
+        amount: v.dragonBalance / 1e9,
       };
     });
 
