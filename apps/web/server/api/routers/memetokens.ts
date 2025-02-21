@@ -216,11 +216,6 @@ export const memetokensRouter = createTRPCRouter({
       };
     });
 
-    console.log({
-      frogLeaderboard,
-      dragonLeaderboard,
-    });
-
     return {
       frogLeaderboard,
       dragonLeaderboard,

@@ -21,13 +21,14 @@ import {
   SelectItem,
   SelectTriggerChevron,
   SelectValue,
-} from "../../../../packages/sdk/components/shared/Select/Select";
+} from "../../../../../packages/sdk/components/shared/Select/Select";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 
 import * as Silvana from "@silvana-one/api";
-import { priceFormatDecimals, totalSupplyFormatDecimals } from "./constants";
+import { priceFormatDecimals, totalSupplyFormatDecimals } from "../constants";
+import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
 
 export function TimerItem({ time, text }: { time: number; text: string }) {
   return (
@@ -141,7 +142,7 @@ export function Slider({
   const [frozenPercent, setFrozenPercent] = useState<number>(0);
   const [hotPercent, setHotPercent] = useState<number>(0);
   const [winning, setWinning] = useState<"neutral" | "hot" | "frozen">(
-    "neutral"
+    "neutral",
   );
 
   useEffect(() => {
@@ -149,7 +150,9 @@ export function Slider({
     const currentFrozenPercent = (frozenAmount / allSupply) * 100;
     const currentHotPercent = (hotAmount / allSupply) * 100;
     const winningType =
-      currentFrozenPercent == currentHotPercent
+      currentFrozenPercent == currentHotPercent ||
+      frozenAmount == 0 ||
+      hotAmount == 0
         ? "neutral"
         : currentFrozenPercent < currentHotPercent
           ? "hot"
@@ -187,7 +190,7 @@ export function Slider({
               : undefined
           }
           style={{
-            width: `${winning == "hot" ? frozenPercent + 1 : frozenPercent}%`,
+            width: `${frozenPercent == 0 || hotPercent == 0 ? 50 : winning == "hot" ? frozenPercent + 1 : frozenPercent}%`,
           }}
         />
         <motion.div
@@ -204,25 +207,35 @@ export function Slider({
               : undefined
           }
           style={{
-            width: `${winning == "frozen" ? hotPercent + 1 : hotPercent}%`,
+            width: `${frozenPercent == 0 || hotPercent == 0 ? 50 : winning == "frozen" ? hotPercent + 1 : hotPercent}%`,
           }}
         />
       </div>
       <div className={"w-full flex flex-row items-center justify-between"}>
-        <span
-          className={
-            "text-[0.833vw] font-plexsans font-semibold leading-[110%] text-foreground uppercase"
-          }
+        <Skeleton
+          isLoading={frozenAmount == 0}
+          className={"w-[8vw] h-[0.833vw] rounded-full"}
         >
-          {frozenAmount.toFixed(totalSupplyFormatDecimals)} Frozen Frog
-        </span>
-        <span
-          className={
-            "text-[0.833vw] font-plexsans font-semibold leading-[110%] text-foreground uppercase"
-          }
+          <span
+            className={
+              "text-[0.833vw] font-plexsans font-semibold leading-[110%] text-foreground uppercase"
+            }
+          >
+            {frozenAmount.toFixed(totalSupplyFormatDecimals)} Frozen Frog
+          </span>
+        </Skeleton>
+        <Skeleton
+          isLoading={hotAmount == 0}
+          className={"w-[8vw] h-[0.833vw] rounded-full"}
         >
-          {hotAmount.toFixed(totalSupplyFormatDecimals)} fire dragon
-        </span>
+          <span
+            className={
+              "text-[0.833vw] font-plexsans font-semibold leading-[110%] text-foreground uppercase"
+            }
+          >
+            {hotAmount.toFixed(totalSupplyFormatDecimals)} fire dragon
+          </span>
+        </Skeleton>
       </div>
     </div>
   );
@@ -256,10 +269,10 @@ export function CoinBock({
 
   const getUserInfo = () => {
     const userInfo = sortedLeaderboard.find(
-      (leaderboardItem) => leaderboardItem.userAddress === networkStore.address
+      (leaderboardItem) => leaderboardItem.userAddress === networkStore.address,
     );
     const userIndex = sortedLeaderboard.findIndex(
-      (item) => item.userAddress === networkStore.address
+      (item) => item.userAddress === networkStore.address,
     );
 
     if (userInfo && userIndex != -1 && userPlace?.amount != userInfo.amount) {
@@ -302,126 +315,148 @@ export function CoinBock({
               Amount
             </span>
           </div>
-          <div className={"flex flex-col gap-[0.26vw]"}>
-            {sortedLeaderboard.slice(0, 5).map((item, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "p-px rounded-[0.521vw]",
-                  index + 1 === 1
-                    ? "bg-gradient-to-l from-[#FFE75F] to-[#252525]"
-                    : index + 1 <= 3
-                      ? "bg-gradient-to-l from-[#A8A6A6] to-[#252525]"
-                      : "bg-gradient-to-l from-[#E3A54F] to-[#252525]"
-                )}
-              >
+          <Skeleton
+            isLoading={sortedLeaderboard.length == 0}
+            className={"h-[15.625vw] w-full rounded-[0.521vw]"}
+          >
+            <div className={"flex flex-col gap-[0.26vw]"}>
+              {sortedLeaderboard.slice(0, 5).map((item, index) => (
                 <div
-                  className={
-                    "grid grid-cols-3 bg-[#252525] items-center p-[0.521vw] rounded-[0.521vw]"
-                  }
+                  key={index}
+                  className={cn(
+                    "p-px rounded-[0.521vw]",
+                    index + 1 === 1
+                      ? "bg-gradient-to-l from-[#FFE75F] to-[#252525]"
+                      : index + 1 <= 3
+                        ? "bg-gradient-to-l from-[#A8A6A6] to-[#252525]"
+                        : "bg-gradient-to-l from-[#E3A54F] to-[#252525]",
+                  )}
                 >
-                  <span
+                  <div
                     className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      "grid grid-cols-3 bg-[#252525] items-center p-[0.521vw] rounded-[0.521vw]"
                     }
                   >
-                    {index + 1}
-                  </span>
-                  <span
-                    className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
-                    }
-                  >
-                    {formatAddress(item.userAddress)}
-                  </span>
-                  <span
-                    className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
-                    }
-                  >
-                    {item.amount}
-                  </span>
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      }
+                    >
+                      {index + 1}
+                    </span>
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
+                      }
+                    >
+                      {formatAddress(item.userAddress)}
+                    </span>
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
+                      }
+                    >
+                      {item.amount}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
-            {!sortedLeaderboard
-              .slice(0, 5)
-              .find((item) => item.userAddress === networkStore.address) &&
-            userPlace ? (
-              <>
-                <div
-                  className={
-                    "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
-                  }
-                >
-                  <span
+              ))}
+              {sortedLeaderboard.length < 5 &&
+                [...Array(5 - sortedLeaderboard.length)].map((_, index) => (
+                  <div
+                    key={index}
                     className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
                     }
                   >
-                    ...
-                  </span>
-                </div>
-                <div
-                  key={"userPlace"}
-                  className={
-                    "grid grid-cols-3 rounded-[0.521vw] bg-[#252525] items-center p-[0.521vw]"
-                  }
-                >
-                  <span
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      }
+                    >
+                      ...
+                    </span>
+                  </div>
+                ))}
+              {!sortedLeaderboard
+                .slice(0, 5)
+                .find((item) => item.userAddress === networkStore.address) &&
+              userPlace ? (
+                <>
+                  <div
                     className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
                     }
                   >
-                    {userPlace.index + 1}
-                  </span>
-                  <span
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      }
+                    >
+                      ...
+                    </span>
+                  </div>
+                  <div
+                    key={"userPlace"}
                     className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
+                      "grid grid-cols-3 rounded-[0.521vw] bg-[#252525] items-center p-[0.521vw]"
                     }
                   >
-                    {formatAddress(userPlace.userAddress)}
-                  </span>
-                  <span
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      }
+                    >
+                      {userPlace.index + 1}
+                    </span>
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
+                      }
+                    >
+                      {formatAddress(userPlace.userAddress)}
+                    </span>
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
+                      }
+                    >
+                      {userPlace.amount.toFixed(totalSupplyFormatDecimals)}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div
                     className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
+                      "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
                     }
                   >
-                    {userPlace.amount}
-                  </span>
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  className={
-                    "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
-                  }
-                >
-                  <span
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      }
+                    >
+                      ...
+                    </span>
+                  </div>
+                  <div
                     className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
                     }
                   >
-                    ...
-                  </span>
-                </div>
-                <div
-                  className={
-                    "rounded-[0.521vw] bg-[#252525] flex justify-center items-center p-[0.521vw]"
-                  }
-                >
-                  <span
-                    className={
-                      "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
-                    }
-                  >
-                    ...
-                  </span>
-                </div>
-              </>
-            )}
-          </div>
+                    <span
+                      className={
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%]"
+                      }
+                    >
+                      ...
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+          </Skeleton>
         </div>
       </div>
       <div className={"flex flex-col w-1/2"}>
@@ -450,22 +485,33 @@ export function CoinBock({
               "mt-[0.781vw] rounded-[0.521vw] bg-[#252525] flex flex-col p-[0.781vw] gap-[0.677vw]"
             }
           >
-            <span
-              className={
-                "text-[1.25vw] font-semibold font-plexsans leading-[110%] uppercase"
-              }
+            <Skeleton
+              isLoading={amount == 0}
+              className={"w-[70%] h-[1.25vw] rounded-full"}
             >
-              Total Supply: {amount.toFixed(totalSupplyFormatDecimals)}
-            </span>
-            <span className={"text-[0.833vw] font-plexsans leading-[110%]"}>
-              Current Price: {price.toFixed(priceFormatDecimals)} MINA
-            </span>
+              <span
+                className={
+                  "text-[1.25vw] font-semibold font-plexsans leading-[110%] uppercase"
+                }
+              >
+                Total Supply: {amount.toFixed(totalSupplyFormatDecimals)}
+              </span>
+            </Skeleton>
+            <Skeleton
+              isLoading={price == 0}
+              className={"w-1/2 h-[0.833vw] rounded-full"}
+            >
+              <span className={"text-[0.833vw] font-plexsans leading-[110%]"}>
+                Current Price: {price.toFixed(priceFormatDecimals)} MINA
+              </span>
+            </Skeleton>
           </div>
           <button
             className={
-              "hover:opacity-80 rounded-[0.26vw] flex flex-col justify-center items-center w-full py-[0.26vw] mt-[0.26vw]"
+              "disabled:opacity-60 disabled:cursor-progress hover:opacity-80 rounded-[0.26vw] flex flex-col justify-center items-center w-full py-[0.26vw] mt-[0.26vw]"
             }
             style={{ backgroundColor: btnColor }}
+            disabled={price == 0}
             onClick={onBuy}
           >
             <span

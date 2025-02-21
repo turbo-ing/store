@@ -1,31 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import memeBannerIMG from "@/public/image/memecoins/banner.svg";
-import coinFrogIMG from "@/public/image/memecoins/coin-frog.svg";
-import coinDragonIMG from "@/public/image/memecoins/сoin-dragon.svg";
-import minanftIMG from "@/public/image/partners/minanft.svg";
-import minaICON from "@/public/image/memecoins/mina.svg";
-import dragonICON from "@/public/image/memecoins/dragon.svg";
-import frogICON from "@/public/image/memecoins/frog.svg";
-import { DateTime, DurationObjectUnits, Interval } from "luxon";
-import { ChangeEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { cn, formatAddress } from "@zknoid/sdk/lib/helpers";
-import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
-import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTriggerChevron,
-  SelectValue,
-} from "../../../../packages/sdk/components/shared/Select/Select";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
-
 import * as Silvana from "@silvana-one/api";
 
 export function RulesModal({ onClose }: { onClose: () => void }) {

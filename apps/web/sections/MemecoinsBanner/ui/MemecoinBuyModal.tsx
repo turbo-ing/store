@@ -1,19 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import memeBannerIMG from "@/public/image/memecoins/banner.svg";
-import coinFrogIMG from "@/public/image/memecoins/coin-frog.svg";
-import coinDragonIMG from "@/public/image/memecoins/сoin-dragon.svg";
-import minanftIMG from "@/public/image/partners/minanft.svg";
 import minaICON from "@/public/image/memecoins/mina.svg";
 import dragonICON from "@/public/image/memecoins/dragon.svg";
 import frogICON from "@/public/image/memecoins/frog.svg";
-import { DateTime, DurationObjectUnits, Interval } from "luxon";
 import { ChangeEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { cn, formatAddress } from "@zknoid/sdk/lib/helpers";
+import { cn } from "@zknoid/sdk/lib/helpers";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
-import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -21,13 +15,11 @@ import {
   SelectItem,
   SelectTriggerChevron,
   SelectValue,
-} from "../../../../packages/sdk/components/shared/Select/Select";
+} from "../../../../../packages/sdk/components/shared/Select/Select";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
-
-import { totalSupplyFormatDecimals } from "./constants";
-import { api } from "../../trpc/react";
+import { api } from "../../../trpc/react";
 
 const frogTokenAddress = process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS!;
 const dragonTokenAddress = process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS!;
@@ -55,16 +47,17 @@ export function MemecoinBuyModal({
   const notificationStore = useNotificationStore();
   const [chosenCoin, setChosenCoin] = useState<"frog" | "dragon">(token);
   const [buyAmount, setBuyAmount] = useState<number>(
-    Number((1 / (token === "frog" ? frogPrice : dragonPrice)).toFixed(4))
+    Number((1 / (token === "frog" ? frogPrice : dragonPrice)).toFixed(4)),
   );
   const [minaAmount, setMinaAmount] = useState<number>(1);
 
   const [price, setPrice] = useState<number>(
-    token === "frog" ? frogPrice : dragonPrice
+    token === "frog" ? frogPrice : dragonPrice,
   );
 
   const [statusArray, setStatusArray] = useState<string[]>([]);
   const [txStatus, setTxStatus] = useState<string | null>(null);
+  const [canCloseWindow, setCanCloseWindow] = useState<boolean>(true);
 
   const mintTokens = async (amount: number) => {
     const tokenAddress =
@@ -73,8 +66,8 @@ export function MemecoinBuyModal({
     const adaptiveAmount = Math.floor(amount * 1e9);
     const adaptivePrice = Math.floor(price * 1e9);
 
-    setTxStatus("Generating transaction");
-    setStatusArray((old) => [...old, "Generating transaction"]);
+    setTxStatus("Generating transaction...");
+    setStatusArray((old) => [...old, "Generating transaction..."]);
 
     const txData = await mintTokensMutation.mutateAsync({
       sender,
@@ -84,19 +77,24 @@ export function MemecoinBuyModal({
       price: adaptivePrice,
     });
     if (!txData) throw new Error("No tx data returned from server");
+    console.log("txData", txData);
 
-    setTxStatus("Waiting for user to sign transaction");
-    setStatusArray((old) => [...old, "Waiting for user to sign transaction"]);
-
-    const txResult = await (window as any).mina?.sendTransaction(
-      txData.walletPayload
-    );
-
-    setTxStatus("Waiting for transaction to be proved on server");
+    setTxStatus("Waiting for user to sign transaction...");
     setStatusArray((old) => [
       ...old,
-      "Waiting for transaction to be proved on server",
+      "Waiting for user to sign transaction...",
     ]);
+
+    const txResult = await (window as any).mina?.sendTransaction(
+      txData.walletPayload,
+    );
+
+    setTxStatus("Waiting for transaction to be proved on server...");
+    setStatusArray((old) => [
+      ...old,
+      "Waiting for transaction to be proved on server...",
+    ]);
+    setCanCloseWindow(true);
 
     const proveData = await proveTxMutation.mutateAsync({
       tx: txData,
@@ -182,19 +180,28 @@ export function MemecoinBuyModal({
     minaAmount: Yup.number()
       .min(
         chosenCoin === "frog" ? frogPrice : dragonPrice,
-        `Min amount: ${chosenCoin === "frog" ? frogPrice : dragonPrice}`
+        `Min amount: ${chosenCoin === "frog" ? frogPrice : dragonPrice}`,
       )
       .required("Amount is required"),
   });
 
   const onFormSubmit = async () => {
-    // notificationStore.create({
-    //   type: "success",
-    //   message: "form submitted",
-    // });
-    // onClose();
-
-    await mintTokens(buyAmount);
+    setCanCloseWindow(false);
+    await mintTokens(buyAmount).catch((e) => {
+      console.error(e);
+      onClose();
+      if (e?.code == 1002) {
+        notificationStore.create({
+          type: "error",
+          message: "User rejected transaction...",
+        });
+      } else {
+        notificationStore.create({
+          type: "error",
+          message: "Error while minting NFT",
+        });
+      }
+    });
   };
 
   useEffect(() => {
@@ -219,7 +226,7 @@ export function MemecoinBuyModal({
       className={
         "fixed left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center backdrop-blur-md p-[10vw] lg:!p-0"
       }
-      onClick={onClose}
+      onClick={canCloseWindow ? onClose : undefined}
     >
       <div
         className={
@@ -231,7 +238,7 @@ export function MemecoinBuyModal({
           className={
             "absolute cursor-pointer top-[0.26vw] hover:opacity-80 -right-[1.563vw] flex flex-col justify-center items-center"
           }
-          onClick={onClose}
+          onClick={canCloseWindow ? onClose : undefined}
         >
           <svg
             width="20"
@@ -318,7 +325,7 @@ export function MemecoinBuyModal({
                       setBuyAmount(tokenAmount);
                     }}
                     className={
-                      "text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
+                      "w-full text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
                     }
                   />
                 </div>
@@ -379,7 +386,7 @@ export function MemecoinBuyModal({
                     onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                       removeLeadingZero(e);
                       const value = Number(e.target.value);
-                      const mintPrice = Number((value * price).toFixed(4));
+                      const mintPrice = Number(value * price);
 
                       await setFieldValue("amount", value);
                       await setFieldValue("minaAmount", mintPrice);
@@ -387,16 +394,17 @@ export function MemecoinBuyModal({
                       setMinaAmount(mintPrice);
                     }}
                     className={
-                      "text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
+                      "w-full text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
                     }
                   />
                 </div>
               </div>
               <button
                 type={"submit"}
+                disabled={!canCloseWindow}
                 className={cn(
-                  "rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
-                  chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]"
+                  "disabled:opacity-60 disabled:cursor-progress rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
+                  chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]",
                 )}
               >
                 <span
@@ -407,9 +415,39 @@ export function MemecoinBuyModal({
                   Mint {chosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}
                 </span>
               </button>
-              {statusArray.map((status) => {
-                return <div>{status}</div>;
-              })}
+              {statusArray.length != 0 && (
+                <div className={"mt-[1.042vw] gap-[0.508vw] flex flex-col"}>
+                  {statusArray.map((status) => {
+                    return (
+                      <span
+                        className={
+                          "text-[0.833vw] font-plexsans text-foreground leading-[110%]"
+                        }
+                      >
+                        {status}
+                      </span>
+                    );
+                  })}
+                  {canCloseWindow && (
+                    <>
+                      <span
+                        className={
+                          "text-[0.833vw] font-plexsans text-foreground leading-[110%]"
+                        }
+                      >
+                        Tokens soon will appear in your wallet and leaderboard
+                      </span>
+                      <span
+                        className={
+                          "text-[0.833vw] font-plexsans text-green-500 leading-[110%]"
+                        }
+                      >
+                        You can close this window!
+                      </span>
+                    </>
+                  )}
+                </div>
+              )}
             </Form>
           )}
         </Formik>

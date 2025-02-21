@@ -1,34 +1,13 @@
 "use client";
 
-import Image from "next/image";
-import memeBannerIMG from "@/public/image/memecoins/banner.svg";
 import coinFrogIMG from "@/public/image/memecoins/coin-frog.svg";
 import coinDragonIMG from "@/public/image/memecoins/сoin-dragon.svg";
-import minanftIMG from "@/public/image/partners/minanft.svg";
-import minaICON from "@/public/image/memecoins/mina.svg";
-import dragonICON from "@/public/image/memecoins/dragon.svg";
-import frogICON from "@/public/image/memecoins/frog.svg";
 import { DateTime, DurationObjectUnits, Interval } from "luxon";
-import { ChangeEvent, useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { cn, formatAddress } from "@zknoid/sdk/lib/helpers";
+import { useEffect, useState } from "react";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
-import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTriggerChevron,
-  SelectValue,
-} from "../../../../packages/sdk/components/shared/Select/Select";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
-
-import { MemecoinBuyModal } from "./MemecoinBuyModal";
-import { RulesModal } from "./RulesModal";
-import { Banner, CoinBock, Slider } from "./ContestInfo";
+import { MemecoinBuyModal } from "./ui/MemecoinBuyModal";
+import { RulesModal } from "./ui/RulesModal";
+import { Banner, CoinBock, Slider } from "./ui/ContestInfo";
 import { api } from "../../trpc/react";
 
 interface ILeaderboardUnit {
