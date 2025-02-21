@@ -31,6 +31,12 @@ import { RulesModal } from "./RulesModal";
 import { Banner, CoinBock, Slider } from "./ContestInfo";
 import { api } from "../../trpc/react";
 
+interface ILeaderboardUnit {
+  userAddress: string;
+  amount: number;
+}
+
+/*
 const mockFrozenLeaderboard = [
   {
     userAddress: "B62qkV189rv4G3aUxj7nSCzn3bnDsZU8t9UCF2EhMQpnco7FBUain87",
@@ -100,6 +106,7 @@ const mockHotLeaderboard = [
     amount: 1024,
   },
 ];
+*/
 
 const calculatePrice = (totalSupply: number): number => {
   const initialPrice = 0.00001;
@@ -114,6 +121,12 @@ export default function MemecoinsBanner() {
   const balances = api.http.memetokens.getBalances.useQuery(undefined, {
     refetchInterval: 30000,
   });
+  const leaderboards = api.http.memetokens.getLeaderBoardInfo.useQuery(
+    undefined,
+    {
+      refetchInterval: 30000,
+    }
+  );
   const getUserTokensMutation =
     api.http.memetokens.getUserBalance.useMutation();
 
@@ -138,10 +151,10 @@ export default function MemecoinsBanner() {
   const [userFrogTokens, setUserFrogTokens] = useState<number>(0);
   const [userDragonTokens, setUserDragonTokens] = useState<number>(0);
 
-  const [frozenLeaderboard, setFrozenLeaderboard] = useState(
-    mockFrozenLeaderboard
-  );
-  const [hotLeaderboard, setHotLeaderboard] = useState(mockHotLeaderboard);
+  const [frozenLeaderboard, setFrozenLeaderboard] = useState<
+    ILeaderboardUnit[]
+  >([]);
+  const [hotLeaderboard, setHotLeaderboard] = useState<ILeaderboardUnit[]>([]);
 
   const getTimeLeft = () => {
     return Interval.fromDateTimes(
@@ -174,6 +187,13 @@ export default function MemecoinsBanner() {
       setDragonTotalSupply((balances.data.dragonTokenSupply || 0) / 1e9);
     }
   }, [balances.data]);
+
+  useEffect(() => {
+    if (leaderboards.data) {
+      setFrozenLeaderboard(leaderboards.data.frogLeaderboard);
+      setHotLeaderboard(leaderboards.data.dragonLeaderboard);
+    }
+  }, [leaderboards.data]);
 
   useEffect(() => {
     if (frogTotalSupply) {

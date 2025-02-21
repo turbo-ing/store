@@ -188,4 +188,42 @@ export const memetokensRouter = createTRPCRouter({
         success: false,
       };
     }),
+
+  getLeaderBoardInfo: publicProcedure.query(async ({ input }) => {
+    let frogLeaderboard = (
+      await db!
+        .collection("leaderboard")
+        .find({})
+        .sort({ frogBalance: -1 })
+        .toArray()
+    ).map((v) => {
+      return {
+        userAddress: v.address,
+        amount: v.frogBalance,
+      };
+    });
+
+    let dragonLeaderboard = (
+      await db!
+        .collection("leaderboard")
+        .find({})
+        .sort({ dragonBalance: -1 })
+        .toArray()
+    ).map((v) => {
+      return {
+        userAddress: v.address,
+        amount: v.dragonBalance,
+      };
+    });
+
+    console.log({
+      frogLeaderboard,
+      dragonLeaderboard,
+    });
+
+    return {
+      frogLeaderboard,
+      dragonLeaderboard,
+    };
+  }),
 });
