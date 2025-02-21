@@ -2,8 +2,8 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";
 import * as Silvana from "@silvana-one/api";
 
-const frogTokenAddress = process.env.FROG_TOKEN_ADDRESS!;
-const dragonTokenAddress = process.env.DRAGON_TOKEN_ADDRESS!;
+const frogTokenAddress = process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS!;
+const dragonTokenAddress = process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS!;
 const chain = process.env.MEMETOKENS_CHAIN!;
 
 export const memetokensRouter = createTRPCRouter({

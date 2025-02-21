@@ -29,8 +29,8 @@ import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification
 import { totalSupplyFormatDecimals } from "./constants";
 import { api } from "../../trpc/react";
 
-const frogTokenAddress = process.env.FROG_TOKEN_ADDRESS!;
-const dragonTokenAddress = process.env.DRAGON_TOKEN_ADDRESS!;
+const frogTokenAddress = process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS!;
+const dragonTokenAddress = process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS!;
 
 export function MemecoinBuyModal({
   token,
