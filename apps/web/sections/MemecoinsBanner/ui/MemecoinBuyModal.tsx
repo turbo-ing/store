@@ -234,28 +234,6 @@ export function MemecoinBuyModal({
         }
         onClick={(e) => e.stopPropagation()}
       >
-        <div
-          className={
-            "absolute cursor-pointer top-[0.26vw] hover:opacity-80 -right-[1.563vw] flex flex-col justify-center items-center"
-          }
-          onClick={canCloseWindow ? onClose : undefined}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className={"w-[1.042vw] h-[1.042vw]"}
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M11.8174 10.0043L20 1.81818L18.1826 0L9.99994 8.18609L1.81742 0.000150223L0 1.81833L8.18252 10.0043L0.00836661 18.1818L1.82579 20L9.99994 11.8225L18.1742 20.0002L19.9917 18.182L11.8174 10.0043Z"
-              fill="#141414"
-            />
-          </svg>
-        </div>
         <Formik
           initialValues={{ amount: buyAmount, minaAmount: minaAmount }}
           validationSchema={validationSchema}
