@@ -212,7 +212,7 @@ export function MemecoinBuyModal({
     const value = event.target.value;
     const num = parseFloat(value);
 
-    if (Number.isInteger(num) && value.startsWith("0") && value.length > 1) {
+    if (value.startsWith("0") && !value.startsWith("0.")) {
       event.target.value = num.toString();
     }
   };
@@ -303,7 +303,7 @@ export function MemecoinBuyModal({
                       setBuyAmount(tokenAmount);
                     }}
                     className={
-                      "w-full text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
+                      "w-full text-right ml-[1vw] outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
                     }
                   />
                 </div>
@@ -379,7 +379,7 @@ export function MemecoinBuyModal({
                       setMinaAmount(mintPrice);
                     }}
                     className={
-                      "w-full text-right ml-auto outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
+                      "w-full text-right ml-[1vw] outline-none appearance-none focus:outline-none bg-[#252525] mr-[0.521vw] text-foreground text-[1.042vw] font-medium font-plexsans leading-[110%] uppercase"
                     }
                   />
                 </div>
