@@ -235,6 +235,22 @@ export function Slider({
   );
 }
 
+function UserPlaceIcon() {
+  return (
+    <div
+      className={
+        "col-span-2 w-fit rounded-[0.26vw] bg-gradient-to-l from-[#FFE75E] to-[#AD6B00] flex flex-col justify-center items-center p-[0.26vw]"
+      }
+    >
+      <span
+        className={"text-[0.417vw] font-plexsans leading-[110%] text-[#252525]"}
+      >
+        Your place
+      </span>
+    </div>
+  );
+}
+
 export function CoinBock({
   label,
   price,
@@ -329,9 +345,12 @@ export function CoinBock({
                   )}
                 >
                   <div
-                    className={
-                      "grid grid-cols-3 bg-[#252525] items-center p-[0.521vw] rounded-[0.521vw]"
-                    }
+                    className={cn(
+                      "grid bg-[#252525] items-center p-[0.521vw] rounded-[0.521vw]",
+                      networkStore.address == item.userAddress
+                        ? "grid-cols-9"
+                        : "grid-cols-3",
+                    )}
                   >
                     <span
                       className={
@@ -340,17 +359,24 @@ export function CoinBock({
                     >
                       {index + 1}
                     </span>
+                    {networkStore.address == item.userAddress && (
+                      <UserPlaceIcon />
+                    )}
                     <span
-                      className={
-                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
-                      }
+                      className={cn(
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center",
+                        networkStore.address == item.userAddress &&
+                          "col-span-3",
+                      )}
                     >
                       {formatAddress(item.userAddress)}
                     </span>
                     <span
-                      className={
-                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
-                      }
+                      className={cn(
+                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end",
+                        networkStore.address == item.userAddress &&
+                          "col-span-3",
+                      )}
                     >
                       {abbreviateNumber(item.amount)}
                     </span>
@@ -395,7 +421,7 @@ export function CoinBock({
                   <div
                     key={"userPlace"}
                     className={
-                      "grid grid-cols-3 rounded-[0.521vw] bg-[#252525] items-center p-[0.521vw]"
+                      "grid grid-cols-9 rounded-[0.521vw] bg-[#252525] items-center p-[0.521vw]"
                     }
                   >
                     <span
@@ -405,16 +431,17 @@ export function CoinBock({
                     >
                       {userPlace.index + 1}
                     </span>
+                    <UserPlaceIcon />
                     <span
                       className={
-                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
+                        "col-span-3 text-foreground text-[0.833vw] font-plexsans leading-[110%] text-center"
                       }
                     >
                       {formatAddress(userPlace.userAddress)}
                     </span>
                     <span
                       className={
-                        "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
+                        "col-span-3 text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
                       }
                     >
                       {abbreviateNumber(userPlace.amount)}

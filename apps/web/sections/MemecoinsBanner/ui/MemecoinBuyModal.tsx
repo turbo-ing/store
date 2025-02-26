@@ -400,7 +400,7 @@ export function MemecoinBuyModal({
                   Mint {chosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}
                 </span>
               </button>
-              {statusArray.length != 0 && (
+              {statusArray.length != 0 ? (
                 <div className={"mt-[1.042vw] gap-[0.508vw] flex flex-col"}>
                   {statusArray.map((status) => {
                     return (
@@ -421,6 +421,7 @@ export function MemecoinBuyModal({
                         }
                       >
                         Tokens soon will appear in your wallet and leaderboard
+                        (~10 minutes)
                       </span>
                       <span
                         className={
@@ -431,6 +432,43 @@ export function MemecoinBuyModal({
                       </span>
                     </>
                   )}
+                </div>
+              ) : (
+                <div
+                  className={
+                    "flex flex-row gap-[0.26vw] mt-[0.781vw] max-w-[20.833vw]"
+                  }
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={"w-[0.833vw] h-[0.833vw]"}
+                  >
+                    <circle
+                      cx="7"
+                      cy="7"
+                      r="6"
+                      fill="#8F8E8C"
+                      stroke="#8F8E8C"
+                      stroke-width="0.500035"
+                    />
+                    <path
+                      d="M6.71907 8.69084L6.29907 5.10284V2.71484H7.71507V5.10284L7.31907 8.69084H6.71907ZM7.01907 11.2348C6.71507 11.2348 6.49107 11.1628 6.34707 11.0188C6.21107 10.8668 6.14307 10.6748 6.14307 10.4428V10.2388C6.14307 10.0068 6.21107 9.81884 6.34707 9.67484C6.49107 9.52284 6.71507 9.44684 7.01907 9.44684C7.32307 9.44684 7.54307 9.52284 7.67907 9.67484C7.82307 9.81884 7.89507 10.0068 7.89507 10.2388V10.4428C7.89507 10.6748 7.82307 10.8668 7.67907 11.0188C7.54307 11.1628 7.32307 11.2348 7.01907 11.2348Z"
+                      fill="#252525"
+                    />
+                  </svg>
+                  <span
+                    className={
+                      "text-[0.729vw] text-foreground font-plexsans leading-[110%] w-fit"
+                    }
+                  >
+                    The Mina blockchain will burn 1 MINA for your first memecoin
+                    mint to activate the new address. No fees will be charged
+                    for subsequent mints.
+                  </span>
                 </div>
               )}
             </Form>
