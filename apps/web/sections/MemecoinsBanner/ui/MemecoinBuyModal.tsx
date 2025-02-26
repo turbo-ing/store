@@ -386,10 +386,17 @@ export function MemecoinBuyModal({
               </div>
               <button
                 type={"submit"}
-                disabled={!canCloseWindow}
+                disabled={
+                  !canCloseWindow || !!errors.amount || !!errors.minaAmount
+                }
                 className={cn(
-                  "disabled:opacity-60 disabled:cursor-progress rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
+                  "disabled:opacity-60 rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
                   chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]",
+                  !canCloseWindow
+                    ? "disabled:cursor-progress"
+                    : !!errors.amount || !!errors.minaAmount
+                      ? "disabled:cursor-not-allowed"
+                      : "",
                 )}
               >
                 <span
