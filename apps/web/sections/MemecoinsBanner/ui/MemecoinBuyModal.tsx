@@ -342,9 +342,16 @@ export function MemecoinBuyModal({
                   />
                   <Select
                     value={chosenCoin}
-                    onValueChange={(value: "frog" | "dragon") => {
+                    onValueChange={async (value: "frog" | "dragon") => {
                       setChosenCoin(value);
-                      setBuyAmount(1);
+                      const currentPrice = Number(
+                        (
+                          1 / (value === "frog" ? frogPrice : dragonPrice)
+                        ).toFixed(4),
+                      );
+                      await setFieldValue("amount", currentPrice);
+                      await setFieldValue("minaAmount", 1);
+                      setBuyAmount(currentPrice);
                       setMinaAmount(1);
                     }}
                   >

@@ -104,7 +104,7 @@ export default function MemecoinsBanner() {
     undefined,
     {
       refetchInterval: 30000,
-    }
+    },
   );
   const getUserTokensMutation =
     api.http.memetokens.getUserBalance.useMutation();
@@ -119,7 +119,7 @@ export default function MemecoinsBanner() {
   const [isRulesOpen, setIsRulesOpen] = useState<boolean>(false);
   const [isBuyModalOpen, setIsBuyModalOpen] = useState<boolean>(false);
   const [touchedCoin, setTouchedCoin] = useState<"frog" | "dragon" | undefined>(
-    undefined
+    undefined,
   );
   const [frogTotalSupply, setFrogTotalSupply] = useState<number>(0);
   const [dragonTotalSupply, setDragonTotalSupply] = useState<number>(0);
@@ -141,8 +141,8 @@ export default function MemecoinsBanner() {
       DateTime.fromJSDate(
         event.date.start.getTime() >= Date.now()
           ? event.date.start
-          : event.date.end
-      )
+          : event.date.end,
+      ),
     )
       .toDuration(["days", "hours", "minutes", "seconds"])
       .toObject();
@@ -227,7 +227,7 @@ export default function MemecoinsBanner() {
           amount={frogTotalSupply}
           leaderboard={frozenLeaderboard}
           image={coinFrogIMG}
-          link={"#"}
+          link={`https://devnet.minatokens.com/token/${process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS}`}
           btnColor={"#3A39FF"}
           onBuy={() => {
             setTouchedCoin("frog");
@@ -240,7 +240,7 @@ export default function MemecoinsBanner() {
           amount={dragonTotalSupply}
           leaderboard={hotLeaderboard}
           image={coinDragonIMG}
-          link={"#"}
+          link={`https://devnet.minatokens.com/token/${process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS}`}
           btnColor={"#FF5B23"}
           onBuy={() => {
             setTouchedCoin("dragon");

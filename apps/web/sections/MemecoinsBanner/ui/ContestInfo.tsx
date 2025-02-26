@@ -2,32 +2,14 @@
 
 import Image from "next/image";
 import memeBannerIMG from "@/public/image/memecoins/banner.svg";
-import coinFrogIMG from "@/public/image/memecoins/coin-frog.svg";
-import coinDragonIMG from "@/public/image/memecoins/сoin-dragon.svg";
 import minanftIMG from "@/public/image/partners/minanft.svg";
-import minaICON from "@/public/image/memecoins/mina.svg";
-import dragonICON from "@/public/image/memecoins/dragon.svg";
-import frogICON from "@/public/image/memecoins/frog.svg";
-import { DateTime, DurationObjectUnits, Interval } from "luxon";
-import { ChangeEvent, useEffect, useState } from "react";
+import { DurationObjectUnits } from "luxon";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { abbreviateNumber, cn, formatAddress } from "@zknoid/sdk/lib/helpers";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTriggerChevron,
-  SelectValue,
-} from "../../../../../packages/sdk/components/shared/Select/Select";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
-
-import * as Silvana from "@silvana-one/api";
-import { priceFormatDecimals, totalSupplyFormatDecimals } from "../constants";
+import { priceFormatDecimals } from "../constants";
 import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
 
 export function TimerItem({ time, text }: { time: number; text: string }) {
@@ -141,25 +123,13 @@ export function Slider({
 }) {
   const [frozenPercent, setFrozenPercent] = useState<number>(0);
   const [hotPercent, setHotPercent] = useState<number>(0);
-  const [winning, setWinning] = useState<"neutral" | "hot" | "frozen">(
-    "neutral"
-  );
 
   useEffect(() => {
     const allSupply = frozenAmount + hotAmount;
     const currentFrozenPercent = (frozenAmount / allSupply) * 100;
     const currentHotPercent = (hotAmount / allSupply) * 100;
-    const winningType =
-      currentFrozenPercent == currentHotPercent ||
-      frozenAmount == 0 ||
-      hotAmount == 0
-        ? "neutral"
-        : currentFrozenPercent < currentHotPercent
-          ? "hot"
-          : "frozen";
     setFrozenPercent(currentFrozenPercent);
     setHotPercent(currentHotPercent);
-    setWinning(winningType);
   }, [frozenAmount, hotAmount]);
 
   return (
@@ -171,43 +141,67 @@ export function Slider({
       <span className={"text-[1.667vw] text-foreground font-bold font-museo"}>
         Frozen Frog VS Fire Dragon
       </span>
-      <div
-        className={
-          "relative w-full h-[2.344vw] flex flex-row overflow-hidden rounded-[0.521vw]"
-        }
-      >
+      <div className={"relative w-full h-[2.344vw] flex flex-row"}>
         <motion.div
           className={
-            "absolute left-0 top-0 h-[2.344vw] bg-gradient-to-l to-[#232299] from-[#3A39FF]"
-          }
-          animate={
-            winning == "frozen" || winning == "neutral"
-              ? {
-                  borderTopRightRadius: "0.521vw",
-                  borderBottomRightRadius: "0.521vw",
-                  zIndex: 1,
-                }
-              : undefined
+            "absolute left-0 top-0 h-[2.344vw] bg-gradient-to-l to-[#232299] from-[#3A39FF] rounded-l-[0.521vw]"
           }
           style={{
-            width: `${frozenPercent == 0 || hotPercent == 0 ? 50 : winning == "hot" ? frozenPercent + 1 : frozenPercent}%`,
+            width: `${frozenPercent == 0 || hotPercent == 0 ? 50 : frozenPercent}%`,
           }}
         />
         <motion.div
           className={
-            "absolute right-0 top-0 h-[2.344vw] bg-gradient-to-l to-[#FF5B23] from-[#993715]"
-          }
-          animate={
-            winning == "hot" || winning == "neutral"
-              ? {
-                  borderTopLeftRadius: "0.521vw",
-                  borderBottomLeftRadius: "0.521vw",
-                  zIndex: 1,
-                }
-              : undefined
+            "absolute h-[2.344vw] z-[1] w-[0.104vw] bg-foreground rounded-t-[0.052vw] flex flex-col justify-center items-center"
           }
           style={{
-            width: `${frozenPercent == 0 || hotPercent == 0 ? 50 : winning == "frozen" ? hotPercent + 1 : hotPercent}%`,
+            left: `${frozenPercent == 0 || hotPercent == 0 ? 50 : frozenPercent}%`,
+          }}
+        >
+          <motion.div
+            className={
+              "absolute z-[1] mt-[1.042vw] top-full flex flex-row items-center justify-center gap-[0.365vw]"
+            }
+          >
+            <Skeleton
+              isLoading={isNaN(frozenPercent) || frozenPercent == 0}
+              className={"w-[3.125vw] h-[0.625vw] rounded-full"}
+            >
+              <span
+                className={
+                  "text-[0.625vw] font-plexsans text-foreground leading-[110%]"
+                }
+              >
+                {frozenPercent.toFixed(2)}%
+              </span>
+            </Skeleton>
+            <span
+              className={
+                "text-[0.625vw] font-semibold font-plexsans text-foreground leading-[110%]"
+              }
+            >
+              VS
+            </span>
+            <Skeleton
+              isLoading={isNaN(hotPercent) || hotPercent == 0}
+              className={"w-[3.125vw] h-[0.625vw] rounded-full"}
+            >
+              <span
+                className={
+                  "text-[0.625vw] font-plexsans text-foreground leading-[110%]"
+                }
+              >
+                {hotPercent.toFixed(2)}%
+              </span>
+            </Skeleton>
+          </motion.div>
+        </motion.div>
+        <motion.div
+          className={
+            "absolute right-0 top-0 h-[2.344vw] bg-gradient-to-l to-[#FF5B23] from-[#993715] rounded-r-[0.521vw]"
+          }
+          style={{
+            width: `${frozenPercent == 0 || hotPercent == 0 ? 50 : hotPercent}%`,
           }}
         />
       </div>
@@ -261,7 +255,9 @@ export function CoinBock({
   onBuy: () => void;
 }) {
   const networkStore = useNetworkStore();
-  const sortedLeaderboard = leaderboard.sort((a, b) => b.amount - a.amount);
+  const sortedLeaderboard = leaderboard
+    .filter((item) => item.amount != 0)
+    .sort((a, b) => b.amount - a.amount);
 
   const [userPlace, setUserPlace] = useState<
     { userAddress: string; amount: number; index: number } | undefined
@@ -269,10 +265,10 @@ export function CoinBock({
 
   const getUserInfo = () => {
     const userInfo = sortedLeaderboard.find(
-      (leaderboardItem) => leaderboardItem.userAddress === networkStore.address
+      (leaderboardItem) => leaderboardItem.userAddress === networkStore.address,
     );
     const userIndex = sortedLeaderboard.findIndex(
-      (item) => item.userAddress === networkStore.address
+      (item) => item.userAddress === networkStore.address,
     );
 
     if (userInfo && userIndex != -1 && userPlace?.amount != userInfo.amount) {
@@ -329,7 +325,7 @@ export function CoinBock({
                       ? "bg-gradient-to-l from-[#FFE75F] to-[#252525]"
                       : index + 1 <= 3
                         ? "bg-gradient-to-l from-[#A8A6A6] to-[#252525]"
-                        : "bg-gradient-to-l from-[#E3A54F] to-[#252525]"
+                        : "bg-gradient-to-l from-[#E3A54F] to-[#252525]",
                   )}
                 >
                   <div
@@ -421,7 +417,7 @@ export function CoinBock({
                         "text-foreground text-[0.833vw] font-plexsans leading-[110%] text-end"
                       }
                     >
-                      {userPlace.amount.toFixed(totalSupplyFormatDecimals)}
+                      {abbreviateNumber(userPlace.amount)}
                     </span>
                   </div>
                 </>
@@ -462,6 +458,8 @@ export function CoinBock({
       <div className={"flex flex-col w-1/2"}>
         <Link
           href={link}
+          target="_blank"
+          rel="noopener noreferrer"
           className={
             "rounded-[0.26vw] hover:opacity-80 bg-[#252525] py-[0.26vw] px-[0.417vw] flex flex-col justify-center items-center ml-auto"
           }
