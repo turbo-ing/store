@@ -11,7 +11,7 @@ const client = await clientPromise;
 const db = client?.db(process.env.MEMETOKENS_DATABASE);
 
 const excludedAddresses = [
-  "B62qnhNf3TYDA4wNhcfPYYnQrzxwa18mcU2ofVH6Zpxy8TWGkawRfaV",
+  "B62qpq6k13mXQh6HiMUcefssybR9Wjh5kbP2YzQNz2Wk9DKvobfpKTA",
 ];
 
 export const memetokensRouter = createTRPCRouter({
