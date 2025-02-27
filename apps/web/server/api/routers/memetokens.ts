@@ -10,6 +10,10 @@ const chain = process.env.MEMETOKENS_CHAIN!;
 const client = await clientPromise;
 const db = client?.db(process.env.MEMETOKENS_DATABASE);
 
+const excludedAddresses = [
+  "B62qnhNf3TYDA4wNhcfPYYnQrzxwa18mcU2ofVH6Zpxy8TWGkawRfaV",
+];
+
 export const memetokensRouter = createTRPCRouter({
   getUserBalance: publicProcedure
     .input(
@@ -62,31 +66,55 @@ export const memetokensRouter = createTRPCRouter({
 
       return { frogBalance, dragonBalance };
     }),
+
   getBalances: publicProcedure.query(async () => {
     Silvana.config({
       apiKey: process.env.SILVANA_API_KEY!,
       chain: chain as any,
     });
 
-    const frogTotalSupply = (
-      await Silvana.getTokenBalance({
-        body: {
-          tokenAddress: frogTokenAddress,
-          address: frogTokenAddress,
-        },
+    // Remove preminted supply from total supply
+    const premintedSupplyRecords = await db
+      ?.collection("leaderboard")
+      .find({
+        address: { $in: excludedAddresses },
       })
-    ).data?.balance;
+      .toArray();
 
-    const dragonTokenSupply = (
-      await Silvana.getTokenBalance({
-        body: {
-          tokenAddress: dragonTokenAddress,
-          address: dragonTokenAddress,
-        },
-      })
-    ).data?.balance;
+    const premintedSupply = premintedSupplyRecords?.reduce(
+      (acc, cur) => {
+        return {
+          frogPreminted: acc.frogPreminted + cur.frogBalance,
+          dragonPreminted: acc.dragonPreminted + cur.dragonBalance,
+        };
+      },
+      { frogPreminted: 0, dragonPreminted: 0 }
+    ) || { frogPreminted: 0, dragonPreminted: 0 };
 
-    return { frogTotalSupply, dragonTokenSupply };
+    const frogTotalSupply =
+      (
+        await Silvana.getTokenBalance({
+          body: {
+            tokenAddress: frogTokenAddress,
+            address: frogTokenAddress,
+          },
+        })
+      ).data?.balance || 0;
+
+    const dragonTokenSupply =
+      (
+        await Silvana.getTokenBalance({
+          body: {
+            tokenAddress: dragonTokenAddress,
+            address: dragonTokenAddress,
+          },
+        })
+      ).data?.balance || 0;
+
+    return {
+      frogTotalSupply: frogTotalSupply - premintedSupply.frogPreminted,
+      dragonTokenSupply: dragonTokenSupply - premintedSupply.dragonPreminted,
+    };
   }),
 
   mintTokens: publicProcedure
@@ -195,7 +223,7 @@ export const memetokensRouter = createTRPCRouter({
     let frogLeaderboard = (
       await db!
         .collection("leaderboard")
-        .find({})
+        .find({ frogBalance: { $gt: 0 }, address: { $nin: excludedAddresses } })
         .sort({ frogBalance: -1 })
         .toArray()
     ).map((v) => {
@@ -208,7 +236,10 @@ export const memetokensRouter = createTRPCRouter({
     let dragonLeaderboard = (
       await db!
         .collection("leaderboard")
-        .find({})
+        .find({
+          dragonBalance: { $gt: 0 },
+          address: { $nin: excludedAddresses },
+        })
         .sort({ dragonBalance: -1 })
         .toArray()
     ).map((v) => {
