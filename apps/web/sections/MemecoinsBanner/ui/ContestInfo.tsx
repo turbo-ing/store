@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import memeBannerIMG from "@/public/image/memecoins/banner.svg";
 import minanftIMG from "@/public/image/partners/minanft.svg";
 import { DurationObjectUnits } from "luxon";
 import { useEffect, useState } from "react";
@@ -55,7 +54,11 @@ export function Banner({
       }
     >
       <Image
-        src={memeBannerIMG}
+        src={
+          "https://res.cloudinary.com/dw4kivbv0/image/upload/f_auto,q_50,w_2800/v1/store/memecoins/umizmfjdndkcqgyccsvz"
+        }
+        width={1400}
+        height={400}
         alt={"Banner"}
         className={"w-full h-full object-cover object-center"}
       />

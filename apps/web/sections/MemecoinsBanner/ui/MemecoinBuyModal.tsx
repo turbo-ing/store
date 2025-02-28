@@ -6,7 +6,7 @@ import dragonICON from "@/public/image/memecoins/dragon.svg";
 import frogICON from "@/public/image/memecoins/frog.svg";
 import { ChangeEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { cn } from "@zknoid/sdk/lib/helpers";
+import { cn, walletInstalled } from "@zknoid/sdk/lib/helpers";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import {
   Select,
@@ -20,6 +20,8 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNotificationStore } from "@zknoid/sdk/components/shared/Notification/lib/notificationStore";
 import { api } from "../../../trpc/react";
+import { NetworkIds, NETWORKS } from "@zknoid/sdk/constants/networks";
+import NetworkValidator from "@zknoid/sdk/components/widgets/NetworkValidator";
 
 const frogTokenAddress = process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS!;
 const dragonTokenAddress = process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS!;
@@ -186,6 +188,7 @@ export function MemecoinBuyModal({
   });
 
   const onFormSubmit = async () => {
+    setStatusArray([]);
     setCanCloseWindow(false);
     await mintTokens(buyAmount).catch((e) => {
       console.error(e);
@@ -384,29 +387,51 @@ export function MemecoinBuyModal({
                   />
                 </div>
               </div>
-              <button
-                type={"submit"}
-                disabled={
-                  !canCloseWindow || !!errors.amount || !!errors.minaAmount
-                }
-                className={cn(
-                  "disabled:opacity-60 rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
-                  chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]",
-                  !canCloseWindow
-                    ? "disabled:cursor-progress"
-                    : !!errors.amount || !!errors.minaAmount
-                      ? "disabled:cursor-not-allowed"
-                      : "",
-                )}
-              >
-                <span
-                  className={
-                    "text-[1.25vw] font-museo font-medium text-foreground"
+              {networkStore.address &&
+              networkStore.walletConnected &&
+              networkStore.minaNetwork?.networkID == NetworkIds.MINA_MAINNET ? (
+                <button
+                  type={"submit"}
+                  disabled={
+                    !canCloseWindow || !!errors.amount || !!errors.minaAmount
                   }
+                  className={cn(
+                    "disabled:opacity-60 rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
+                    chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]",
+                    !canCloseWindow
+                      ? "disabled:cursor-progress"
+                      : !!errors.amount || !!errors.minaAmount
+                        ? "disabled:cursor-not-allowed"
+                        : "",
+                  )}
                 >
-                  Mint {chosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}
-                </span>
-              </button>
+                  <span
+                    className={
+                      "text-[1.25vw] font-museo font-medium text-foreground"
+                    }
+                  >
+                    Mint {chosenCoin == "frog" ? "Frozen Frog" : "Fire Dragon"}
+                  </span>
+                </button>
+              ) : (
+                <button
+                  type={"button"}
+                  disabled={true}
+                  className={cn(
+                    "disabled:opacity-60 disabled:cursor-not-allowed rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
+                    chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]",
+                  )}
+                >
+                  <span
+                    className={
+                      "text-[1.25vw] font-museo font-medium text-foreground"
+                    }
+                  >
+                    Wrong network
+                  </span>
+                </button>
+              )}
+
               {statusArray.length != 0 ? (
                 <div className={"mt-[1.042vw] gap-[0.508vw] flex flex-col"}>
                   {statusArray.map((status) => {
@@ -482,6 +507,13 @@ export function MemecoinBuyModal({
           )}
         </Formik>
       </div>
+      <NetworkValidator
+        expectedNetwork={
+          NETWORKS[
+            process.env.NEXT_PUBLIC_NETWORK_ID || NetworkIds.MINA_MAINNET
+          ]
+        }
+      />
     </motion.div>
   );
 }
