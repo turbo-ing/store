@@ -71,6 +71,14 @@ interface ISetupStoreContext {
         }) => void)
       | undefined;
   };
+  txStore: {
+    userTransactions:
+      | { userAddress: string; txHash: string; type: string }[]
+      | undefined;
+    addTransaction:
+      | ((userAddress: string, txHash: string, type: string) => void)
+      | undefined;
+  };
 }
 
 const SetupStoreContext = createContext<ISetupStoreContext>({
@@ -91,6 +99,10 @@ const SetupStoreContext = createContext<ISetupStoreContext>({
   chat: {
     sendMessageMutator: undefined,
     onMessageSubscription: undefined,
+  },
+  txStore: {
+    userTransactions: undefined,
+    addTransaction: undefined,
   },
 });
 

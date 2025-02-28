@@ -227,7 +227,7 @@ export default function MemecoinsBanner() {
           amount={frogTotalSupply}
           leaderboard={frozenLeaderboard}
           image={coinFrogIMG}
-          link={`https://devnet.minatokens.com/token/${process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS}`}
+          link={`https://minatokens.com/token/${process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS}`}
           btnColor={"#3A39FF"}
           onBuy={() => {
             setTouchedCoin("frog");
@@ -240,7 +240,7 @@ export default function MemecoinsBanner() {
           amount={dragonTotalSupply}
           leaderboard={hotLeaderboard}
           image={coinDragonIMG}
-          link={`https://devnet.minatokens.com/token/${process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS}`}
+          link={`https://minatokens.com/token/${process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS}`}
           btnColor={"#FF5B23"}
           onBuy={() => {
             setTouchedCoin("dragon");

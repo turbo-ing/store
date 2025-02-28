@@ -28,6 +28,10 @@ export default function Home() {
   });
   const sendMessageMutation = api.ws.chat.sendMessage.useMutation();
   const onMessageSubscription = api.ws.chat.onMessage;
+  const userTransactions = api.http.txStore.getUserTransactions.useQuery({
+    userAddress: networkStore.address || "",
+  });
+  const addTransaction = api.http.txStore.addTransaction.useMutation();
   return (
     <ZkNoidGameContext.Provider
       value={{
@@ -82,6 +86,15 @@ export default function Home() {
               }),
             onMessageSubscription: ({ roomId, opts }) =>
               onMessageSubscription.useSubscription({ roomId }, opts),
+          },
+          txStore: {
+            userTransactions: userTransactions.data?.transactions as [],
+            addTransaction: (userAddress, txHash, type) =>
+              addTransaction.mutate({
+                userAddress: userAddress,
+                txHash: txHash,
+                type: type,
+              }),
           },
         }}
       >

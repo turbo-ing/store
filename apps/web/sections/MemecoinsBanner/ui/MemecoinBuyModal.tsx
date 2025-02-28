@@ -6,7 +6,7 @@ import dragonICON from "@/public/image/memecoins/dragon.svg";
 import frogICON from "@/public/image/memecoins/frog.svg";
 import { ChangeEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { cn, walletInstalled } from "@zknoid/sdk/lib/helpers";
+import { cn } from "@zknoid/sdk/lib/helpers";
 import { useNetworkStore } from "@zknoid/sdk/lib/stores/network";
 import {
   Select,
@@ -45,6 +45,8 @@ export function MemecoinBuyModal({
     api.http.memetokens.checkProofStatus.useMutation();
   const checkTransactionStatusMutation =
     api.http.memetokens.checkTransactionStatus.useMutation();
+  const addUserTransactionMutation =
+    api.http.txStore.addTransaction.useMutation();
 
   const notificationStore = useNotificationStore();
   const [chosenCoin, setChosenCoin] = useState<"frog" | "dragon">(token);
@@ -151,6 +153,13 @@ export function MemecoinBuyModal({
 
     let txFound = false;
     let txNumOfAttempts = 0;
+
+    // Add tx to txStore
+    addUserTransactionMutation.mutate({
+      userAddress: sender,
+      txHash: hash,
+      type: "Memecoins mint",
+    });
 
     while (!txFound && txNumOfAttempts < MAX_NUM_OF_ATTEMPTS) {
       try {

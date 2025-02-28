@@ -52,6 +52,11 @@ export default function Layout({ children }: { children: ReactNode }) {
   const sendMessageMutation = api.ws.chat.sendMessage.useMutation();
   const onMessageSubscription = api.ws.chat.onMessage;
 
+  const userTransactions = api.http.txStore.getUserTransactions.useQuery({
+    userAddress: networkStore.address || "",
+  });
+  const addTransaction = api.http.txStore.addTransaction.useMutation();
+
   useEffect(() => {
     if (!getRoundQuery.data) return undefined;
 
@@ -110,6 +115,15 @@ export default function Layout({ children }: { children: ReactNode }) {
             }),
           onMessageSubscription: ({ roomId, opts }) =>
             onMessageSubscription.useSubscription({ roomId }, opts),
+        },
+        txStore: {
+          userTransactions: userTransactions.data?.transactions as [],
+          addTransaction: (userAddress, txHash, type) =>
+            addTransaction.mutate({
+              userAddress: userAddress,
+              txHash: txHash,
+              type: type,
+            }),
         },
       }}
     >
