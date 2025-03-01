@@ -112,8 +112,10 @@ export const memetokensRouter = createTRPCRouter({
       ).data?.balance || 0;
 
     return {
-      frogTotalSupply: frogTotalSupply - premintedSupply.frogPreminted,
-      dragonTokenSupply: dragonTokenSupply - premintedSupply.dragonPreminted,
+      frogTotalSupply: frogTotalSupply,
+      frogPreminted: premintedSupply.frogPreminted,
+      dragonTokenSupply: dragonTokenSupply,
+      dragonPreminted: premintedSupply.dragonPreminted,
     };
   }),
 
