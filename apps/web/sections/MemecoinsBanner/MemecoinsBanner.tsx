@@ -9,6 +9,7 @@ import { MemecoinBuyModal } from "./ui/MemecoinBuyModal";
 import { RulesModal } from "./ui/RulesModal";
 import { Banner, CoinBock, Slider } from "./ui/ContestInfo";
 import { api } from "../../trpc/react";
+import { set } from "zod";
 
 interface ILeaderboardUnit {
   userAddress: string;
@@ -122,7 +123,13 @@ export default function MemecoinsBanner() {
     undefined,
   );
   const [frogTotalSupply, setFrogTotalSupply] = useState<number>(0);
+  const [frogDisplayedTotalSupply, setFrogDisplayedTotalSupply] =
+    useState<number>(0);
+  const [frogPreminted, setFrogPreminted] = useState<number>(0);
   const [dragonTotalSupply, setDragonTotalSupply] = useState<number>(0);
+  const [dragonDisplayedTotalSupply, setDragonDisplayedTotalSupply] =
+    useState<number>(0);
+  const [dragonPreminted, setDragonPreminted] = useState<number>(0);
 
   const [frogPrice, setFrogPrice] = useState<number>(0);
   const [dragonPrice, setDragonPrice] = useState<number>(0);
@@ -163,7 +170,20 @@ export default function MemecoinsBanner() {
   useEffect(() => {
     if (balances.data) {
       setFrogTotalSupply((balances.data.frogTotalSupply || 0) / 1e9);
+      setFrogPreminted((balances.data.frogPreminted || 0) / 1e9);
       setDragonTotalSupply((balances.data.dragonTokenSupply || 0) / 1e9);
+      setDragonPreminted((balances.data.dragonPreminted || 0) / 1e9);
+
+      setFrogDisplayedTotalSupply(
+        ((balances.data.frogTotalSupply || 0) -
+          (balances.data.frogPreminted || 0)) /
+          1e9
+      );
+      setDragonDisplayedTotalSupply(
+        ((balances.data.dragonTokenSupply || 0) -
+          (balances.data.dragonPreminted || 0)) /
+          1e9
+      );
     }
   }, [balances.data]);
 
@@ -219,12 +239,15 @@ export default function MemecoinsBanner() {
           setIsRulesOpen(true);
         }}
       />
-      <Slider frozenAmount={frogTotalSupply} hotAmount={dragonTotalSupply} />
+      <Slider
+        frozenAmount={frogDisplayedTotalSupply}
+        hotAmount={dragonDisplayedTotalSupply}
+      />
       <div className={"flex flex-row gap-[0.781vw]"}>
         <CoinBock
           label={"Frozen Frog"}
           price={frogPrice}
-          amount={frogTotalSupply}
+          amount={frogDisplayedTotalSupply}
           leaderboard={frozenLeaderboard}
           image={coinFrogIMG}
           link={`https://minatokens.com/token/${process.env.NEXT_PUBLIC_FROG_TOKEN_ADDRESS}`}
@@ -237,7 +260,7 @@ export default function MemecoinsBanner() {
         <CoinBock
           label={"Fire Dragon"}
           price={dragonPrice}
-          amount={dragonTotalSupply}
+          amount={dragonDisplayedTotalSupply}
           leaderboard={hotLeaderboard}
           image={coinDragonIMG}
           link={`https://minatokens.com/token/${process.env.NEXT_PUBLIC_DRAGON_TOKEN_ADDRESS}`}
