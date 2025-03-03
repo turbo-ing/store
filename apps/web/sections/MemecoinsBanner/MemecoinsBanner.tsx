@@ -111,7 +111,7 @@ export default function MemecoinsBanner() {
 
   const event = {
     date: {
-      start: new Date("2025-03-03T00:12:00.000"),
+      start: new Date("2025-03-03T12:00:00.000"),
       end: new Date("2025-03-17T12:00:00.000"),
     },
   };
