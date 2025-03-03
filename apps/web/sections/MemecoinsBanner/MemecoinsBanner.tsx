@@ -9,7 +9,6 @@ import { MemecoinBuyModal } from "./ui/MemecoinBuyModal";
 import { RulesModal } from "./ui/RulesModal";
 import { Banner, CoinBock, Slider } from "./ui/ContestInfo";
 import { api } from "../../trpc/react";
-import { set } from "zod";
 
 interface ILeaderboardUnit {
   userAddress: string;
@@ -112,8 +111,8 @@ export default function MemecoinsBanner() {
 
   const event = {
     date: {
-      start: new Date("2025-02-22T00:00:00.000+03:00"),
-      end: new Date("2025-03-01T00:00:00.000+03:00"),
+      start: new Date("2025-03-03T00:12:00.000"),
+      end: new Date("2025-03-17T12:00:00.000"),
     },
   };
 
@@ -177,12 +176,12 @@ export default function MemecoinsBanner() {
       setFrogDisplayedTotalSupply(
         ((balances.data.frogTotalSupply || 0) -
           (balances.data.frogPreminted || 0)) /
-          1e9
+          1e9,
       );
       setDragonDisplayedTotalSupply(
         ((balances.data.dragonTokenSupply || 0) -
           (balances.data.dragonPreminted || 0)) /
-          1e9
+          1e9,
       );
     }
   }, [balances.data]);
