@@ -164,6 +164,13 @@ export const memetokensRouter = createTRPCRouter({
         },
       });
 
+      await db?.collection("tx_statuses").insertOne({
+        userAddress: tx.sender,
+        jobId: result.data?.jobId,
+      });
+
+      result.data?.jobId;
+
       return result.data;
     }),
 
@@ -180,6 +187,30 @@ export const memetokensRouter = createTRPCRouter({
       });
 
       const proofs = await Silvana.getProof({ body: { jobId: input.jobId } });
+
+      if (
+        proofs.data?.jobStatus === "finished" ||
+        proofs.data?.jobStatus === "used" ||
+        proofs.data?.jobStatus === "failed"
+      ) {
+        if (!proofs.data.results) {
+          console.error("No results found in proofs");
+          return proofs;
+        }
+
+        await db?.collection("tx_statuses").updateOne(
+          {
+            jobId: input.jobId,
+          },
+          {
+            $set: {
+              proofStatus: proofs.data.jobStatus,
+              txHash: proofs.data.results![0].hash,
+            },
+          }
+        );
+      }
+
       return proofs;
     }),
 
@@ -202,6 +233,17 @@ export const memetokensRouter = createTRPCRouter({
       let txStatus = txStatusData?.status ?? "pending";
 
       if (txStatus === "failed") {
+        await db?.collection("tx_statuses").updateOne(
+          {
+            txHash: input.txHash,
+          },
+          {
+            $set: {
+              txStatus: "failed",
+            },
+          }
+        );
+
         return {
           pending: false,
           success: false,
@@ -209,6 +251,17 @@ export const memetokensRouter = createTRPCRouter({
       }
 
       if (txStatus === "applied") {
+        await db?.collection("tx_statuses").updateOne(
+          {
+            txHash: input.txHash,
+          },
+          {
+            $set: {
+              txStatus: "success",
+            },
+          }
+        );
+
         return {
           pending: false,
           success: true,
