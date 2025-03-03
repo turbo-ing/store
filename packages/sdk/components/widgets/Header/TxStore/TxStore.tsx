@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import SetupStoreContext from "../../../../lib/contexts/SetupStoreContext";
 import { getZkAppTxByHash } from "../../../../lib/api/getZkAppTxByHash";
 import Link from "next/link";
@@ -17,8 +17,14 @@ interface Tx {
 }
 
 export default function TxStore({ onClose }: { onClose: () => void }) {
+  const ITEMS_PER_PAGE = 6;
   const { txStore } = useContext(SetupStoreContext);
+  const observer = useRef<IntersectionObserver | null>(null);
+
   const [txs, setTxs] = useState<Tx[]>([]);
+  const [txsToRender, setTxsToRender] = useState<Tx[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(false);
 
   useEffect(() => {
     if (!txStore.userTransactions) return;
@@ -37,6 +43,30 @@ export default function TxStore({ onClose }: { onClose: () => void }) {
     };
     fetchTxs();
   }, [txStore.userTransactions]);
+
+  useEffect(() => {
+    if (txs.length == 0) return;
+    setTxsToRender(txs.slice(0, ITEMS_PER_PAGE * page));
+    if (txs.length / (ITEMS_PER_PAGE * (page + 1)) > 0) setHasMore(true);
+    else setHasMore(false);
+  }, [page, txStore.userTransactions]);
+
+  // Intersection Observer
+  const lastTxRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (!node || !hasMore) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+
+      observer.current.observe(node);
+    },
+    [hasMore],
+  );
 
   const formatTimeElapsed = (timestamp: number) => {
     const postDate = new Date(timestamp);
@@ -100,9 +130,12 @@ export default function TxStore({ onClose }: { onClose: () => void }) {
             </span>
           </div>
           <div className={"flex flex-col gap-[1.042vw]"}>
-            {txs.length != 0
-              ? txs.map((item, index) => (
+            {txsToRender.length != 0
+              ? txsToRender.map((item, index) => (
                   <div
+                    ref={
+                      txsToRender.length === index + 1 ? lastTxRef : undefined
+                    }
                     key={index}
                     className={
                       "grid grid-cols-4 bg-[#212121] px-[0.521vw] py-[0.26vw] items-center rounded-[0.521vw]"
