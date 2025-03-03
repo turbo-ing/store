@@ -33,6 +33,7 @@ import avatar21 from "../../../../../public/image/avatars/avatar-21.svg";
 import Image from "next/image";
 import SetupStoreContext from "../../../../../lib/contexts/SetupStoreContext";
 import { algoliasearch } from "algoliasearch";
+import TxStore from "../../TxStore";
 
 const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_PROJECT || "",
@@ -88,6 +89,7 @@ export default function AccountPopup({
   const [avatarId, setAvatarId] = useState<number | undefined>(undefined);
   const [avatarMode, setAvatarMode] = useState<boolean>(false);
   const [avatars, setAvatars] = useState(zknoidAvatars);
+  const [isTxStoreOpen, setIsTxStoreOpen] = useState<boolean>(false);
 
   // const getNameCheckQuery = api.accounts.checkNameUnique.useQuery({
   //   name: testName,
@@ -535,6 +537,7 @@ export default function AccountPopup({
           <AccountPopupBalance />
           <div className={"flex w-full flex-row gap-1.5"}>
             <button
+              onClick={() => setIsTxStoreOpen(true)}
               className={
                 "group flex w-full cursor-pointer flex-col items-center justify-center gap-2.5 rounded-[5px] border border-bg-dark bg-bg-dark p-1 text-foreground hover:bg-right-accent hover:text-bg-dark"
               }
@@ -558,7 +561,7 @@ export default function AccountPopup({
                 />
               </svg>
               <span className={"font-museo text-[16px]/[16px] font-medium"}>
-                Profile Information
+                Transaction Store
               </span>
             </button>
             <button
@@ -587,6 +590,7 @@ export default function AccountPopup({
           </div>
         </div>
       )}
+      {isTxStoreOpen && <TxStore onClose={() => setIsTxStoreOpen(false)} />}
     </motion.div>
   );
 }

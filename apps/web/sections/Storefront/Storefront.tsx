@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 import Faq from "../Faq";
 import Favorites from "../Favorites";
 import { announcedGames, defaultGames, IGame } from "@/app/constants/games";
+import MemecoinsBanner from "../MemecoinsBanner";
 
 export default function Storefront() {
   const searchParams = useSearchParams();
@@ -78,6 +79,7 @@ export default function Storefront() {
         <Faq />
       ) : (
         <>
+          <MemecoinsBanner />
           <Events
             eventTypesSelected={eventTypesSelected}
             setEventTypesSelected={setEventTypesSelected}

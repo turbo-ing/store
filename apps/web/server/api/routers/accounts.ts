@@ -1,8 +1,8 @@
-import clientPromise from '../../../app/lib/mongodb'
+import clientPromise from "../../../app/lib/mongodb";
 
-import { z } from 'zod';
+import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from '../../../server/api/trpc';
+import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";
 
 const client = await clientPromise;
 const db = client?.db(process.env.MONGODB_DB);
@@ -14,7 +14,7 @@ export const accountsRouter = createTRPCRouter({
       if (!db) return;
       return {
         account: await db
-          .collection('accounts')
+          .collection("accounts")
           .findOne({ userAddress: input.userAddress }),
       };
     }),
@@ -25,7 +25,7 @@ export const accountsRouter = createTRPCRouter({
 
       return {
         accounts: await db
-          .collection('accounts')
+          .collection("accounts")
           .find({ userAddress: { $in: input.userAddresses } })
           .toArray(),
       };
@@ -35,7 +35,7 @@ export const accountsRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       if (!db) return;
 
-      await db.collection('accounts').updateOne(
+      await db.collection("accounts").updateOne(
         { userAddress: input.userAddress },
         {
           $set: {
@@ -55,7 +55,7 @@ export const accountsRouter = createTRPCRouter({
       if (!db) return;
 
       const account = await db
-        .collection('accounts')
+        .collection("accounts")
         .findOne({ name: input.name });
       return !account;
     }),
@@ -64,7 +64,7 @@ export const accountsRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       if (!db) return;
 
-      await db.collection('accounts').updateOne(
+      await db.collection("accounts").updateOne(
         { userAddress: input.userAddress },
         {
           $set: {
