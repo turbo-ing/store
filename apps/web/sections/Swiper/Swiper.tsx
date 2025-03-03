@@ -13,8 +13,7 @@ const Slides = () => {
   }[] = [
     {
       image:
-        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/igypeqldbrsbgvfxomhc",
-      link: "/games/lottery/global",
+        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/fgrrbnj4nszspwtpekpe",
     },
     {
       image:
@@ -24,14 +23,43 @@ const Slides = () => {
       image:
         "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/pkfoaj76fsxrozcszvo3",
     },
-    {
-      image:
-        "https://res.cloudinary.com/dw4kivbv0/image/upload/w_2400,f_auto,fl_progressive:semi,q_auto:best/v1/store/slides/fgrrbnj4nszspwtpekpe",
-    },
   ];
 
   return (
     <>
+      {slides.map((slide, index) =>
+        slide.link ? (
+          <Link
+            key={index}
+            href={slide.link}
+            target={slide.openAsNewTab ? "_blank" : undefined}
+            rel={slide.openAsNewTab ? "noopener noreferrer" : undefined}
+            className="min-w-0 flex-[0_0_100%]"
+          >
+            <div className="flex h-full w-full items-center justify-center">
+              <Image
+                width={1600}
+                height={1000}
+                src={slide.image}
+                alt="Slide"
+                className="w-full"
+              />
+            </div>
+          </Link>
+        ) : (
+          <div key={index} className="min-w-0 flex-[0_0_100%]">
+            <div className="flex h-full w-full items-center justify-center">
+              <Image
+                width={1600}
+                height={1000}
+                src={slide.image}
+                alt="Slide"
+                className="w-full"
+              />
+            </div>
+          </div>
+        ),
+      )}
       <div key={"custom-lottery"} className="min-w-0 flex-[0_0_100%]">
         <div className="relative flex h-full w-full items-center justify-center">
           <Link href={"/games/lottery/global"}>
@@ -125,39 +153,6 @@ const Slides = () => {
           </div>
         </div>
       </div>
-      {slides.map((slide, index) =>
-        slide.link ? (
-          <Link
-            key={index}
-            href={slide.link}
-            target={slide.openAsNewTab ? "_blank" : undefined}
-            rel={slide.openAsNewTab ? "noopener noreferrer" : undefined}
-            className="min-w-0 flex-[0_0_100%]"
-          >
-            <div className="flex h-full w-full items-center justify-center">
-              <Image
-                width={1600}
-                height={1000}
-                src={slide.image}
-                alt="Slide"
-                className="w-full"
-              />
-            </div>
-          </Link>
-        ) : (
-          <div key={index} className="min-w-0 flex-[0_0_100%]">
-            <div className="flex h-full w-full items-center justify-center">
-              <Image
-                width={1600}
-                height={1000}
-                src={slide.image}
-                alt="Slide"
-                className="w-full"
-              />
-            </div>
-          </div>
-        ),
-      )}
     </>
   );
 };
