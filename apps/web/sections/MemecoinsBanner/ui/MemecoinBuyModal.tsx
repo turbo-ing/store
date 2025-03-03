@@ -100,11 +100,24 @@ export function MemecoinBuyModal({
     ]);
     setCanCloseWindow(true);
 
+    const serverProvingNotificationID = notificationStore.create({
+      type: "loader",
+      message: "Memecoin mint: Server proving",
+      dismissAfterDelay: false,
+    });
+
     const proveData = await proveTxMutation.mutateAsync({
       tx: txData,
       signedData: txResult.signedData,
     });
-    if (!proveData?.jobId) throw new Error("No jobId returned from server");
+    if (!proveData?.jobId) {
+      notificationStore.remove(serverProvingNotificationID);
+      notificationStore.create({
+        type: "error",
+        message: "Memecoin mint: Error while server proving",
+      });
+      throw new Error("No jobId returned from server");
+    }
 
     let foundProof = false;
     let numOfAttempts = 0;
@@ -136,10 +149,23 @@ export function MemecoinBuyModal({
       }
     }
 
-    if (!foundProof) throw new Error("Proof not found");
+    if (!foundProof) {
+      notificationStore.remove(serverProvingNotificationID);
+      notificationStore.create({
+        type: "error",
+        message: "Memecoin mint: Error while server proving",
+      });
+      throw new Error("Proof not found");
+    }
 
-    if (!proofs || proofs.results?.length === 0)
+    if (!proofs || proofs.results?.length === 0) {
+      notificationStore.remove(serverProvingNotificationID);
+      notificationStore.create({
+        type: "error",
+        message: "Memecoin mint: Error while server proving",
+      });
       throw new Error("No proofs returned");
+    }
 
     const hash = proofs.results![0].hash;
 
@@ -148,8 +174,21 @@ export function MemecoinBuyModal({
       ...old,
       `Proof generated. Waiting for transaction (${hash}) to be mined`,
     ]);
+    notificationStore.remove(serverProvingNotificationID);
+    const mintNotificationID = notificationStore.create({
+      type: "loader",
+      message: "Memecoin mint: Proof generated. Waiting to mint",
+      dismissAfterDelay: false,
+    });
 
-    if (!hash) return;
+    if (!hash) {
+      notificationStore.remove(mintNotificationID);
+      notificationStore.create({
+        type: "error",
+        message: "Memecoin mint: Error while minting, no hash",
+      });
+      return;
+    }
 
     let txFound = false;
     let txNumOfAttempts = 0;
@@ -180,10 +219,22 @@ export function MemecoinBuyModal({
       }
     }
 
-    if (!txFound) throw new Error("Tx not found");
+    if (!txFound) {
+      notificationStore.remove(mintNotificationID);
+      notificationStore.create({
+        type: "error",
+        message: "Memecoin mint: Error while minting, no tx found",
+      });
+      throw new Error("Tx not found");
+    }
 
     setTxStatus("Mined");
     setStatusArray((old) => [...old, `Tx ${hash} mined`]);
+    notificationStore.remove(mintNotificationID);
+    notificationStore.create({
+      type: "success",
+      message: "Memecoin mint: Successfully mined!",
+    });
   };
 
   const validationSchema = Yup.object().shape({
