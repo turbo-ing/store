@@ -81,7 +81,6 @@ export function MemecoinBuyModal({
       price: adaptivePrice,
     });
     if (!txData) throw new Error("No tx data returned from server");
-    console.log("txData", txData);
 
     setTxStatus("Waiting for user to sign transaction...");
     setStatusArray((old) => [
