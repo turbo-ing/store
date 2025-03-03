@@ -39,7 +39,10 @@ export function MemecoinBuyModal({
 }) {
   const networkStore = useNetworkStore();
 
-  const mintTokensMutation = api.http.memetokens.mintTokens.useMutation();
+  const mintTokensMutation = api.http.memetokens.mintTokens.useMutation({
+    retry: 3,
+    retryDelay: 3000, // 3 sec
+  });
   const proveTxMutation = api.http.memetokens.proveTx.useMutation();
   const checkProofStatusMutation =
     api.http.memetokens.checkProofStatus.useMutation();
@@ -51,12 +54,12 @@ export function MemecoinBuyModal({
   const notificationStore = useNotificationStore();
   const [chosenCoin, setChosenCoin] = useState<"frog" | "dragon">(token);
   const [buyAmount, setBuyAmount] = useState<number>(
-    Number((1 / (token === "frog" ? frogPrice : dragonPrice)).toFixed(4)),
+    Number((1 / (token === "frog" ? frogPrice : dragonPrice)).toFixed(4))
   );
   const [minaAmount, setMinaAmount] = useState<number>(1);
 
   const [price, setPrice] = useState<number>(
-    token === "frog" ? frogPrice : dragonPrice,
+    token === "frog" ? frogPrice : dragonPrice
   );
 
   const [statusArray, setStatusArray] = useState<string[]>([]);
@@ -89,7 +92,7 @@ export function MemecoinBuyModal({
     ]);
 
     const txResult = await (window as any).mina?.sendTransaction(
-      txData.walletPayload,
+      txData.walletPayload
     );
 
     setTxStatus("Waiting for transaction to be proved on server...");
@@ -241,7 +244,7 @@ export function MemecoinBuyModal({
     minaAmount: Yup.number()
       .min(
         chosenCoin === "frog" ? frogPrice : dragonPrice,
-        `Min amount: ${chosenCoin === "frog" ? frogPrice : dragonPrice}`,
+        `Min amount: ${chosenCoin === "frog" ? frogPrice : dragonPrice}`
       )
       .required("Amount is required"),
   });
@@ -409,7 +412,7 @@ export function MemecoinBuyModal({
                       const currentPrice = Number(
                         (
                           1 / (value === "frog" ? frogPrice : dragonPrice)
-                        ).toFixed(4),
+                        ).toFixed(4)
                       );
                       await setFieldValue("amount", currentPrice);
                       await setFieldValue("minaAmount", 1);
@@ -461,7 +464,7 @@ export function MemecoinBuyModal({
                       ? "disabled:cursor-progress"
                       : !!errors.amount || !!errors.minaAmount
                         ? "disabled:cursor-not-allowed"
-                        : "",
+                        : ""
                   )}
                 >
                   <span
@@ -478,7 +481,7 @@ export function MemecoinBuyModal({
                   disabled={true}
                   className={cn(
                     "disabled:opacity-60 disabled:cursor-not-allowed rounded-[0.26vw] py-[0.521vw] flex flex-col justify-center items-center w-full",
-                    chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]",
+                    chosenCoin == "frog" ? "bg-[#3A39FF]" : "bg-[#FF5B23]"
                   )}
                 >
                   <span
