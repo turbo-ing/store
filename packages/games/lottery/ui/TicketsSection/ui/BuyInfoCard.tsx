@@ -17,6 +17,7 @@ import LotteryContext from "../../../lib/contexts/LotteryContext";
 import { useGiftCodes } from "../../../stores/giftCodes";
 import BoughtModal from "../../Modals/BoughtModal";
 import { useBoughtModalStore } from "@zknoid/sdk/lib/stores/boughtModalStore";
+import { api } from "../../../../../../apps/web/trpc/react";
 
 enum BoughtModalsVariants {
   ticket = "ticket",
@@ -56,6 +57,9 @@ export default function BuyInfoCard({
   const { addGiftCodesMutation, sendTicketQueueMutation, roundInfo } =
     useContext(LotteryContext);
 
+  const addUserTransactionMutation =
+    api.http.txStore.addTransaction.useMutation();
+
   const numberOfTickets =
     voucherMode == VoucherMode.List
       ? giftCodeToBuyAmount
@@ -78,7 +82,7 @@ export default function BuyInfoCard({
       roundInfo!.plotteryAddress,
       networkStore.address!,
       ticketsInfo[0].numbers,
-      numberOfTickets,
+      numberOfTickets
     );
     console.log("txJson", txJson);
     await sendTransaction(JSON.stringify(txJson))
@@ -89,6 +93,12 @@ export default function BuyInfoCard({
           notificationStore.create({
             type: "success",
             message: "Transaction sent",
+          });
+
+          addUserTransactionMutation.mutate({
+            userAddress: networkStore.address!,
+            txHash: transaction,
+            type: "Lottery ticket purchase",
           });
         } else {
           notificationStore.create({
@@ -126,7 +136,7 @@ export default function BuyInfoCard({
 
       const dataToSign = codes
         .map((x) =>
-          Poseidon.hashPacked(CircuitString, CircuitString.fromString(x)),
+          Poseidon.hashPacked(CircuitString, CircuitString.fromString(x))
         )
         .flatMap((x) => x.toFields());
 
@@ -156,7 +166,7 @@ export default function BuyInfoCard({
           approved: false,
           deleted: false,
           createdAt: Date.now(),
-        })),
+        }))
       );
 
       setGiftCodeToBuyAmount(1);
@@ -183,7 +193,7 @@ export default function BuyInfoCard({
   const sendTicketQueue = async () => {
     const dataToSign = Poseidon.hashPacked(
       CircuitString,
-      CircuitString.fromString(giftCode),
+      CircuitString.fromString(giftCode)
     );
     let response;
 
@@ -294,7 +304,7 @@ export default function BuyInfoCard({
               Number(balance) < Number(formatUnits(totalPrice)),
             "mt-[9.302vw] lg:!mt-[1vw]":
               Number(balance) > Number(formatUnits(totalPrice)),
-          },
+          }
         )}
         disabled={
           voucherMode != VoucherMode.UseValid
