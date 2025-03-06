@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import MobileRulesModal from "../../../ui/BannerSection/ui/MobileRulesModal";
+import Image from "next/image";
+import iImage from "../../../images/5.png";
 
 export default function Rules() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -124,13 +126,20 @@ export default function Rules() {
                   >
                     Ticket consist of 6 numbers (1-9) and quantity
                   </span>
-                  <span
-                    className={
-                      "font-plexsans text-[3.256vw] lg:!text-[0.729vw] font-normal"
-                    }
-                  >
-                    Duplicates tickets are allowed
-                  </span>
+                  <div className={"flex flex-row gap-[0.26vw]"}>
+                    <span
+                      className={
+                        "font-plexsans text-[3.256vw] lg:!text-[0.729vw] font-normal"
+                      }
+                    >
+                      Duplicates tickets are allowed
+                    </span>
+                    <Image
+                      src={iImage}
+                      alt={"img"}
+                      className={"w-[1.042vw] h-[1.042vw]"}
+                    />
+                  </div>
                 </div>
                 <div className={"flex flex-col gap-[0.26vw]"}>
                   <span

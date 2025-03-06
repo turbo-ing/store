@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import FaqAccordion from "../../features/FaqAccordion";
 import { useState } from "react";
+import simg from "@/public/image/misc/2.png";
 
 const QA = [
   {
@@ -147,11 +148,14 @@ const QA = [
   {
     title: "What is ZkNoid?",
     content: (
-      <span className={"font-plexsans text-[0.833vw]"}>
-        The ZkNoid project is a home for zk-provable gaming. On the platform,
-        you can try cutting edge games utilizing Zero-Knowledge proofs or build
-        one using the provided infrastructure.
-      </span>
+      <>
+        <span className={"font-plexsans text-[0.833vw]"}>
+          The ZkNoid project is a home for zk-provable gaming. On the platform,
+          you can try cutting edge games utilizing Zero-Knowledge proofs or
+          build one using the provided infrastructure.
+        </span>
+        <Image src={simg} alt={"image"} className={"w-[1.042vw] h-[1.042vw]"} />
+      </>
     ),
   },
   {
