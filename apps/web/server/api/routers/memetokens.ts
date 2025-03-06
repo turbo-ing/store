@@ -309,4 +309,66 @@ export const memetokensRouter = createTRPCRouter({
       dragonLeaderboard,
     };
   }),
+
+  updateLeaderboardInfo: publicProcedure.query(async () => {
+    Silvana.config({
+      apiKey: process.env.SILVANA_API_KEY!,
+      chain: chain as any,
+    });
+
+    const frogHolders =
+      (
+        await Silvana.getTokenHolders({
+          body: {
+            address: frogTokenAddress,
+          },
+        })
+      ).data?.holders || [];
+
+    const dragonHolders =
+      (
+        await Silvana.getTokenHolders({
+          body: {
+            address: dragonTokenAddress,
+          },
+        })
+      ).data?.holders || [];
+
+    const usersBulkData = [];
+
+    for (const holder of frogHolders) {
+      // Token address is included in the holders list as total supply
+      if (holder.address === frogTokenAddress) {
+        continue;
+      }
+      usersBulkData.push({
+        updateOne: {
+          filter: { address: holder.address },
+          // Balance come in formated way, so we need to multiply by 1e9 to get the real balance
+          update: { $set: { frogBalance: holder.balance * 1e9 } },
+          upsert: true,
+        },
+      });
+    }
+
+    for (const holder of dragonHolders) {
+      // Token address is included in the holders list as total supply
+      if (holder.address === dragonTokenAddress) {
+        continue;
+      }
+
+      usersBulkData.push({
+        updateOne: {
+          filter: { address: holder.address },
+          // Balance come in formated way, so we need to multiply by 1e9 to get the real balance
+          update: { $set: { dragonBalance: holder.balance * 1e9 } },
+          upsert: true,
+        },
+      });
+    }
+
+    let result = await db?.collection("leaderboard").bulkWrite(usersBulkData);
+
+    return result;
+  }),
 });
