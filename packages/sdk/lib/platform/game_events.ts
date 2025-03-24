@@ -139,6 +139,24 @@ export const GAME_EVENTS: ZkNoidEvent[] = [
     image:
       "https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/d1xghz6od0etqweelpvm",
   },
+  {
+    name: '',
+    description: '',
+    eventStarts: new Date('2025-02-05T15:00:00.000+03:00').getTime(),
+    eventEnds: new Date('2025-04-01T00:00:00.000+03:00').getTime(),
+    link: 'https://minatokens.com/token/B62qqL3V1g63YonwvghXrERzUANeKWYTDq8KxHxvqb26ZqNDXL1NpJ7',
+    image:
+      'https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/dmsti7dxnfgv4zi8yyai',
+  },
+  {
+    name: '',
+    description: '',
+    eventStarts: new Date('2025-02-05T15:00:00.000+03:00').getTime(),
+    eventEnds: new Date('2025-04-01T00:00:00.000+03:00').getTime(),
+    link: 'https://minatokens.com/token/B62qqoMiKci7aA2cUYontX7SmNgquk9QPkya8vSaHHKPxC7Tv51Tf7h',
+    image:
+      'https://res.cloudinary.com/dw4kivbv0/image/upload/w_3200,f_auto,q_auto:best/v1/store/events/x4bajshfxalfkryhrk6e',
+  },
 ];
 
 export const getEventType = (event: ZkNoidEvent): ZkNoidEventType => {

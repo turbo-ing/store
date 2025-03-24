@@ -79,7 +79,7 @@ export default function Storefront() {
         <Faq />
       ) : (
         <>
-          <MemecoinsBanner />
+          {/* <MemecoinsBanner /> */}
           <Events
             eventTypesSelected={eventTypesSelected}
             setEventTypesSelected={setEventTypesSelected}
