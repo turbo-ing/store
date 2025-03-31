@@ -9,6 +9,29 @@ import LotteryContext from "../../../lib/contexts/LotteryContext";
 import { cn } from "@zknoid/sdk/lib/helpers";
 import { LOTTERY_ROUND_OFFSET } from "../OwnedTickets/lib/constant";
 
+const calcRoundTime = (
+  roundId: number,
+  slotSinceGenesis: number,
+  startBlock: number
+) => {
+  const oneDayRounds = Math.min(LOTTERY_ROUND_OFFSET, roundId);
+  const regularRounds = Math.max(0, roundId - oneDayRounds);
+
+  const deployTime =
+    Date.now() - (slotSinceGenesis - startBlock) * 3 * 60 * 1000;
+
+  if (roundId <= LOTTERY_ROUND_OFFSET) {
+    return new Date(
+      deployTime -
+        (LOTTERY_ROUND_OFFSET - oneDayRounds) * BLOCK_PER_ROUND * 3 * 60 * 1000
+    );
+  } else {
+    return new Date(
+      deployTime + regularRounds * BLOCK_PER_ROUND * 7 * 3 * 60 * 1000
+    );
+  }
+};
+
 export default function PreviousRounds() {
   const workerClientStore = useWorkerClientStore();
   const lotteryStore = useWorkerClientStore();
@@ -46,11 +69,16 @@ export default function PreviousRounds() {
     if ((!oneDayData && !regularData) || !chainStore.block?.slotSinceGenesis)
       return;
 
-    const roundInfos = {
-      ...(oneDayData || {}),
-      ...(regularData || {}),
-    };
-    setRoundInfos(Object.values(roundInfos));
+    const oneDayDataArray = Object.values(oneDayData || {});
+
+    const regularDataWithOffset = Object.values(regularData || {}).map(
+      (round) => ({
+        ...round,
+        id: round.id + LOTTERY_ROUND_OFFSET,
+      })
+    );
+
+    setRoundInfos([...oneDayDataArray, ...regularDataWithOffset]);
   }, [oneDayData, regularData, chainStore.block?.slotSinceGenesis]);
 
   useEffect(() => {
@@ -178,27 +206,15 @@ export default function PreviousRounds() {
                     key={index}
                     round={round}
                     roundDates={{
-                      start: new Date(
-                        Date.now() -
-                          (Number(
-                            chainStore.block?.slotSinceGenesis! -
-                              lotteryStore.onchainState?.startBlock!
-                          ) -
-                            round.id * BLOCK_PER_ROUND) *
-                            3 *
-                            60 *
-                            1000
+                      start: calcRoundTime(
+                        round.id,
+                        Number(chainStore.block?.slotSinceGenesis!),
+                        Number(lotteryStore.onchainState?.startBlock!)
                       ),
-                      end: new Date(
-                        Date.now() -
-                          (Number(
-                            chainStore.block?.slotSinceGenesis! -
-                              lotteryStore.onchainState?.startBlock!
-                          ) -
-                            (round.id + 1) * BLOCK_PER_ROUND) *
-                            3 *
-                            60 *
-                            1000
+                      end: calcRoundTime(
+                        round.id + 1,
+                        Number(chainStore.block?.slotSinceGenesis!),
+                        Number(lotteryStore.onchainState?.startBlock!)
                       ),
                     }}
                   />
