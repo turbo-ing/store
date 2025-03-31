@@ -16,6 +16,7 @@ import { VoucherMode } from "./lib/voucherMode";
 import Image from "next/image";
 import noCodesImg from "../../images/no-gift-codes.svg";
 import { useGiftCodes } from "../../stores/giftCodes";
+import { LOTTERY_ROUND_OFFSET } from "./OwnedTickets/lib/constant";
 
 interface TicketInfo {
   amount: number;
@@ -75,7 +76,7 @@ export default function TicketsSection() {
         {
           "gap-[2.604vw]":
             hasOwnedTickets ||
-            roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
+            roundsStore.roundToShowId == lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET,
         },
       )}
     >
@@ -83,16 +84,16 @@ export default function TicketsSection() {
         <div
           className={cn("flex flex-col lg:!grid gap-[16.279vw] lg:!gap-[2vw]", {
             "grid-cols-2":
-              roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
+                roundsStore.roundToShowId  == lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET,
             "grid-cols-1":
-              roundsStore.roundToShowId != lotteryStore.lotteryRoundId,
+              roundsStore.roundToShowId != lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET,
           })}
         >
           <OwnedTickets
             hasOwnedTickets={hasOwnedTickets}
             setHasOwnedTickets={setHasOwnedTickets}
           />
-          {roundsStore.roundToShowId == lotteryStore.lotteryRoundId && (
+          {roundsStore.roundToShowId == lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET && (
             <div className={"flex flex-col"}>
               <div className="mb-[1.33vw] text-[7.442vw] lg:!text-[2.13vw]">
                 Buy tickets

@@ -33,6 +33,7 @@ interface ILotteryContext {
   minaEvents: any | undefined;
   getRoundsInfosQuery: (
     roundsIds: number[],
+    oneDay: boolean,
     params?: { refetchInterval?: number | false }
   ) => Record<number, ILotteryRound> | undefined;
   checkGiftCodesQuery: (

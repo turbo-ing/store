@@ -7,6 +7,7 @@ import { ILotteryRound } from "../../../lib/types";
 import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
 import LotteryContext from "../../../lib/contexts/LotteryContext";
 import { cn } from "@zknoid/sdk/lib/helpers";
+import { LOTTERY_ROUND_OFFSET } from "../OwnedTickets/lib/constant";
 
 export default function PreviousRounds() {
   const workerClientStore = useWorkerClientStore();
@@ -26,16 +27,22 @@ export default function PreviousRounds() {
     { length: ROUNDS_PER_PAGE },
     (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE,
   ).filter((x) => x >= 0);
-  const roundInfosData = getRoundsInfosQuery(roundsToShow, {
-    refetchInterval: 5000,
-  });
+
+  const oneDayRounds = roundsToShow.filter(roundId => roundId <= LOTTERY_ROUND_OFFSET);
+  const regularRounds = roundsToShow.filter(roundId => roundId > LOTTERY_ROUND_OFFSET);
+
+  const oneDayData = getRoundsInfosQuery(oneDayRounds, true, { refetchInterval: 5000 })
+  const regularData = getRoundsInfosQuery(regularRounds, false, { refetchInterval: 5000 })
 
   useEffect(() => {
-    if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
+    if ((!oneDayData && !regularData) || !chainStore.block?.slotSinceGenesis) return;
 
-    const roundInfos = roundInfosData!;
+    const roundInfos = {
+      ...(oneDayData || {}),
+      ...(regularData || {})
+    };
     setRoundInfos(Object.values(roundInfos));
-  }, [roundInfosData, chainStore.block?.slotSinceGenesis]);
+  }, [oneDayData, regularData, chainStore.block?.slotSinceGenesis]);
 
   useEffect(() => {
     const checkWidth = () => {
@@ -60,11 +67,11 @@ export default function PreviousRounds() {
         <button
           onClick={() => setPage(page + 1)}
           disabled={
-            page + 1 > workerClientStore.lotteryRoundId / ROUNDS_PER_PAGE
+            page + 1 > workerClientStore.lotteryRoundId + LOTTERY_ROUND_OFFSET / ROUNDS_PER_PAGE
           }
           className={cn(
             "w-full flex flex-row items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
-            page + 1 > workerClientStore.lotteryRoundId / ROUNDS_PER_PAGE
+            page + 1 > workerClientStore.lotteryRoundId + LOTTERY_ROUND_OFFSET / ROUNDS_PER_PAGE
               ? "opacity-0"
               : "opacity-100",
           )}
@@ -136,7 +143,7 @@ export default function PreviousRounds() {
               }
               onClick={() => setPage(page + 1)}
               disabled={
-                page + 1 > workerClientStore.lotteryRoundId / ROUNDS_PER_PAGE
+                page + 1 > workerClientStore.lotteryRoundId + LOTTERY_ROUND_OFFSET / ROUNDS_PER_PAGE
               }
             >
               <svg

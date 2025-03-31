@@ -23,6 +23,7 @@ import { cn } from "@zknoid/sdk/lib/helpers";
 import CurrentRoundInfo from "../ui/BannerSection/ui/CurrentRoundInfo";
 import PrevRoundInfo from "../ui/BannerSection/ui/PrevRoundInfo";
 import LotteryContext from "../lib/contexts/LotteryContext";
+import { LOTTERY_ROUND_OFFSET } from "./TicketsSection/OwnedTickets/lib/constant";
 
 export enum Pages {
   Main,
@@ -222,12 +223,12 @@ export default function Lottery({}: { params: { competitionId: string } }) {
             </div>
             <BannerSection roundEndsIn={roundEndsIn} setPage={setPage} />
             <div className={"lg:!hidden"}>
-              {roundsStore.roundToShowId == lotteryStore.lotteryRoundId && (
+              {roundsStore.roundToShowId == lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET && (
                 <CurrentRoundInfo ticketsNum={ticketsNum} />
               )}
             </div>
             <div className={"lg:!hidden"}>
-              {roundsStore.roundToShowId != lotteryStore.lotteryRoundId && (
+              {roundsStore.roundToShowId != lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET && (
                 <PrevRoundInfo
                   ticketsNum={ticketsNum}
                   winningCombination={roundInfo?.winningCombination}

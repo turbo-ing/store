@@ -9,6 +9,7 @@ import { ILotteryRound } from "../../../../packages/games/lottery/lib/types";
 import { useNetworkStore } from "../../../../packages/sdk/lib/stores/network";
 import LotteryContext from "../../../../packages/games/lottery/lib/contexts/LotteryContext";
 import SetupStoreContext from "../../../../packages/sdk/lib/contexts/SetupStoreContext";
+import { LOTTERY_ROUND_OFFSET } from "../../../../packages/games/lottery/ui/TicketsSection/OwnedTickets/lib/constant";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const roundsStore = useRoundsStore();
@@ -18,7 +19,16 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [minaEvents, setMinaEvents] = useState<any | undefined>(undefined);
   const getRoundQuery = api.http.lotteryBackend.getRoundInfos.useQuery(
     {
+      roundIds: [roundsStore.roundToShowId - LOTTERY_ROUND_OFFSET],
+    },
+    {
+      refetchInterval: 5000,
+    },
+  );
+  const getRoundQueryOneDay = api.http.lotteryBackend.getRoundInfos.useQuery(
+    {
       roundIds: [roundsStore.roundToShowId],
+      oneDay: true,
     },
     {
       refetchInterval: 5000,
@@ -58,10 +68,18 @@ export default function Layout({ children }: { children: ReactNode }) {
   const addTransaction = api.http.txStore.addTransaction.useMutation();
 
   useEffect(() => {
+    if (roundsStore.roundToShowId >= LOTTERY_ROUND_OFFSET) return;
     if (!getRoundQuery.data) return undefined;
 
     setRoundInfo(Object.values(getRoundQuery.data)[0]);
   }, [roundsStore.roundToShowId, getRoundQuery.data]);
+
+  useEffect(() => {
+    if (roundsStore.roundToShowId < LOTTERY_ROUND_OFFSET) return;
+    if (!getRoundQueryOneDay.data) return undefined;
+
+    setRoundInfo(Object.values(getRoundQueryOneDay.data)[0]);
+  }, [roundsStore.roundToShowId, getRoundQueryOneDay.data]);
 
   useEffect(() => {
     if (!getMinaEventsQuery.data) return undefined;
@@ -131,8 +149,8 @@ export default function Layout({ children }: { children: ReactNode }) {
         value={{
           roundInfo: roundInfo,
           minaEvents: minaEvents,
-          getRoundsInfosQuery: (roundsIds, params) =>
-            (getRoundsInfosQuery.useQuery({ roundIds: roundsIds }, params)
+          getRoundsInfosQuery: (roundsIds, oneDay, params) =>
+            (getRoundsInfosQuery.useQuery({ roundIds: !oneDay ? roundsIds.map(roundId => roundId - LOTTERY_ROUND_OFFSET) : roundsIds, oneDay: oneDay }, params)
               ?.data as Record<number, ILotteryRound>) || undefined,
           addGiftCodesMutation: (giftCodes) =>
             addGiftCodesMutation.mutate(giftCodes),
