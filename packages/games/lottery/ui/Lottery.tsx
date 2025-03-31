@@ -23,6 +23,7 @@ import { cn } from "@zknoid/sdk/lib/helpers";
 import CurrentRoundInfo from "../ui/BannerSection/ui/CurrentRoundInfo";
 import PrevRoundInfo from "../ui/BannerSection/ui/PrevRoundInfo";
 import LotteryContext from "../lib/contexts/LotteryContext";
+import { LOTTERY_ROUND_OFFSET } from "./TicketsSection/OwnedTickets/lib/constant";
 
 export enum Pages {
   Main,
@@ -32,7 +33,7 @@ export enum Pages {
 export default function Lottery({}: { params: { competitionId: string } }) {
   const networkStore = useNetworkStore();
   const [roundEndsIn, setRoundEndsIn] = useState<DateTime>(
-    DateTime.fromMillis(0),
+    DateTime.fromMillis(0)
   );
   const [page, setPage] = useState<Pages>(Pages.Main);
 
@@ -75,10 +76,10 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       if (chainStore.block?.slotSinceGenesis) {
         const roundId = Math.floor(
           Number(chainStore.block!.slotSinceGenesis - onchainState.startBlock) /
-            BLOCK_PER_ROUND,
+            BLOCK_PER_ROUND
         );
 
-        workerClientStore.setRoundId(roundId);
+        workerClientStore.setRoundId(roundId + LOTTERY_ROUND_OFFSET);
       }
     })();
   }, [networkStore.minaNetwork?.networkID, chainStore.block]);
@@ -116,10 +117,11 @@ export default function Lottery({}: { params: { competitionId: string } }) {
               second:
                 (BLOCK_PER_ROUND -
                   (Number(blockNum - startBlock) % BLOCK_PER_ROUND)) *
+                7 *
                 3 *
                 60,
-            }),
-          ),
+            })
+          )
         )
       : 0;
   }, [workerClientStore.onchainState, workerClientStore.lotteryRoundId]);
@@ -156,7 +158,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
                 disabled={roundsStore.roundToShowId < 1}
                 className={cn(
                   "w-full flex flex-row items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
-                  roundsStore.roundToShowId < 1 ? "opacity-0" : "opacity-100",
+                  roundsStore.roundToShowId < 1 ? "opacity-0" : "opacity-100"
                 )}
               >
                 <svg
@@ -193,7 +195,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
                   "w-full flex flex-row-reverse items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
                   roundsStore.roundToShowId >= lotteryStore.lotteryRoundId
                     ? "opacity-0"
-                    : "opacity-100",
+                    : "opacity-100"
                 )}
               >
                 <svg

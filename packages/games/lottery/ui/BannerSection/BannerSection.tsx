@@ -10,7 +10,7 @@ import PrevRoundInfo from "../../ui/BannerSection/ui/PrevRoundInfo";
 import { Pages } from "../Lottery";
 import { useRoundsStore } from "../../lib/roundsStore";
 import LotteryContext from "../../lib/contexts/LotteryContext";
-
+import { LOTTERY_ROUND_OFFSET } from "../TicketsSection/OwnedTickets/lib/constant";
 export default function BannerSection({
   roundEndsIn,
   setPage,
@@ -27,6 +27,9 @@ export default function BannerSection({
     .map((x) => x.amount)
     .reduce((x, y) => x + y, 0n);
 
+  console.log("roundToSHOW", roundsStore.roundToShowId);
+  console.log("/////////////roundInfo: /////////////", roundInfo);
+
   return (
     <div
       className={cn(
@@ -36,7 +39,7 @@ export default function BannerSection({
             roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
           "bg-[url('/image/games/lottery/TopBanner-2-mobile.svg')] lg:!bg-[url('/image/games/lottery/TopBanner-2.svg')] bg-cover lg:!bg-contain bg-center bg-no-repeat":
             roundsStore.roundToShowId != lotteryStore.lotteryRoundId,
-        },
+        }
       )}
     >
       <div className="hidden lg:!flex absolute m-[1vw] h-[3.13vw] gap-[0.33vw]">

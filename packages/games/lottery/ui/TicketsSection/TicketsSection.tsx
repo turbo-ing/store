@@ -1,7 +1,7 @@
 import { cn } from "@zknoid/sdk/lib/helpers";
 import TicketCard from "./ui/TicketCard";
 import BuyInfoCard from "./ui/BuyInfoCard";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import OwnedTickets from "./OwnedTickets";
 import { useWorkerClientStore } from "../../workers/workerClientStore";
 import { AnimatePresence } from "framer-motion";
@@ -16,6 +16,7 @@ import { VoucherMode } from "./lib/voucherMode";
 import Image from "next/image";
 import noCodesImg from "../../images/no-gift-codes.svg";
 import { useGiftCodes } from "../../stores/giftCodes";
+import { LOTTERY_ROUND_OFFSET } from "./OwnedTickets/lib/constant";
 
 interface TicketInfo {
   amount: number;
@@ -32,7 +33,7 @@ export default function TicketsSection() {
   const [tickets, setTickets] = useState<TicketInfo[]>([]);
   const [blankTicket, setBlankTicket] = useState<boolean>(true);
   const [voucherMode, setVoucherMode] = useState<VoucherMode>(
-    VoucherMode.Closed,
+    VoucherMode.Closed
   );
   const [giftCode, setGiftCode] = useState<string>("");
   const [giftCodeToBuyAmount, setGiftCodeToBuyAmount] = useState<number>(1);
@@ -68,6 +69,11 @@ export default function TicketsSection() {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("Compare effect");
+    console.log(roundsStore.roundToShowId, lotteryStore.lotteryRoundId);
+  }, [lotteryStore.lotteryRoundId]);
+
   return (
     <div
       className={cn(
@@ -76,7 +82,7 @@ export default function TicketsSection() {
           "gap-[2.604vw]":
             hasOwnedTickets ||
             roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
-        },
+        }
       )}
     >
       <div className="">
@@ -138,7 +144,7 @@ export default function TicketsSection() {
                         "flex flex-col",
                         voucherMode == VoucherMode.Closed
                           ? "gap-[2.326vw] lg:!gap-0"
-                          : "gap-0",
+                          : "gap-0"
                       )}
                     >
                       <button
@@ -146,7 +152,7 @@ export default function TicketsSection() {
                           "flex w-full lg:!w-[22.5vw] cursor-pointer flex-row items-center justify-center gap-[4.651vw] lg:!gap-[0.781vw] rounded-[2.326vw] lg:!rounded-[0.521vw] bg-right-accent py-[1.628vw] lg:!py-[0.365vw] hover:opacity-80 disabled:cursor-default disabled:hover:opacity-100",
                           {
                             "rounded-b-none": voucherMode != VoucherMode.Closed,
-                          },
+                          }
                         )}
                         onClick={() => setVoucherMode(VoucherMode.Use)}
                         disabled={voucherMode != VoucherMode.Closed}

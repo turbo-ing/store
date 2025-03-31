@@ -7,6 +7,30 @@ import { ILotteryRound } from "../../../lib/types";
 import Skeleton from "@zknoid/sdk/components/shared/Skeleton";
 import LotteryContext from "../../../lib/contexts/LotteryContext";
 import { cn } from "@zknoid/sdk/lib/helpers";
+import { LOTTERY_ROUND_OFFSET } from "../OwnedTickets/lib/constant";
+
+const calcRoundTime = (
+  roundId: number,
+  slotSinceGenesis: number,
+  startBlock: number
+) => {
+  const oneDayRounds = Math.min(LOTTERY_ROUND_OFFSET, roundId);
+  const regularRounds = Math.max(0, roundId - oneDayRounds);
+
+  const deployTime =
+    Date.now() - (slotSinceGenesis - startBlock) * 3 * 60 * 1000;
+
+  if (roundId <= LOTTERY_ROUND_OFFSET) {
+    return new Date(
+      deployTime -
+        (LOTTERY_ROUND_OFFSET - oneDayRounds) * BLOCK_PER_ROUND * 3 * 60 * 1000
+    );
+  } else {
+    return new Date(
+      deployTime + regularRounds * BLOCK_PER_ROUND * 7 * 3 * 60 * 1000
+    );
+  }
+};
 
 export default function PreviousRounds() {
   const workerClientStore = useWorkerClientStore();
@@ -16,7 +40,7 @@ export default function PreviousRounds() {
 
   const [page, setPage] = useState<number>(0);
   const [roundInfos, setRoundInfos] = useState<ILotteryRound[] | undefined>(
-    undefined,
+    undefined
   );
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -24,18 +48,38 @@ export default function PreviousRounds() {
 
   const roundsToShow = Array.from(
     { length: ROUNDS_PER_PAGE },
-    (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE,
+    (_, i) => workerClientStore.lotteryRoundId - i - page * ROUNDS_PER_PAGE
   ).filter((x) => x >= 0);
-  const roundInfosData = getRoundsInfosQuery(roundsToShow, {
+
+  const oneDayRounds = roundsToShow.filter(
+    (roundId) => roundId <= LOTTERY_ROUND_OFFSET
+  );
+  const regularRounds = roundsToShow.filter(
+    (roundId) => roundId > LOTTERY_ROUND_OFFSET
+  );
+
+  const oneDayData = getRoundsInfosQuery(oneDayRounds, true, {
+    refetchInterval: 5000,
+  });
+  const regularData = getRoundsInfosQuery(regularRounds, false, {
     refetchInterval: 5000,
   });
 
   useEffect(() => {
-    if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
+    if ((!oneDayData && !regularData) || !chainStore.block?.slotSinceGenesis)
+      return;
 
-    const roundInfos = roundInfosData!;
-    setRoundInfos(Object.values(roundInfos));
-  }, [roundInfosData, chainStore.block?.slotSinceGenesis]);
+    const oneDayDataArray = Object.values(oneDayData || {});
+
+    const regularDataWithOffset = Object.values(regularData || {}).map(
+      (round) => ({
+        ...round,
+        id: round.id + LOTTERY_ROUND_OFFSET,
+      })
+    );
+
+    setRoundInfos([...oneDayDataArray, ...regularDataWithOffset]);
+  }, [oneDayData, regularData, chainStore.block?.slotSinceGenesis]);
 
   useEffect(() => {
     const checkWidth = () => {
@@ -66,7 +110,7 @@ export default function PreviousRounds() {
             "w-full flex flex-row items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
             page + 1 > workerClientStore.lotteryRoundId / ROUNDS_PER_PAGE
               ? "opacity-0"
-              : "opacity-100",
+              : "opacity-100"
           )}
         >
           <svg
@@ -97,7 +141,7 @@ export default function PreviousRounds() {
           disabled={page - 1 < 0}
           className={cn(
             "w-full flex flex-row-reverse items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
-            page - 1 < 0 ? "opacity-0" : "opacity-100",
+            page - 1 < 0 ? "opacity-0" : "opacity-100"
           )}
         >
           <svg
@@ -162,27 +206,15 @@ export default function PreviousRounds() {
                     key={index}
                     round={round}
                     roundDates={{
-                      start: new Date(
-                        Date.now() -
-                          (Number(
-                            chainStore.block?.slotSinceGenesis! -
-                              lotteryStore.onchainState?.startBlock!,
-                          ) -
-                            round.id * BLOCK_PER_ROUND) *
-                            3 *
-                            60 *
-                            1000,
+                      start: calcRoundTime(
+                        round.id,
+                        Number(chainStore.block?.slotSinceGenesis!),
+                        Number(lotteryStore.onchainState?.startBlock!)
                       ),
-                      end: new Date(
-                        Date.now() -
-                          (Number(
-                            chainStore.block?.slotSinceGenesis! -
-                              lotteryStore.onchainState?.startBlock!,
-                          ) -
-                            (round.id + 1) * BLOCK_PER_ROUND) *
-                            3 *
-                            60 *
-                            1000,
+                      end: calcRoundTime(
+                        round.id + 1,
+                        Number(chainStore.block?.slotSinceGenesis!),
+                        Number(lotteryStore.onchainState?.startBlock!)
                       ),
                     }}
                   />

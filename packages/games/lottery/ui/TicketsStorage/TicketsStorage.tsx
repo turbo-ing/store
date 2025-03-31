@@ -34,7 +34,7 @@ const CheckboxButton = ({
           {
             "border-foreground": !isActive,
             "border-left-accent bg-left-accent": isActive,
-          },
+          }
         )}
       >
         <svg
@@ -69,7 +69,7 @@ export default function TicketsStorage({
   const [onlyLoosing, setOnlyLoosing] = useState<boolean>(false);
   const [onlyClaimable, setOnlyClaimable] = useState<boolean>(false);
   const [currentRoundId, setCurrentRoundId] = useState<number | undefined>(
-    undefined,
+    undefined
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -84,12 +84,13 @@ export default function TicketsStorage({
     currentRoundId !== undefined
       ? [currentRoundId]
       : [...Array(lotteryStore.lotteryRoundId)].map((_, i) => i);
-  const roundInfosData = getRoundsInfosQuery(roundsToShow, {
+  const roundInfosData = getRoundsInfosQuery(roundsToShow, true, {
     refetchInterval: 5000,
   });
   const roundIDSData = getRoundsInfosQuery(
     [...Array(lotteryStore.lotteryRoundId)].map((_, i) => i),
-    { refetchInterval: 5000 },
+    true,
+    { refetchInterval: 5000 }
   );
 
   useEffect(() => {
@@ -100,9 +101,9 @@ export default function TicketsStorage({
       Object.values(roundInfos).map((item) => ({
         id: item.id,
         hasClaim: !!item.tickets.find(
-          (ticket) => ticket.owner === networkStore.address && ticket.funds,
+          (ticket) => ticket.owner === networkStore.address && ticket.funds
         ),
-      })),
+      }))
     );
   }, [roundIDSData]);
 
@@ -110,7 +111,7 @@ export default function TicketsStorage({
     if (!roundInfosData || !chainStore.block?.slotSinceGenesis) return;
     const roundInfos = roundInfosData!;
     setRoundInfos(
-      Object.values(roundInfos).filter((round) => round.winningCombination),
+      Object.values(roundInfos).filter((round) => round.winningCombination)
     );
   }, [currentRoundId, roundInfosData]);
 
@@ -122,7 +123,7 @@ export default function TicketsStorage({
           ? ticket.owner === networkStore.address &&
             !!ticket.funds &&
             !ticket.claimed
-          : ticket.owner === networkStore.address && !ticket.funds,
+          : ticket.owner === networkStore.address && !ticket.funds
     );
     return round;
   };
@@ -133,7 +134,7 @@ export default function TicketsStorage({
     const rounds = roundInfos
       .slice(
         (currentPage - 1) * PAGINATION_LIMIT,
-        currentPage * PAGINATION_LIMIT,
+        currentPage * PAGINATION_LIMIT
       )
       .map((round) => filterRound(round))
       .filter((round) => round.tickets.length != 0);
@@ -298,7 +299,7 @@ export default function TicketsStorage({
                         win: round.winningCombination
                           ? number == round.winningCombination[numberIndex]
                           : false,
-                      }),
+                      })
                     )}
                     combination={ticket.numbers}
                     quantity={ticket.amount}
@@ -308,7 +309,7 @@ export default function TicketsStorage({
                     hash={ticket.hash}
                     ticketId={ticketIndex}
                   />
-                )),
+                ))
               )
             ) : (
               <div

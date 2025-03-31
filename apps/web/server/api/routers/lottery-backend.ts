@@ -6,6 +6,7 @@ import { createTRPCRouter, publicProcedure } from "../../../server/api/trpc";
 
 const client = await clientPromise;
 const db = client?.db(process.env.BACKEND_MONGODB_DB);
+const oneDayDb = client?.db(process.env.BACKEND_MONGODB_DB_ONE_DAY);
 
 export interface Progress {
   ARKANOID: boolean[];
@@ -19,11 +20,12 @@ export const lotteryBackendRouter = createTRPCRouter({
     .input(
       z.object({
         roundIds: z.array(z.number()),
+        oneDay: z.boolean().optional(),
       })
     )
     .query(async ({ input }) => {
-      if (!db) return;
-      const roundInfos = await db
+      if (!db || !oneDayDb) return;
+      const roundInfos = await (input.oneDay ? oneDayDb : db)
         .collection("rounds")
         .find({
           roundId: {
@@ -74,7 +76,7 @@ export const lotteryBackendRouter = createTRPCRouter({
         } as any;
       }
 
-      const claimRequestInfo = await db
+      const claimRequestInfo = await (input.oneDay ? oneDayDb : db)
         .collection("claim_requests")
         .find({
           roundId: {
@@ -91,6 +93,8 @@ export const lotteryBackendRouter = createTRPCRouter({
         data[claimRequest.roundId].tickets[claimRequest.ticketId].claimQueue =
           index;
       });
+
+      console.log(data);
 
       return data;
     }),

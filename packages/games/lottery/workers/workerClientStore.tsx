@@ -9,6 +9,7 @@ import { BLOCK_PER_ROUND, PLottery } from "l1-lottery-contracts";
 import { FACTORY_ADDRESS } from "../constants/addresses";
 import { Field, PublicKey, UInt32, type JsonProof } from "o1js";
 import { DateTime, Duration } from "luxon";
+import { LOTTERY_ROUND_OFFSET } from "../ui/TicketsSection/OwnedTickets/lib/constant";
 
 export interface ClientState {
   status: string;
@@ -75,11 +76,12 @@ export const useWorkerClientStore = create<
           startBlock: bigint;
         }
       | undefined,
-    lotteryRoundId: 0,
+    lotteryRoundId: LOTTERY_ROUND_OFFSET,
     lotteryGames: undefined as Record<number, PLottery> | undefined,
     async start() {
-      const isLocalProving = (window as any).localStorage.getItem("localProving") == "true";
-      console.log('Starting', isLocalProving);
+      const isLocalProving =
+        (window as any).localStorage.getItem("localProving") == "true";
+      console.log("Starting", isLocalProving);
       set((state) => {
         state.isLocalProving = isLocalProving;
       });
