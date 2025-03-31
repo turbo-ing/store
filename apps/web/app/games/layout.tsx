@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     },
     {
       refetchInterval: 5000,
-    },
+    }
   );
   const getRoundQueryOneDay = api.http.lotteryBackend.getRoundInfos.useQuery(
     {
@@ -32,7 +32,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     },
     {
       refetchInterval: 5000,
-    },
+    }
   );
 
   const getMinaEventsQuery = api.http.lotteryBackend.getMinaEvents.useQuery({});
@@ -68,14 +68,14 @@ export default function Layout({ children }: { children: ReactNode }) {
   const addTransaction = api.http.txStore.addTransaction.useMutation();
 
   useEffect(() => {
-    if (roundsStore.roundToShowId >= LOTTERY_ROUND_OFFSET) return;
+    if (roundsStore.roundToShowId < LOTTERY_ROUND_OFFSET) return;
     if (!getRoundQuery.data) return undefined;
 
     setRoundInfo(Object.values(getRoundQuery.data)[0]);
   }, [roundsStore.roundToShowId, getRoundQuery.data]);
 
   useEffect(() => {
-    if (roundsStore.roundToShowId < LOTTERY_ROUND_OFFSET) return;
+    if (roundsStore.roundToShowId >= LOTTERY_ROUND_OFFSET) return;
     if (!getRoundQueryOneDay.data) return undefined;
 
     setRoundInfo(Object.values(getRoundQueryOneDay.data)[0]);
@@ -150,8 +150,15 @@ export default function Layout({ children }: { children: ReactNode }) {
           roundInfo: roundInfo,
           minaEvents: minaEvents,
           getRoundsInfosQuery: (roundsIds, oneDay, params) =>
-            (getRoundsInfosQuery.useQuery({ roundIds: !oneDay ? roundsIds.map(roundId => roundId - LOTTERY_ROUND_OFFSET) : roundsIds, oneDay: oneDay }, params)
-              ?.data as Record<number, ILotteryRound>) || undefined,
+            (getRoundsInfosQuery.useQuery(
+              {
+                roundIds: !oneDay
+                  ? roundsIds.map((roundId) => roundId - LOTTERY_ROUND_OFFSET)
+                  : roundsIds,
+                oneDay: oneDay,
+              },
+              params
+            )?.data as Record<number, ILotteryRound>) || undefined,
           addGiftCodesMutation: (giftCodes) =>
             addGiftCodesMutation.mutate(giftCodes),
           addClaimRequestMutation: (claim) =>

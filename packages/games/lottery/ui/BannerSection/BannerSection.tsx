@@ -27,8 +27,8 @@ export default function BannerSection({
     .map((x) => x.amount)
     .reduce((x, y) => x + y, 0n);
 
-    console.log('roundToSHOW', roundsStore.roundToShowId)
-    console.log('/////////////roundInfo: /////////////', roundInfo)
+  console.log("roundToSHOW", roundsStore.roundToShowId);
+  console.log("/////////////roundInfo: /////////////", roundInfo);
 
   return (
     <div
@@ -36,10 +36,10 @@ export default function BannerSection({
         "relative mb-[3.488vw] lg:!mb-[2.083vw] h-[80.233vw] lg:!h-[17.969vw] items-center justify-center rounded-[4.651vw] lg:!rounded-[0.67vw] border border-left-accent",
         {
           "bg-[url('/image/games/lottery/TopBanner-1-mobile.svg')] lg:!bg-[url('/image/games/lottery/TopBanner-1.svg')] bg-cover lg:!bg-contain bg-center bg-no-repeat":
-            roundsStore.roundToShowId == lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET,
+            roundsStore.roundToShowId == lotteryStore.lotteryRoundId,
           "bg-[url('/image/games/lottery/TopBanner-2-mobile.svg')] lg:!bg-[url('/image/games/lottery/TopBanner-2.svg')] bg-cover lg:!bg-contain bg-center bg-no-repeat":
-            roundsStore.roundToShowId != lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET,
-        },
+            roundsStore.roundToShowId != lotteryStore.lotteryRoundId,
+        }
       )}
     >
       <div className="hidden lg:!flex absolute m-[1vw] h-[3.13vw] gap-[0.33vw]">
@@ -65,7 +65,7 @@ export default function BannerSection({
           onClick={() =>
             roundsStore.setRoundToShowId(roundsStore.roundToShowId + 1)
           }
-          disabled={roundsStore.roundToShowId >= lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET}
+          disabled={roundsStore.roundToShowId >= lotteryStore.lotteryRoundId}
           className="flex w-[3.13vw] items-center justify-center border-left-accent bg-bg-grey text-left-accent"
         >
           <svg
@@ -81,7 +81,7 @@ export default function BannerSection({
         </BannerButton>
       </div>
       <div className={"hidden lg:!block"}>
-        {roundsStore.roundToShowId != lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET && (
+        {roundsStore.roundToShowId != lotteryStore.lotteryRoundId && (
           <PrevRoundInfo
             ticketsNum={ticketsNum}
             winningCombination={roundInfo?.winningCombination}
@@ -96,12 +96,12 @@ export default function BannerSection({
         setPage={setPage}
       />
 
-      {roundsStore.roundToShowId != lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET && (
+      {roundsStore.roundToShowId != lotteryStore.lotteryRoundId && (
         <button
           onClick={() =>
-            roundsStore.setRoundToShowId(lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET)
+            roundsStore.setRoundToShowId(lotteryStore.lotteryRoundId)
           }
-          disabled={roundsStore.roundToShowId == lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET}
+          disabled={roundsStore.roundToShowId == lotteryStore.lotteryRoundId}
           className={
             "absolute right-[1vw] top-[1vw] hidden lg:!flex cursor-pointer flex-row items-center justify-center gap-[0.26vw] hover:opacity-80 disabled:opacity-60"
           }
@@ -129,7 +129,7 @@ export default function BannerSection({
       )}
 
       <div className={"hidden lg:!block"}>
-        {roundsStore.roundToShowId == lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET && (
+        {roundsStore.roundToShowId == lotteryStore.lotteryRoundId && (
           <CurrentRoundInfo ticketsNum={ticketsNum} />
         )}
       </div>

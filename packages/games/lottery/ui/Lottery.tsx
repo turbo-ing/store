@@ -33,7 +33,7 @@ export enum Pages {
 export default function Lottery({}: { params: { competitionId: string } }) {
   const networkStore = useNetworkStore();
   const [roundEndsIn, setRoundEndsIn] = useState<DateTime>(
-    DateTime.fromMillis(0),
+    DateTime.fromMillis(0)
   );
   const [page, setPage] = useState<Pages>(Pages.Main);
 
@@ -76,10 +76,10 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       if (chainStore.block?.slotSinceGenesis) {
         const roundId = Math.floor(
           Number(chainStore.block!.slotSinceGenesis - onchainState.startBlock) /
-            BLOCK_PER_ROUND,
+            BLOCK_PER_ROUND
         );
 
-        workerClientStore.setRoundId(roundId);
+        workerClientStore.setRoundId(roundId + LOTTERY_ROUND_OFFSET);
       }
     })();
   }, [networkStore.minaNetwork?.networkID, chainStore.block]);
@@ -119,8 +119,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
                   (Number(blockNum - startBlock) % BLOCK_PER_ROUND)) *
                 3 *
                 60,
-            }),
-          ),
+            })
+          )
         )
       : 0;
   }, [workerClientStore.onchainState, workerClientStore.lotteryRoundId]);
@@ -157,7 +157,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
                 disabled={roundsStore.roundToShowId < 1}
                 className={cn(
                   "w-full flex flex-row items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
-                  roundsStore.roundToShowId < 1 ? "opacity-0" : "opacity-100",
+                  roundsStore.roundToShowId < 1 ? "opacity-0" : "opacity-100"
                 )}
               >
                 <svg
@@ -194,7 +194,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
                   "w-full flex flex-row-reverse items-center justify-center gap-[3.488vw] rounded-[2.326vw] bg-bg-grey p-[2.326vw]",
                   roundsStore.roundToShowId >= lotteryStore.lotteryRoundId
                     ? "opacity-0"
-                    : "opacity-100",
+                    : "opacity-100"
                 )}
               >
                 <svg
@@ -223,12 +223,12 @@ export default function Lottery({}: { params: { competitionId: string } }) {
             </div>
             <BannerSection roundEndsIn={roundEndsIn} setPage={setPage} />
             <div className={"lg:!hidden"}>
-              {roundsStore.roundToShowId == lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET && (
+              {roundsStore.roundToShowId == lotteryStore.lotteryRoundId && (
                 <CurrentRoundInfo ticketsNum={ticketsNum} />
               )}
             </div>
             <div className={"lg:!hidden"}>
-              {roundsStore.roundToShowId != lotteryStore.lotteryRoundId + LOTTERY_ROUND_OFFSET && (
+              {roundsStore.roundToShowId != lotteryStore.lotteryRoundId && (
                 <PrevRoundInfo
                   ticketsNum={ticketsNum}
                   winningCombination={roundInfo?.winningCombination}

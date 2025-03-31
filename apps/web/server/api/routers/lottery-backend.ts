@@ -94,6 +94,8 @@ export const lotteryBackendRouter = createTRPCRouter({
           index;
       });
 
+      console.log(data);
+
       return data;
     }),
   getMinaEvents: publicProcedure.input(z.object({})).query(async () => {

@@ -5,6 +5,6 @@ export const FACTORY_ADDRESS: {
 } = {
   [NetworkIds.MINA_DEVNET]: "",
   [NetworkIds.MINA_MAINNET]:
-    "B62qpHtWX41NstxzzUe8xooKogqomDwgJ4CN8J3V2274v5B9dnfJ1fu",
+    "B62qoT5XU2gKw5QCG31qsSYcSd9qPNSx4f5qPjTHrgP5ksDK8iwmZbv",
   [NetworkIds.ZEKO_TESTNET]: "not-deployed",
 };
