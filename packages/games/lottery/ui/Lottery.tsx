@@ -117,6 +117,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
               second:
                 (BLOCK_PER_ROUND -
                   (Number(blockNum - startBlock) % BLOCK_PER_ROUND)) *
+                7 *
                 3 *
                 60,
             })

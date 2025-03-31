@@ -63,7 +63,7 @@ export default function CenterConsole({
     ) {
       workerStore.initLotteryInstance(
         roundInfo.plotteryAddress,
-        networkStore.minaNetwork?.networkID!,
+        networkStore.minaNetwork?.networkID!
       );
     }
   }, [
@@ -74,7 +74,7 @@ export default function CenterConsole({
   ]);
 
   const aggregateTickets = (
-    tickets: ILotteryTicket[] | undefined,
+    tickets: ILotteryTicket[] | undefined
   ): { owner: string; tickets: bigint; funds: bigint }[] => {
     if (!tickets) return [];
     const leaderboard: Record<string, { tickets: bigint; funds: bigint }> = {};
@@ -127,7 +127,7 @@ export default function CenterConsole({
               roundToShow == lotteryStore.lotteryRoundId ||
               (roundToShow != lotteryStore.lotteryRoundId &&
                 !roundInfo?.winningCombination),
-          },
+          }
         )}
       >
         <div
@@ -152,11 +152,27 @@ export default function CenterConsole({
               "w-full":
                 roundInfo?.winningCombination &&
                 roundToShow != lotteryStore.lotteryRoundId,
-            },
+            }
           )}
         >
           {roundToShow == lotteryStore.lotteryRoundId ? (
             <>
+              <div className={"flex flex-col gap-0"}>
+                <div className="flex h-[17.907vw] lg:!h-[5.469vw] w-[17.907vw] lg:!w-[5.469vw] items-center justify-center rounded-[1.628vw] lg:!rounded-[0.67vw] bg-white text-center font-museo text-[13.953vw] lg:!text-[4.219vw] font-bold text-bg-dark">
+                  {!!roundTimer.startsIn.days
+                    ? roundTimer.startsIn.days < 10
+                      ? "0" + roundTimer.startsIn.days
+                      : roundTimer.startsIn.days
+                    : "00"}
+                </div>
+                <span
+                  className={
+                    "hidden lg:!inline-block text-center font-plexsans text-[0.625vw]"
+                  }
+                >
+                  Days
+                </span>
+              </div>
               <div className={"flex flex-col gap-0"}>
                 <div className="flex h-[17.907vw] lg:!h-[5.469vw] w-[17.907vw] lg:!w-[5.469vw] items-center justify-center rounded-[1.628vw] lg:!rounded-[0.67vw] bg-white text-center font-museo text-[13.953vw] lg:!text-[4.219vw] font-bold text-bg-dark">
                   {!!roundTimer.startsIn.hours
@@ -189,7 +205,7 @@ export default function CenterConsole({
                   Minutes
                 </span>
               </div>
-              <div className={"flex flex-col gap-0"}>
+              {/* <div className={"flex flex-col gap-0"}>
                 <div className="flex h-[17.907vw] lg:!h-[5.469vw] w-[17.907vw] lg:!w-[5.469vw] items-center justify-center rounded-[1.628vw] lg:!rounded-[0.67vw] bg-white text-center font-museo text-[13.953vw] lg:!text-[4.219vw] font-bold text-bg-dark">
                   {!!roundTimer.startsIn.seconds
                     ? Math.trunc(roundTimer.startsIn.seconds) < 10
@@ -204,7 +220,7 @@ export default function CenterConsole({
                 >
                   Seconds
                 </span>
-              </div>
+              </div> */}
             </>
           ) : roundInfo?.winningCombination ? (
             <div
@@ -295,7 +311,7 @@ export default function CenterConsole({
                             }
                           >
                             {accounts.find(
-                              (account) => account.userAddress === item.owner,
+                              (account) => account.userAddress === item.owner
                             )?.name || formatAddress(item.owner)}
                           </Link>
                           <div
@@ -508,7 +524,7 @@ export default function CenterConsole({
               "mt-[0.4vw]":
                 roundToShow != lotteryStore.lotteryRoundId &&
                 roundInfo?.winningCombination,
-            },
+            }
           )}
           disabled={
             roundToShow != lotteryStore.lotteryRoundId &&
