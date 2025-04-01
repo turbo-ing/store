@@ -52,10 +52,10 @@ export default function PreviousRounds() {
   ).filter((x) => x >= 0);
 
   const oneDayRounds = roundsToShow.filter(
-    (roundId) => roundId <= LOTTERY_ROUND_OFFSET
+    (roundId) => roundId < LOTTERY_ROUND_OFFSET
   );
   const regularRounds = roundsToShow.filter(
-    (roundId) => roundId > LOTTERY_ROUND_OFFSET
+    (roundId) => roundId >= LOTTERY_ROUND_OFFSET
   );
 
   const oneDayData = getRoundsInfosQuery(oneDayRounds, true, {

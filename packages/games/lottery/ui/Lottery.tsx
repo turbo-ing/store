@@ -76,7 +76,7 @@ export default function Lottery({}: { params: { competitionId: string } }) {
       if (chainStore.block?.slotSinceGenesis) {
         const roundId = Math.floor(
           Number(chainStore.block!.slotSinceGenesis - onchainState.startBlock) /
-            BLOCK_PER_ROUND
+            (7 * BLOCK_PER_ROUND)
         );
 
         workerClientStore.setRoundId(roundId + LOTTERY_ROUND_OFFSET);
