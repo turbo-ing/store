@@ -115,9 +115,8 @@ export default function Lottery({}: { params: { competitionId: string } }) {
           DateTime.now().plus(
             Duration.fromObject({
               second:
-                (BLOCK_PER_ROUND -
-                  (Number(blockNum - startBlock) % BLOCK_PER_ROUND)) *
-                7 *
+                (7 * BLOCK_PER_ROUND -
+                  (Number(blockNum - startBlock) % (7 * BLOCK_PER_ROUND))) *
                 3 *
                 60,
             })
