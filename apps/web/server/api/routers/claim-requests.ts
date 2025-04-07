@@ -2,9 +2,11 @@ import clientPromise from "../../../app/lib/mongodb";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
+import { LOTTERY_ROUND_OFFSET } from "../../../../../packages/games/lottery/ui/TicketsSection/OwnedTickets/lib/constant";
 
 const client = await clientPromise;
 const db = client?.db(process.env.BACKEND_MONGODB_DB);
+const oneDayDB = client?.db(process.env.BACKEND_MONGODB_DB_ONE_DAY);
 
 export const claimRequestRouter = createTRPCRouter({
   requestClaim: publicProcedure
@@ -16,11 +18,17 @@ export const claimRequestRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
-      if (!db) return;
+      if (!db || !oneDayDB) return;
 
-      await db.collection("claim_requests").updateOne(
+      const targetDB = input.roundId >= LOTTERY_ROUND_OFFSET ? db : oneDayDB;
+      const targetRound =
+        input.roundId >= LOTTERY_ROUND_OFFSET
+          ? input.roundId - LOTTERY_ROUND_OFFSET
+          : input.roundId;
+
+      await targetDB.collection("claim_requests").updateOne(
         {
-          roundId: input.roundId,
+          roundId: targetRound,
           ticketId: input.ticketId,
         },
         {
