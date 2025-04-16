@@ -34,10 +34,11 @@ import Image from "next/image";
 import SetupStoreContext from "../../../../../lib/contexts/SetupStoreContext";
 import { algoliasearch } from "algoliasearch";
 import TxStore from "../../TxStore";
+import { useRouter } from "next/navigation";
 
 const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_PROJECT || "",
-  process.env.NEXT_PUBLIC_ALGOLIA_KEY || "",
+  process.env.NEXT_PUBLIC_ALGOLIA_KEY || ""
 );
 
 const zknoidAvatars = [
@@ -69,7 +70,7 @@ const AccountPopupBalance = dynamic(
   () => import("./nonSSR/AccountPopupBalance"),
   {
     ssr: false,
-  },
+  }
 );
 
 export default function AccountPopup({
@@ -81,6 +82,7 @@ export default function AccountPopup({
   const bridgeStore = useBridgeStore();
   const notificationStore = useNotificationStore();
   const { account } = useContext(SetupStoreContext);
+  const router = useRouter();
 
   const [linkCopied, setLinkCopied] = useState<boolean>(false);
   const [name, setName] = useState<string | undefined>(undefined);
@@ -312,7 +314,7 @@ export default function AccountPopup({
                       </div>
                     )}
                   </div>
-                ),
+                )
             )}
           </div>
         </div>
@@ -474,7 +476,7 @@ export default function AccountPopup({
                     "w-full rounded-[5px] border border-bg-dark px-2 py-1 text-center text-bg-dark",
                     {
                       "opacity-60": linkCopied,
-                    },
+                    }
                   )}
                 >
                   {networkStore.address &&
@@ -537,7 +539,7 @@ export default function AccountPopup({
           <AccountPopupBalance />
           <div className={"flex w-full flex-row gap-1.5"}>
             <button
-              onClick={() => setIsTxStoreOpen(true)}
+              onClick={() => router.push("/profile")}
               className={
                 "group flex w-full cursor-pointer flex-col items-center justify-center gap-2.5 rounded-[5px] border border-bg-dark bg-bg-dark p-1 text-foreground hover:bg-right-accent hover:text-bg-dark"
               }
@@ -561,7 +563,7 @@ export default function AccountPopup({
                 />
               </svg>
               <span className={"font-museo text-[16px]/[16px] font-medium"}>
-                Transaction Store
+                Profile
               </span>
             </button>
             <button
