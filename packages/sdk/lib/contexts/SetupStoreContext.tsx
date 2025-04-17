@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { createContext } from "react";
+import { createContext } from 'react';
 
 interface ISetupStoreContext {
   account: {
@@ -18,9 +18,7 @@ interface ISetupStoreContext {
           rating: number;
         }) => void)
       | undefined;
-    getGameRatingQuery:
-      | ((gameId: string) => Record<number, number>)
-      | undefined;
+    getGameRatingQuery: ((gameId: string) => Record<number, number>) | undefined;
   };
   favorites: {
     setFavoriteGameStatus:
@@ -72,12 +70,8 @@ interface ISetupStoreContext {
       | undefined;
   };
   txStore: {
-    userTransactions:
-      | { userAddress: string; txHash: string; type: string }[]
-      | undefined;
-    addTransaction:
-      | ((userAddress: string, txHash: string, type: string) => void)
-      | undefined;
+    userTransactions: { userAddress: string; txHash: string; type: string }[] | undefined;
+    addTransaction: ((userAddress: string, txHash: string, type: string) => void) | undefined;
   };
 }
 

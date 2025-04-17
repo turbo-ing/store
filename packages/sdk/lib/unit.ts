@@ -1,4 +1,8 @@
-export function formatUnits(value: bigint | number, decimals: number = 9) {
+export function formatUnits(
+  value: bigint | number,
+  decimals: number = 9,
+  digits: number | null = null
+) {
   let display = value.toString();
 
   const negative = display.startsWith('-');
@@ -10,8 +14,11 @@ export function formatUnits(value: bigint | number, decimals: number = 9) {
     display.slice(0, display.length - decimals),
     display.slice(display.length - decimals),
   ];
+
+  if (digits !== null) {
+    fraction = fraction.slice(0, digits);
+  }
+
   fraction = fraction.replace(/(0+)$/, '');
-  return `${negative ? '-' : ''}${integer || '0'}${
-    fraction ? `.${fraction}` : ''
-  }`;
+  return `${negative ? '-' : ''}${integer || '0'}${fraction ? `.${fraction}` : ''}`;
 }
