@@ -6,6 +6,8 @@ import { api } from '../../trpc/react';
 import { formatAddress } from '@zknoid/sdk/lib/helpers';
 import { useNotificationStore } from '@zknoid/sdk/components/shared/Notification/lib/notificationStore';
 import minaIMG from '../../public/image/tokens/mina.svg';
+import { useMinaBalancesStore } from '@zknoid/sdk/lib/stores/minaBalances';
+import { formatUnits } from '@zknoid/sdk/lib/unit';
 
 export function ProfileHeader({
   account,
@@ -22,6 +24,7 @@ export function ProfileHeader({
   openAvatarModal: () => void;
   avatarId: number;
 }) {
+  const balanceStore = useMinaBalancesStore();
   const notificationStore = useNotificationStore();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -36,6 +39,9 @@ export function ProfileHeader({
     });
     setIsEditing(false);
   };
+
+  console.log(account);
+  console.log(account?.userAddress && balanceStore.balances[account?.userAddress]);
 
   return (
     <section className="flex flex-row gap-[0.781vw]">
@@ -64,11 +70,11 @@ export function ProfileHeader({
               defaultValue={account?.name || ''}
               className="bg-transparent text-[1.667vw] font-museo font-medium text-foreground border-b border-transparent focus:border-foreground focus:outline-none"
               autoFocus
-              onBlur={(e) => {
+              onBlur={e => {
                 handleSubmit(e.target.value);
                 setIsEditing(false);
               }}
-              onKeyDown={(e) => {
+              onKeyDown={e => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                   handleSubmit(e.currentTarget.value);
@@ -135,7 +141,12 @@ export function ProfileHeader({
             <div className="flex flex-row items-center justify-start gap-[0.521vw] p-[0.781vw] bg-[#373737] rounded-[0.26vw] w-[15.104vw]">
               <Image src={minaIMG} alt="Mina" className={'w-[0.938vw] h-[0.938vw]'} />
               <span className="text-[0.938vw] font-plexsans leading-[110%] text-foreground">
-                0 MINA
+                {account?.userAddress
+                  ? balanceStore.balances[account?.userAddress]
+                    ? formatUnits(balanceStore.balances[account?.userAddress], 9, 2)
+                    : 0
+                  : 0}{' '}
+                MINA
               </span>
             </div>
           </div>
