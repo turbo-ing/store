@@ -4,6 +4,7 @@ import { useNetworkStore } from "../../../../lib/stores/network";
 import { useEffect, useRef } from "react";
 import { useMinaBalancesStore } from "../../../../lib/stores/minaBalances";
 import { useProtokitChainStore } from "../../../../lib/stores/protokitChain";
+import { useObserveMinaBalance } from "../../../../lib/hooks/observe-mina-balance";
 
 export const tickInterval = 20000;
 export const protokitTickInterval = 5000;
@@ -42,27 +43,6 @@ export const usePollMinaBlockHeight = () => {
   }, [network.minaNetwork?.networkID, network.pollMinaBlocks]);
 };
 
-export const useObserveMinaBalance = () => {
-  const chain = useChainStore();
-  const balances = useMinaBalancesStore();
-  const network = useNetworkStore();
-
-  useEffect(() => {
-    if (
-      !network.walletConnected ||
-      !network.address ||
-      !network.minaNetwork?.networkID
-    )
-      return;
-
-    balances.loadBalance(network.minaNetwork?.networkID!, network.address!);
-  }, [
-    chain.block?.height,
-    network.walletConnected,
-    network.minaNetwork?.networkID,
-    network.address,
-  ]);
-};
 
 export const usePollProtokitBlockHeight = () => {
   const chain = useProtokitChainStore();

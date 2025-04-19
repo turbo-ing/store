@@ -1,14 +1,5 @@
-import { useContext, useEffect } from "react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-import { ALL_NETWORKS, NETWORKS } from "../../constants/networks";
-
-import { useChainStore } from "./minaChain";
-import { useNetworkStore } from "./network";
-
-import ZkNoidGameContext from "../contexts/ZkNoidGameContext";
-import { fetchAccount } from "o1js";
 
 export interface BalancesState {
   loading: boolean;
@@ -16,7 +7,7 @@ export interface BalancesState {
     // address - balance
     [key: string]: bigint;
   };
-  loadBalance: (networkID: string, address: string) => Promise<void>;
+  loadBalance: (networkID: string, address: string, balance: bigint) => Promise<void>;
 }
 
 export interface BalanceQueryResponse {
@@ -38,14 +29,10 @@ export const useMinaBalancesStore = create<
   immer((set) => ({
     loading: Boolean(false),
     balances: {},
-    async loadBalance(networkID: string, address: string) {
+    async loadBalance(networkID: string, address: string, balance: bigint) {
       set((state) => {
         state.loading = true;
       });
-
-      const account = await fetchAccount({ publicKey: address });
-
-      const balance = BigInt(account.account?.balance.toBigInt() ?? 0n);
 
       console.log("Balance fetching", balance);
 
@@ -56,25 +43,3 @@ export const useMinaBalancesStore = create<
     },
   }))
 );
-
-export const useObserveMinaBalance = () => {
-  const chain = useChainStore();
-  const balances = useMinaBalancesStore();
-  const network = useNetworkStore();
-
-  useEffect(() => {
-    if (
-      !network.walletConnected ||
-      !network.address ||
-      !network.minaNetwork?.networkID
-    )
-      return;
-
-    balances.loadBalance(network.minaNetwork?.networkID!, network.address!);
-  }, [
-    chain.block?.height,
-    network.walletConnected,
-    network.minaNetwork?.networkID,
-    network.address,
-  ]);
-};
