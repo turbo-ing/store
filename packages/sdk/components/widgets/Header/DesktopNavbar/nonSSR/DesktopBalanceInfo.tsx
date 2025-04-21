@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import {
   useMinaBalancesStore,
-  useObserveMinaBalance,
 } from '../../../../../lib/stores/minaBalances';
 import { useNetworkStore } from '../../../../../lib/stores/network';
 import {

@@ -32,7 +32,9 @@ export default function ProfilePage() {
             ...(data.name && { name: data.name }),
             ...(data.avatarId && { avatarId: data.avatarId }),
           }
-        : undefined
+        : {
+            userAddress: networkStore.address || '',
+          }
     );
   }, [accountQuery.data]);
 
@@ -64,7 +66,7 @@ export default function ProfilePage() {
       {changeAvatarModal && (
         <ChangeAvatarModal
           currentAvatarId={currentAvatarId}
-          onClose={(newAvatarId) => {
+          onClose={newAvatarId => {
             if (newAvatarId) setCurrentAvatarId(newAvatarId);
             setChangeAvatarModal(false);
           }}
