@@ -8,6 +8,7 @@ import { pokerConfig } from "./poker/config";
 import { thimblerigConfig } from "./thimblerig/config";
 import { lotteryConfig } from "./lottery/config";
 import { connect4Config } from "./connect_4/config";
+import { game2048Config } from "./game_2048/config";
 
 import { gameTemplateConfig } from "./game-template/config";
 
@@ -22,6 +23,7 @@ export const zkNoidConfig = createConfig({
     pokerConfig,
     arkanoidConfig,
     numberGuessingConfig,
-    connect4Config
+    connect4Config,
+    game2048Config
   ],
 });
