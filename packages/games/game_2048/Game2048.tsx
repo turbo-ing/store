@@ -27,7 +27,6 @@ const Game2048: React.FC = () => {
         <iframe
           src="https://mina.2048.turbo.ing/"
           style={iframeStyle}
-          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
         />
       </div>
     </GamePage>
