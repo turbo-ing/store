@@ -10,12 +10,14 @@ const Game2048: React.FC = () => {
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    padding: '20px'
+    padding: '5px'
   };
 
   const iframeStyle = {
-    width: '420px',
-    height: '420px',
+    width: '95%',
+    maxWidth: '900px',
+    height: '90vh',
+    minHeight: '800px',
     border: 'none',
     borderRadius: '6px',
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
@@ -27,6 +29,7 @@ const Game2048: React.FC = () => {
         <iframe
           src="https://mina.2048.turbo.ing/"
           style={iframeStyle}
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
         />
       </div>
     </GamePage>
